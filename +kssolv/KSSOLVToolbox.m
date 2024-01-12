@@ -70,8 +70,11 @@ classdef KSSOLVToolbox < handle
     methods (Access = private)
         function callbackAppStateChanged(this)
             % 当 AppContainer 被关闭时，删除类的实例
-            import matlab.ui.container.internal.appcontainer.*;
+            import matlab.ui.container.internal.appcontainer.*
             if this.AppContainer.State == AppState.TERMINATED
+                % 清除本地化管理器的类的实例
+                kssolv.ui.util.Localizer.clearInstance();
+                % 清除 App Container 相关的实例
                 delete(this);
             end
         end

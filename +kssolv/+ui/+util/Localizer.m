@@ -15,6 +15,9 @@ classdef Localizer < handle
     properties (Access = private)
         % 键：Identifier，值：对应的本地化翻译
         keyValueMap containers.Map
+    end
+
+    properties (Access = public)
         % 上一次读取 XML 文件时使用的 locale
         currentLocale
     end
@@ -70,11 +73,11 @@ classdef Localizer < handle
             persistent uniqueInstance
             if nargin == 0
                 % 无输入参数，则尝试直接返回当前非空的 uniqueInstance 实例
-                if ~isempty(uniqueInstance)
+                if ~isempty(uniqueInstance) && isvalid(uniqueInstance)
                     instance = uniqueInstance;
                     return
                 else
-                    % 若 uniqueInstance 为空，则需要使用构造函数构造实例
+                    % 若 uniqueInstance 为空或已被删除，则需要使用构造函数构造实例
                     locale = userLocale;
                 end
             elseif isempty(varargin{1})
@@ -84,7 +87,7 @@ classdef Localizer < handle
                 locale = varargin{1};
             end
 
-            if isempty(uniqueInstance) || ~strcmp(locale, uniqueInstance.currentLocale)
+            if isempty(uniqueInstance) || ~isvalid(uniqueInstance) || ~strcmp(locale, uniqueInstance.currentLocale)
                 % 重载所有的本地化 XML 文件
                 uniqueInstance = kssolv.ui.util.Localizer(locale);
             end
@@ -105,6 +108,12 @@ classdef Localizer < handle
                 % 未找到键时的默认行为
                 error('KSSOLV:Localizer:KeyNotFound', 'Key not found.');
             end
+        end
+
+        function clearInstance()
+            % 清除类的唯一实例
+            instance = kssolv.ui.util.Localizer.getInstance();
+            delete(instance);
         end
     end
 end
