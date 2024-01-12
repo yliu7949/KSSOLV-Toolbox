@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rsccat version="1.0" locale="en_US" product="MPC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+  <!-- This file stores localized content related to UI components. -->
+  <message>
+    <!-- App -->
+    <entry key="AppTitle">KSSOLV Toolbox</entry>
+    <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
+
+    <!-- ToolStrip Home tab -->
+    <entry key="HomeTabTitle">Home</entry>
+
+  </message>
+</rsccat>

@@ -1,0 +1,15 @@
+function LocalizerTest()
+%LOCALIZERTEST 测试本地化文件的读取
+import kssolv.ui.util.Localizer.*
+% 获取默认的本地化翻译
+disp(message('KSSOLV:toolbox:WelcomeMessage'));
+
+% 切换至另一种语言
+setLocale('en');
+disp(message('KSSOLV:toolbox:WelcomeMessage'));
+
+% 再次切换语言
+setLocale('zh_CN');
+disp(message('KSSOLV:toolbox:WelcomeMessage'));
+end
+
