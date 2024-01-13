@@ -5,9 +5,13 @@
     <!-- App -->
     <entry key="AppTitle">KSSOLV Toolbox</entry>
     <entry key="WelcomeMessage">欢迎使用 KSSOLV Toolbox！</entry>
+    <entry key="UnitTestTitle">单元测试</entry>
 
     <!-- ToolStrip Home tab -->
     <entry key="HomeTabTitle">主页</entry>
+
+    <!-- Data Browser -->
+    <entry key="BrowserTitle">浏览器</entry>
 
   </message>
 </rsccat>

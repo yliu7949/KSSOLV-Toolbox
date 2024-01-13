@@ -5,9 +5,13 @@
     <!-- App -->
     <entry key="AppTitle">KSSOLV Toolbox</entry>
     <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
+    <entry key="UnitTestTitle">Unit Test</entry>
 
     <!-- ToolStrip Home tab -->
     <entry key="HomeTabTitle">Home</entry>
+
+    <!-- Data Browser -->
+    <entry key="BrowserTitle">Browser</entry>
 
   </message>
 </rsccat>

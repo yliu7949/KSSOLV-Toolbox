@@ -42,13 +42,20 @@ classdef HomeTab < handle
             text = 'Open';
             icon = Icon.OPEN_24;
             button1 = Button(text, icon);
+            button2 = Button('Test', Icon.NEW_24);
+            button2.ButtonPushedFcn = @this.moleculerDisplay;
             % 组装 Column 和 Button
             column1.add(button1);
-            column2.add(button1);
+            column2.add(button2);
             section.add(column1);
             section.add(column2);
             this.Tab.add(section);
         end
+
+        function moleculerDisplay(~, ~, ~)
+            kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
+        end
+
     end
 end
 

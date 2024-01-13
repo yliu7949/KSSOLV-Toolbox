@@ -21,25 +21,27 @@ classdef KSSOLVToolbox < handle
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.ToolstripEnabled = true;
             appOptions.EnableTheming = true;
-            this.AppContainer = matlab.ui.container.internal.AppContainer(appOptions);            
+            this.AppContainer = matlab.ui.container.internal.AppContainer(appOptions);
             this.Name = this.AppContainer.Tag;
+            % 保存 AppContainer 至 DataStorage
+            kssolv.ui.util.DataStorage.setData('AppContainer', this.AppContainer);
             % 添加工作区文字
             msg = message('KSSOLV:toolbox:WelcomeMessage');
             this.AppContainer.DocumentPlaceHolderText = msg;
             % 监听 App Container 的状态改变，例如关闭 App 时会触发 StateChanged 事件
             addlistener(this.AppContainer, 'StateChanged', @(src,data) callbackAppStateChanged(this));
-            % add two document groups
+            % 添加 Document Group
             group = matlab.ui.internal.FigureDocumentGroup();
-            group.Tag = 'InputPlot';
-            group.Title = 'Input Plots';
+            group.Tag = 'DocumentGroup';
+            group.Title = 'DocumentGroup';
             group.DefaultRegion = 'left';
             this.AppContainer.add(group);
-            group = matlab.ui.internal.FigureDocumentGroup();
-            group.Tag = 'OutputPlot';
-            group.Title = 'Output Plots';
-            group.DefaultRegion = 'right';
-            this.AppContainer.add(group);
-            % 添加 Tabs 组件
+            % 添加多个 Data Browser 组件
+            browser = kssolv.ui.components.databrowser.Browser();
+            browser.addToAppContainer(this.AppContainer);
+            infoBrowser = kssolv.ui.components.databrowser.InfoBrowser();
+            infoBrowser.addToAppContainer(this.AppContainer);
+            % 添加多个 Tab 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
             tabGroup = matlab.ui.internal.toolstrip.TabGroup();
             tabGroup.Tag = 'kssolvTabGroup';
@@ -49,6 +51,14 @@ classdef KSSOLVToolbox < handle
             show(this);
         end
         
+        function delete(this)
+            %DELETE 析构函数
+            % 删除 App Container
+            if ~isempty(this.AppContainer) && isvalid(this.AppContainer)
+                delete(this.AppContainer);                        
+            end
+        end
+
         %% App 操作相关
         function appcontainer = getAppContainer(this)
             % 获取 App Container 实例
