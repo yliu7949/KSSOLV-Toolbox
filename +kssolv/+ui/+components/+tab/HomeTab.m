@@ -22,7 +22,7 @@ classdef HomeTab < handle
         end
         
         function buildTab(this)
-            %CONSTRUCTTAB 创建 Home Tab 对象
+            %BUILDTAB 创建 Home Tab 对象
             this.Tab = matlab.ui.internal.toolstrip.Tab(this.Title);
             this.Tab.Tag = this.Tag;
             % 分别创建各个 Section 并添加到 Home Tab 中

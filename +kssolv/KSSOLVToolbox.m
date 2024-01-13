@@ -47,6 +47,9 @@ classdef KSSOLVToolbox < handle
             tabGroup.Tag = 'kssolvTabGroup';
             tabGroup.add(homeTab.Tab);
             this.AppContainer.add(tabGroup);
+            % 添加位于底部的 FooterBar 组件
+            footerBar = kssolv.ui.components.others.FooterBar();
+            footerBar.addToAppContainer(this.AppContainer);
             % 展示布局好的界面
             show(this);
         end
