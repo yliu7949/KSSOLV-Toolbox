@@ -1,13 +1,46 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rsccat version="1.0" locale="en_US" product="MPC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
-  <!-- 该文件存储了与 UI 组件有关的本地化内容. -->
-  <message>
-    <!-- App -->
-    <entry key="AppTitle">KSSOLV Toolbox</entry>
-    <entry key="WelcomeMessage">欢迎使用 KSSOLV Toolbox！</entry>
+    <!-- 该文件存储了与 UI 组件有关的本地化内容. -->
+    <message>
+        <!-- App -->
+        <entry key="AppTitle">KSSOLV Toolbox</entry>
+        <entry key="WelcomeMessage">欢迎使用 KSSOLV Toolbox！</entry>
 
-    <!-- ToolStrip Home tab -->
-    <entry key="HomeTabTitle">主页</entry>
+        <!-- ToolStrip Home tab -->
+        <entry key="HomeTabTitle">主页</entry>
 
-  </message>
+        <entry key="ProjectSectionTitle">项目</entry>
+        <entry key="ProjectOpenButtonLabel">打开</entry>
+        <entry key="ProjectOpenButtonTooltip">打开项目文件</entry>
+        <entry key="ProjectModelButtonLabel">模型</entry>
+        <entry key="ProjectModelButtonTooltip">以文件形式或从数据库导入结构模型</entry>
+        <entry key="ProjectSaveButtonLabel">保存</entry>
+        <entry key="ProjectSaveButtonTooltip">保存当前项目</entry>
+        <entry key="ProjectCloseButtonLabel">关闭</entry>
+        <entry key="ProjectCloseButtonTooltip">关闭当前项目</entry>
+        
+        <entry key="EnvironmentSectionTitle">Environment</entry>
+        <entry key="EnvironmentLayoutButtonLabel">Layout</entry>
+        <entry key="EnvironmentLayoutButtonTooltip">Adjust desktop layout</entry>
+
+        <entry key="EnvironmentSectionTitle">环境</entry>
+        <entry key="EnvironmentLayoutButtonLabel">布局</entry>
+        <entry key="EnvironmentLayoutButtonTooltip">调整桌面布局</entry>
+        <entry key="EnvironmentPreferenceButtonLabel">偏好</entry>
+        <entry key="EnvironmentPreferenceButtonTooltip">偏好设定</entry>
+        <entry key="EnvironmentToolsButtonLabel">工具</entry>
+        <entry key="EnvironmentToolsButtonTooltip">KSSOLV相关工具</entry>
+
+        <entry key="ResourceSectionTitle">资源</entry>
+        <entry key="ResourceLibraryButtonLabel">图书馆</entry>
+        <entry key="ResourceLibraryButtonTooltip">相关理论资料的汇总</entry>
+        <entry key="ResourceCommunityButtonLabel">社区</entry>
+        <entry key="ResourceCommunityButtonTooltip">访问KSSOLV在线社区</entry>
+        <entry key="ResourceHelpButtonLabel">帮助</entry>
+        <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
+        
+        <!-- ToolStrip Workflow tab -->
+        <entry key="WorkflowTabTitle">工作流</entry>
+
+    </message>
 </rsccat>

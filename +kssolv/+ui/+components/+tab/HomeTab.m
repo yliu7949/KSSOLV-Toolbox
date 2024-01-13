@@ -1,6 +1,6 @@
 classdef HomeTab < handle
     %HOMETAB Toolstrip 菜单栏中的 Home 标签页
-    %   开发者：杨柳
+    %   开发者：杨柳、高俊
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
@@ -27,28 +27,93 @@ classdef HomeTab < handle
             this.Tab.Tag = this.Tag;
             % 分别创建各个 Section 并添加到 Home Tab 中
             createProjectSection(this);
+            createEnvironmentSection(this);
+            createResourceSection(this);
         end
 
-        function createProjectSection(this)
+        function createProjectSection(this) 
             %CREATEPROJECTSECTION 创建"项目"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
             % 创建 Project Section
-            section = Section('Project');
+            section = Section(message("KSSOLV:toolbox:ProjectSectionTitle"));
             section.Tag = 'ProjectSection';
             % 创建 Column
             column1 = Column();
             column2 = Column();
+            column3 = Column();
+            column4 = Column();
             % 创建 Button
-            text = 'Open';
-            icon = Icon.OPEN_24;
-            button1 = Button(text, icon);
+            button1 = CreatButton('split','ProjectOpen',section.Tag,Icon.OPEN_24);
+            button2 = CreatButton('split','ProjectModel',section.Tag,Icon.IMPORT_24);
+            button3 = CreatButton('split','ProjectSave',section.Tag,Icon.SAVE_24);
+            button4 = CreatButton('push','ProjectClose',section.Tag,Icon.CLOSE_24);
             % 组装 Column 和 Button
             column1.add(button1);
-            column2.add(button1);
+            column2.add(button2);
+            column3.add(button3);
+            column4.add(button4);
             section.add(column1);
             section.add(column2);
+            section.add(column3);
+            section.add(column4);
             this.Tab.add(section);
         end
+
+        function createEnvironmentSection(this) 
+            %createEnvironmentSection 创建"环境"小节，并添加到 HomeTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Project Section
+            section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));
+            section.Tag = 'EnvironmentSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+            % 创建 Button
+            button1 = CreatButton('split','EnvironmentLayout',section.Tag,Icon.LAYOUT_24);
+            button2 = CreatButton('push','EnvironmentPreference',section.Tag,Icon.SETTINGS_24);
+            button3 = CreatButton('split','EnvironmentTools',section.Tag,Icon.TOOLS_24);
+            % 组装 Column 和 Button
+            column1.add(button1);
+            column2.add(button2);
+            column3.add(button3);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
+        end
+
+        function createResourceSection(this) 
+            %createResourceSection 创建"资源"小节，并添加到 HomeTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Project Section
+            section = Section(message("KSSOLV:toolbox:ResourceSectionTitle"));
+            section.Tag = 'ResourceSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+            % 创建 Button
+            button1 = CreatButton('push','ResourceLibrary',section.Tag,Icon.COMPARE_24);
+            button2 = CreatButton('push','ResourceCommunity',section.Tag,Icon.PUBLISH_24);
+            button3 = CreatButton('split','ResourceHelp',section.Tag,Icon.HELP_24);
+            % 组装 Column 和 Button
+            column1.add(button1);
+            column2.add(button2);
+            column3.add(button3);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
+
+        end
+
     end
 end
 

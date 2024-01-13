@@ -1,13 +1,42 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <rsccat version="1.0" locale="en_US" product="MPC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
-  <!-- This file stores localized content related to UI components. -->
-  <message>
-    <!-- App -->
-    <entry key="AppTitle">KSSOLV Toolbox</entry>
-    <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
+    <!-- This file stores localized content related to UI components. -->
+    <message>
+        <!-- App -->
+        <entry key="AppTitle">KSSOLV Toolbox</entry>
+        <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
 
-    <!-- ToolStrip Home tab -->
-    <entry key="HomeTabTitle">Home</entry>
+        <!-- ToolStrip Home tab -->
+        <entry key="HomeTabTitle">Home</entry>
 
-  </message>
+        <entry key="ProjectSectionTitle">Project</entry>
+        <entry key="ProjectOpenButtonLabel">Open</entry>
+        <entry key="ProjectOpenButtonTooltip">Open project file</entry>
+        <entry key="ProjectModelButtonLabel">Model</entry>
+        <entry key="ProjectModelButtonTooltip">Import the structural model as a file or from a database</entry>
+        <entry key="ProjectSaveButtonLabel">Save</entry>
+        <entry key="ProjectSaveButtonTooltip">Save current project</entry>
+        <entry key="ProjectCloseButtonLabel">Close</entry>
+        <entry key="ProjectCloseButtonTooltip">Close current project</entry>
+
+        <entry key="EnvironmentSectionTitle">Environment</entry>
+        <entry key="EnvironmentLayoutButtonLabel">Layout</entry>
+        <entry key="EnvironmentLayoutButtonTooltip">Adjust desktop layout</entry>
+        <entry key="EnvironmentPreferenceButtonLabel">Preference</entry>
+        <entry key="EnvironmentPreferenceButtonTooltip">Preference setting</entry>
+        <entry key="EnvironmentToolsButtonLabel">Tools</entry>
+        <entry key="EnvironmentToolsButtonTooltip">KSSOLV-related tools</entry>
+
+        <entry key="ResourceSectionTitle">Resource</entry>
+        <entry key="ResourceLibraryButtonLabel">Library</entry>
+        <entry key="ResourceLibraryButtonTooltip">Summary of relevant theoretical data</entry>
+        <entry key="ResourceCommunityButtonLabel">Community</entry>
+        <entry key="ResourceCommunityButtonTooltip">Visit the KSSOLV online community</entry>
+        <entry key="ResourceHelpButtonLabel">Help</entry>
+        <entry key="ResourceHelpButtonTooltip">Get help</entry>
+
+        <!-- ToolStrip Workflow tab -->
+        <entry key="WorkflowTabTitle">Workflow</entry>
+
+    </message>
 </rsccat>

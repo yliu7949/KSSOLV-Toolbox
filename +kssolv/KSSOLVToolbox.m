@@ -41,9 +41,11 @@ classdef KSSOLVToolbox < handle
             this.AppContainer.add(group);
             % 添加 Tabs 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
+            workflowTab = kssolv.ui.components.tab.WorkflowTab();
             tabGroup = matlab.ui.internal.toolstrip.TabGroup();
             tabGroup.Tag = 'kssolvTabGroup';
             tabGroup.add(homeTab.Tab);
+            tabGroup.add(workflowTab.Tab);
             this.AppContainer.add(tabGroup);
             % 展示布局好的界面
             show(this);
