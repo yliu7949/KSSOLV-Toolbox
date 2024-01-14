@@ -40,17 +40,16 @@ classdef FooterBar < handle
             this.StatusProgress.Value = value;
         end
 
-        function setText(this, text)
+        function setLabelText(this, text)
             % 设置状态文本
             this.StatusLabel.Text = text;
         end
     end
 
-    methods (Hidden)
-        function app = qeShow(this)
+    methods (Static, Hidden)
+        function app = qeShow()
             % 用于在单元测试中测试 FooterBar，可通过下面的命令使用：
-            % f = kssolv.ui.components.others.FooterBar();
-            % f.qeShow();
+            % kssolv.ui.components.others.FooterBar.qeShow();
 
             % 创建 AppContainer          
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
@@ -65,15 +64,18 @@ classdef FooterBar < handle
             % 设定 Status Context
             statusTestContext = matlab.ui.container.internal.appcontainer.ContextDefinition();
             statusTestContext.Tag = 'kssolvTestContext';
-            statusTestContext.StatusComponentTags = {this.StatusProgress.Tag, this.StatusLabel.Tag};
+            statusTestContext.StatusComponentTags = {footerBar.StatusLabel.Tag, footerBar.StatusProgress.Tag};
             app.Contexts = [app.Contexts {statusTestContext}];
-            app.ActiveContexts = 'kssolvTestContext';
+            
+            % 设定 FooterBar Label
+            footerBar.setLabelText('正忙');
 
-            % 设定 Label
-            this.setText('Hello');
+            % 设定 Active Context
+            app.ActiveContexts = 'kssolvTestContext';
 
             % 展示界面
             app.Visible = true;
         end
     end
 end
+
