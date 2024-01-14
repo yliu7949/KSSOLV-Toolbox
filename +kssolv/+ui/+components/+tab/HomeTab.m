@@ -97,6 +97,7 @@ classdef HomeTab < handle
             % 创建 Button
             EnvironmentLayoutButton = CreatButton('split', 'EnvironmentLayout', section.Tag, Icon.LAYOUT_24);
             EnvironmentPreferenceButton = CreatButton('push', 'EnvironmentPreference', section.Tag, Icon.SETTINGS_24);
+            EnvironmentPreferenceButton.ButtonPushedFcn = @this.moleculerDisplay;
             EnvironmentToolsButton = CreatButton('split', 'EnvironmentTools', section.Tag, Icon.TOOLS_24);
             % 组装 Column 和 Button
             column1.add(EnvironmentLayoutButton);
