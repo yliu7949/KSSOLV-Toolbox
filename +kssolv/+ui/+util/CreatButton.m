@@ -1,5 +1,5 @@
-function button = CreatButton(type,name,tag_prefix,icon0)
-    %KSSOLVTOOLBOX 的工具类函数 用于创建不同形式的 Button 控件，这些控件主要被添加到Tab下的Column中； 
+function button = CreatButton(type,name,prefix,icon0)
+    %CREATBUTTON 创建不同形式的 Button 控件
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
 
@@ -14,7 +14,7 @@ else
     error('KSSOLV:CreatButton:icon0', 'Incorrect parameter data type.')
 end
 description = message(['KSSOLV:toolbox:' name 'ButtonTooltip']);
-tag = [tag_prefix '_' name];
+tag = [prefix '_' name];
 switch type
     case 'push'
         button = Button(label, icon);

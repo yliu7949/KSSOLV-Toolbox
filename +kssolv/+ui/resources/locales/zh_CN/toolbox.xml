@@ -18,11 +18,7 @@
         <entry key="ProjectSaveButtonTooltip">保存当前项目</entry>
         <entry key="ProjectCloseButtonLabel">关闭</entry>
         <entry key="ProjectCloseButtonTooltip">关闭当前项目</entry>
-        
-        <entry key="EnvironmentSectionTitle">Environment</entry>
-        <entry key="EnvironmentLayoutButtonLabel">Layout</entry>
-        <entry key="EnvironmentLayoutButtonTooltip">Adjust desktop layout</entry>
-
+    
         <entry key="EnvironmentSectionTitle">环境</entry>
         <entry key="EnvironmentLayoutButtonLabel">布局</entry>
         <entry key="EnvironmentLayoutButtonTooltip">调整桌面布局</entry>
@@ -41,6 +37,8 @@
         
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>
+        
+        <entry key="PlotSectionTitle">绘图</entry>
 
     </message>
 </rsccat>

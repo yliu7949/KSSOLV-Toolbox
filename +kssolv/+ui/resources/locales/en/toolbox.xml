@@ -38,5 +38,7 @@
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">Workflow</entry>
 
+        <entry key="PlotSectionTitle">Plot</entry>
+
     </message>
 </rsccat>

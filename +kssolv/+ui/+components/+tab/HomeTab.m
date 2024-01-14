@@ -22,7 +22,7 @@ classdef HomeTab < handle
         end
         
         function buildTab(this)
-            %CONSTRUCTTAB 创建 Home Tab 对象
+            %BUILDTAB 创建 Home Tab 对象
             this.Tab = matlab.ui.internal.toolstrip.Tab(this.Title);
             this.Tab.Tag = this.Tag;
             % 分别创建各个 Section 并添加到 Home Tab 中
@@ -45,15 +45,15 @@ classdef HomeTab < handle
             column3 = Column();
             column4 = Column();
             % 创建 Button
-            button1 = CreatButton('split','ProjectOpen',section.Tag,Icon.OPEN_24);
-            button2 = CreatButton('split','ProjectModel',section.Tag,Icon.IMPORT_24);
-            button3 = CreatButton('split','ProjectSave',section.Tag,Icon.SAVE_24);
-            button4 = CreatButton('push','ProjectClose',section.Tag,Icon.CLOSE_24);
+            ProjectOpenButton = CreatButton('split', 'ProjectOpen', section.Tag, Icon.OPEN_24);
+            ProjectModelButton = CreatButton('split', 'ProjectModel', section.Tag, Icon.IMPORT_24);
+            ProjectSaveButton = CreatButton('split', 'ProjectSave', section.Tag, Icon.SAVE_24);
+            ProjectCloseButton = CreatButton('push', 'ProjectClose', section.Tag, Icon.CLOSE_24);
             % 组装 Column 和 Button
-            column1.add(button1);
-            column2.add(button2);
-            column3.add(button3);
-            column4.add(button4);
+            column1.add(ProjectOpenButton);
+            column2.add(ProjectModelButton);
+            column3.add(ProjectSaveButton);
+            column4.add(ProjectCloseButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
@@ -62,7 +62,7 @@ classdef HomeTab < handle
         end
 
         function createEnvironmentSection(this) 
-            %createEnvironmentSection 创建"环境"小节，并添加到 HomeTab 中
+            %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
@@ -74,13 +74,13 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            button1 = CreatButton('split','EnvironmentLayout',section.Tag,Icon.LAYOUT_24);
-            button2 = CreatButton('push','EnvironmentPreference',section.Tag,Icon.SETTINGS_24);
-            button3 = CreatButton('split','EnvironmentTools',section.Tag,Icon.TOOLS_24);
+            EnvironmentLayoutButton = CreatButton('split','EnvironmentLayout',section.Tag,Icon.LAYOUT_24);
+            EnvironmentPreferenceButton = CreatButton('push','EnvironmentPreference',section.Tag,Icon.SETTINGS_24);
+            EnvironmentToolsButton = CreatButton('split','EnvironmentTools',section.Tag,Icon.TOOLS_24);
             % 组装 Column 和 Button
-            column1.add(button1);
-            column2.add(button2);
-            column3.add(button3);
+            column1.add(EnvironmentLayoutButton);
+            column2.add(EnvironmentPreferenceButton);
+            column3.add(EnvironmentToolsButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
@@ -88,7 +88,7 @@ classdef HomeTab < handle
         end
 
         function createResourceSection(this) 
-            %createResourceSection 创建"资源"小节，并添加到 HomeTab 中
+            %CREATERESOURCESECTION 创建"资源"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
@@ -100,20 +100,18 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            button1 = CreatButton('push','ResourceLibrary',section.Tag,Icon.COMPARE_24);
-            button2 = CreatButton('push','ResourceCommunity',section.Tag,Icon.PUBLISH_24);
-            button3 = CreatButton('split','ResourceHelp',section.Tag,Icon.HELP_24);
+            ResourceLibraryButton = CreatButton('push','ResourceLibrary',section.Tag,Icon.COMPARE_24);
+            ResourceCommunityButton = CreatButton('push','ResourceCommunity',section.Tag,Icon.PUBLISH_24);
+            ResourceHelpButton = CreatButton('split','ResourceHelp',section.Tag,Icon.HELP_24);
             % 组装 Column 和 Button
-            column1.add(button1);
-            column2.add(button2);
-            column3.add(button3);
+            column1.add(ResourceLibraryButton);
+            column2.add(ResourceCommunityButton);
+            column3.add(ResourceHelpButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
             this.Tab.add(section);
-
         end
-
     end
 end
 
