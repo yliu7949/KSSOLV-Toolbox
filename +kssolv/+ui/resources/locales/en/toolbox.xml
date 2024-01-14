@@ -18,6 +18,12 @@
         <entry key="ProjectSaveButtonTooltip">Save current project</entry>
         <entry key="ProjectCloseButtonLabel">Close</entry>
         <entry key="ProjectCloseButtonTooltip">Close current project</entry>
+        
+        <entry key="OperationSectionTitle">Operation</entry>
+        <entry key="OperationUndoButtonLabel">Undo</entry>
+        <entry key="OperationUndoButtonTooltip">Undo operation</entry>
+        <entry key="OperationRedoButtonLabel">Redo</entry>
+        <entry key="OperationRedoButtonTooltip">Redo operation</entry>
 
         <entry key="EnvironmentSectionTitle">Environment</entry>
         <entry key="EnvironmentLayoutButtonLabel">Layout</entry>

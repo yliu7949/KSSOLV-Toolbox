@@ -43,10 +43,10 @@ classdef WorkflowTab < handle
             category1 = GalleryCategory('My Category 1');
             category2 = GalleryCategory('My Category 2');
             % 创建 GalleryItem
-            item1 = GalleryItem('Import',Icon.IMPORT_24);
-            item2 = GalleryItem('Export',Icon.EXPORT_24);
-            item3 = GalleryItem('Print',Icon.PRINT_24);
-            item4 = GalleryItem('Help',Icon.HELP_24);
+            item1 = GalleryItem('Import', Icon.IMPORT_24);
+            item2 = GalleryItem('Export', Icon.EXPORT_24);
+            item3 = GalleryItem('Print', Icon.PRINT_24);
+            item4 = GalleryItem('Help', Icon.HELP_24);
             % 组装 GalleryCategory 和 GalleryItem 构建  Gallery 
             category1.add(item1);
             category1.add(item2);

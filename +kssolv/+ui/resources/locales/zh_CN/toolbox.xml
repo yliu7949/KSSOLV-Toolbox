@@ -18,7 +18,13 @@
         <entry key="ProjectSaveButtonTooltip">保存当前项目</entry>
         <entry key="ProjectCloseButtonLabel">关闭</entry>
         <entry key="ProjectCloseButtonTooltip">关闭当前项目</entry>
-    
+        
+        <entry key="OperationSectionTitle">操作</entry>
+        <entry key="OperationUndoButtonLabel">撤销</entry>
+        <entry key="OperationUndoButtonTooltip">撤销操作</entry>
+        <entry key="OperationRedoButtonLabel">重做</entry>
+        <entry key="OperationRedoButtonTooltip">重做操作</entry>
+        
         <entry key="EnvironmentSectionTitle">环境</entry>
         <entry key="EnvironmentLayoutButtonLabel">布局</entry>
         <entry key="EnvironmentLayoutButtonTooltip">调整桌面布局</entry>

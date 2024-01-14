@@ -27,6 +27,7 @@ classdef HomeTab < handle
             this.Tab.Tag = this.Tag;
             % 分别创建各个 Section 并添加到 Home Tab 中
             createProjectSection(this);
+            createOperationSection(this);
             createEnvironmentSection(this);
             createResourceSection(this);
         end
@@ -60,7 +61,27 @@ classdef HomeTab < handle
             section.add(column4);
             this.Tab.add(section);
         end
-
+        
+        function createOperationSection(this) 
+            %CREATEOPERATIONSECTION 创建"操作"小节，并添加到 HomeTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Operation Section
+            section = Section(message("KSSOLV:toolbox:OperationSectionTitle"));
+            section.Tag = 'OperationSection';
+            % 创建 Column
+            column1 = Column();
+            % 创建 Button
+            OperationUndoButton = CreatButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
+            OperationRedoButton = CreatButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
+            % 组装 Column 和 Button
+            column1.add(OperationUndoButton);
+            column1.add(OperationRedoButton);
+            section.add(column1);
+            this.Tab.add(section);
+        end
+        
         function createEnvironmentSection(this) 
             %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
@@ -74,9 +95,9 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            EnvironmentLayoutButton = CreatButton('split','EnvironmentLayout',section.Tag,Icon.LAYOUT_24);
-            EnvironmentPreferenceButton = CreatButton('push','EnvironmentPreference',section.Tag,Icon.SETTINGS_24);
-            EnvironmentToolsButton = CreatButton('split','EnvironmentTools',section.Tag,Icon.TOOLS_24);
+            EnvironmentLayoutButton = CreatButton('split', 'EnvironmentLayout', section.Tag, Icon.LAYOUT_24);
+            EnvironmentPreferenceButton = CreatButton('push', 'EnvironmentPreference', section.Tag, Icon.SETTINGS_24);
+            EnvironmentToolsButton = CreatButton('split', 'EnvironmentTools', section.Tag, Icon.TOOLS_24);
             % 组装 Column 和 Button
             column1.add(EnvironmentLayoutButton);
             column2.add(EnvironmentPreferenceButton);
@@ -100,9 +121,9 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            ResourceLibraryButton = CreatButton('push','ResourceLibrary',section.Tag,Icon.COMPARE_24);
-            ResourceCommunityButton = CreatButton('push','ResourceCommunity',section.Tag,Icon.PUBLISH_24);
-            ResourceHelpButton = CreatButton('split','ResourceHelp',section.Tag,Icon.HELP_24);
+            ResourceLibraryButton = CreatButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
+            ResourceCommunityButton = CreatButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
+            ResourceHelpButton = CreatButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
             % 组装 Column 和 Button
             column1.add(ResourceLibraryButton);
             column2.add(ResourceCommunityButton);
