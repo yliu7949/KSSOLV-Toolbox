@@ -1,25 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rsccat version="1.0" locale="en_US" product="MPC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
-<<<<<<< +kssolv/+ui/resources/locales/en/toolbox.xml
+<rsccat version="1.0" locale="en_US" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
     <!-- This file stores localized content related to UI components. -->
     <message>
         <!-- App -->
         <entry key="AppTitle">KSSOLV Toolbox</entry>
         <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
         <entry key="UnitTestTitle">Unit Test</entry>
-=======
-  <!-- This file stores localized content related to UI components. -->
-  <message>
-    <!-- App -->
-    <entry key="AppTitle">KSSOLV Toolbox</entry>
-    <entry key="WelcomeMessage">Welcome to use KSSOLV Toolbox.</entry>
-    <entry key="UnitTestTitle">Unit Test</entry>
->>>>>>> +kssolv/+ui/resources/locales/en/toolbox.xml
 
         <!-- ToolStrip Home tab -->
         <entry key="HomeTabTitle">Home</entry>
 
-<<<<<<< +kssolv/+ui/resources/locales/en/toolbox.xml
         <entry key="ProjectSectionTitle">Project</entry>
         <entry key="ProjectOpenButtonLabel">Open</entry>
         <entry key="ProjectOpenButtonTooltip">Open project file</entry>
@@ -58,10 +48,4 @@
         <entry key="PlotSectionTitle">Plot</entry>
 
     </message>
-=======
-    <!-- Data Browser -->
-    <entry key="BrowserTitle">Browser</entry>
-
-  </message>
->>>>>>> +kssolv/+ui/resources/locales/en/toolbox.xml
 </rsccat>
