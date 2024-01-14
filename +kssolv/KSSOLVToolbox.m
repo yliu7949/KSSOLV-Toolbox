@@ -21,25 +21,27 @@ classdef KSSOLVToolbox < handle
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.ToolstripEnabled = true;
             appOptions.EnableTheming = true;
-            this.AppContainer = matlab.ui.container.internal.AppContainer(appOptions);            
+            this.AppContainer = matlab.ui.container.internal.AppContainer(appOptions);
             this.Name = this.AppContainer.Tag;
+            % 保存 AppContainer 至 DataStorage
+            kssolv.ui.util.DataStorage.setData('AppContainer', this.AppContainer);
             % 添加工作区文字
             msg = message('KSSOLV:toolbox:WelcomeMessage');
             this.AppContainer.DocumentPlaceHolderText = msg;
             % 监听 App Container 的状态改变，例如关闭 App 时会触发 StateChanged 事件
             addlistener(this.AppContainer, 'StateChanged', @(src,data) callbackAppStateChanged(this));
-            % add two document groups
+            % 添加 Document Group
             group = matlab.ui.internal.FigureDocumentGroup();
-            group.Tag = 'InputPlot';
-            group.Title = 'Input Plots';
+            group.Tag = 'DocumentGroup';
+            group.Title = 'DocumentGroup';
             group.DefaultRegion = 'left';
             this.AppContainer.add(group);
-            group = matlab.ui.internal.FigureDocumentGroup();
-            group.Tag = 'OutputPlot';
-            group.Title = 'Output Plots';
-            group.DefaultRegion = 'right';
-            this.AppContainer.add(group);
-            % 添加 Tabs 组件
+            % 添加多个 Data Browser 组件
+            browser = kssolv.ui.components.databrowser.Browser();
+            browser.addToAppContainer(this.AppContainer);
+            infoBrowser = kssolv.ui.components.databrowser.InfoBrowser();
+            infoBrowser.addToAppContainer(this.AppContainer);
+            % 添加多个 Tab 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
             workflowTab = kssolv.ui.components.tab.WorkflowTab();
             tabGroup = matlab.ui.internal.toolstrip.TabGroup();
@@ -47,10 +49,21 @@ classdef KSSOLVToolbox < handle
             tabGroup.add(homeTab.Tab);
             tabGroup.add(workflowTab.Tab);
             this.AppContainer.add(tabGroup);
+            % 添加位于底部的 FooterBar 组件
+            footerBar = kssolv.ui.components.others.FooterBar();
+            footerBar.addToAppContainer(this.AppContainer);
             % 展示布局好的界面
             show(this);
         end
         
+        function delete(this)
+            %DELETE 析构函数
+            % 删除 App Container
+            if ~isempty(this.AppContainer) && isvalid(this.AppContainer)
+                delete(this.AppContainer);                        
+            end
+        end
+
         %% App 操作相关
         function appcontainer = getAppContainer(this)
             % 获取 App Container 实例
@@ -72,8 +85,11 @@ classdef KSSOLVToolbox < handle
     methods (Access = private)
         function callbackAppStateChanged(this)
             % 当 AppContainer 被关闭时，删除类的实例
-            import matlab.ui.container.internal.appcontainer.*;
+            import matlab.ui.container.internal.appcontainer.*
             if this.AppContainer.State == AppState.TERMINATED
+                % 清除本地化管理器的类的实例
+                kssolv.ui.util.Localizer.clearInstance();
+                % 清除 App Container 相关的实例
                 delete(this);
             end
         end

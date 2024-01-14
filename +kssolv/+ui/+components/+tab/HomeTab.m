@@ -133,6 +133,11 @@ classdef HomeTab < handle
             section.add(column3);
             this.Tab.add(section);
         end
+
+        function moleculerDisplay(~, ~, ~)
+            kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
+        end
+
     end
 end
 
