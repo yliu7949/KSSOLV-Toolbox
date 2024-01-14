@@ -18,6 +18,22 @@ classdef MoleculerDisplay < handle
             figOptions.Title = '结构'; 
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
+
+            % 添加 html 组件
+            fig = document.Figure;
+            g = uigridlayout(fig);
+            g.RowHeight = {'1x'};
+            g.ColumnWidth = {'1x'};
+            htmlFile = fullfile(fileparts(mfilename('fullpath')), '3Dmol', '3Dmol.html');
+
+            h = uihtml(g, ...
+                "HTMLSource", htmlFile, ...
+                "DataChangedFcn", @(src,event) disp(src.Data), ...
+                "HTMLEventReceivedFcn", @(src,event) disp(event.HTMLEventData));
+            h.Data = "My component data";
+            sendEventToHTMLSource(h, "MyMATLABEvent", "My event data");
+
+            % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             appContainer.add(document);
         end
@@ -29,7 +45,7 @@ classdef MoleculerDisplay < handle
             % m = kssolv.ui.components.figuredocument.MoleculerDisplay();
             % m.qeShow()
 
-            % 创建 AppContainer          
+            % 创建 App Container          
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
@@ -48,6 +64,7 @@ classdef MoleculerDisplay < handle
             
             % 展示界面
             app.Visible = true;
+
             % 展示 MolecularDisplay
             this.DocumentGroupTag = 'DocumentGroupTest';
             this.Display();

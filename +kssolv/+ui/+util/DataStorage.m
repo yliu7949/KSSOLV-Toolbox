@@ -1,5 +1,10 @@
 classdef DataStorage
     %DATASTORAGE 非持久性的键值对类型数据存储，用于跨组件数据传递
+    %   使用示例：
+    %       import kssolv.ui.util.DataStorage.*
+    %       setData('MyKey', myVariable);
+    %       value = getData('MyKey');
+    %
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     properties (Access = private)
