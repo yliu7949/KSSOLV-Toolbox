@@ -43,9 +43,11 @@ classdef KSSOLVToolbox < handle
             infoBrowser.addToAppContainer(this.AppContainer);
             % 添加多个 Tab 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
+            workflowTab = kssolv.ui.components.tab.WorkflowTab();
             tabGroup = matlab.ui.internal.toolstrip.TabGroup();
             tabGroup.Tag = 'kssolvTabGroup';
             tabGroup.add(homeTab.Tab);
+            tabGroup.add(workflowTab.Tab);
             this.AppContainer.add(tabGroup);
             % 添加位于底部的 FooterBar 组件
             footerBar = kssolv.ui.components.others.FooterBar();
