@@ -1,70 +1,38 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <script type="text/javascript">
-		
-        function setup(htmlComponent) {
-            console.log("Setup called:", htmlComponent);
-                
-            // Code response to data changes in MATLAB
-            htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
-
-            // Code response to events from MATLAB
-            htmlComponent.addEventListener("MyMATLABEvent", eventFromMATLABToHTML);
-
-            // Update the Data property of the htmlComponent object
-            // This action also updates the Data property of the MATLAB HTML object
-            // and triggers the DataChangedFcn callback function
-            let dataInput = document.getElementById("compdata")
-            dataInput.addEventListener("change", dataFromHTMLToMATLAB);
-
-            // Send an event to MATLAB and trigger
-            // the HTMLEventReceivedFcn callback function
-            let eventButton = document.getElementById("send");
-            eventButton.addEventListener("click", eventFromHTMLToMATLAB);
-
-            function dataFromMATLABToHTML(event) {
-                let changedData = htmlComponent.Data;
-                console.log("New data from MATLAB:", changedData);
-                
-                // Update your HTML or JavaScript with the new data
-                let dom = document.getElementById("compdata");
-                dom.value = changedData;
-            }
-
-            function eventFromMATLABToHTML(event) {
-                let eventData = event.Data;
-                console.log("Event from MATLAB with event data:", eventData);
-
-                // Update your HTML or JavaScript to react to the event
-                let dom = document.getElementById("evtdata");
-                dom.value = eventData;
-            }
-
-            function dataFromHTMLToMATLAB(event) {
-                newData = event.target.value;
-                htmlComponent.Data = newData;
-                console.log("New data in HTML:", newData)
-            }
-
-            function eventFromHTMLToMATLAB(event) {
-                eventData = document.getElementById("evtdata").value;
-                htmlComponent.sendEventToMATLAB("MyHTMLSourceEvent", eventData);
-                console.log("Sending event to MATLAB with event data:", eventData);
-            }
+    <script src="./3Dmol-min.js"></script>
+    <style>
+        .mol-container {
+            width: 100%;
+            height: 613px;
+            position: relative;
         }
-    </script>
+    </style>
 </head>
-
 <body>
-    <div style="font-family:sans-serif;">
-        <label for="compdata">Component data:</label>
-        <input type="text" id="compdata" name="compdata"><br><br>
-        <label for="evtdata">Event data:</label>
-        <input type="text" id="evtdata" name="evtdata"><br><br>
-        <button id="send">Send event to MATLAB</button>
-    </div>
-</body>
+    <div id="container-01" class="mol-container"></div>
 
+    <script type="text/javascript">
+        function setup(htmlComponent) {
+            htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
+            
+            function dataFromMATLABToHTML(event) {
+                let text = htmlComponent.Data;
+                console.log("New data from MATLAB:", text);
+                
+                let element = document.querySelector('#container-01');
+                let config = { backgroundColor: 'white' };
+                let viewer = $3Dmol.createViewer(element, config);
+                let m = viewer.addModel(text, "cif");
+                viewer.addUnitCell(m);
+                viewer.setStyle({'sphere':{'colorscheme':'Jmol','scale':.3},'stick':{'colorscheme':'Jmol', 'radius': 0.2}})
+                viewer.zoomTo();
+                viewer.render();
+                viewer.zoom(1.5, 1500);
+            }
+        };
+    </script>
+</body>
 </html>
 

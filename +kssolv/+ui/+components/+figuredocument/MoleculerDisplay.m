@@ -25,13 +25,13 @@ classdef MoleculerDisplay < handle
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
             htmlFile = fullfile(fileparts(mfilename('fullpath')), '3Dmol', '3Dmol.html');
+            h = uihtml(g, "HTMLSource", htmlFile);
 
-            h = uihtml(g, ...
-                "HTMLSource", htmlFile, ...
-                "DataChangedFcn", @(src,event) disp(src.Data), ...
-                "HTMLEventReceivedFcn", @(src,event) disp(event.HTMLEventData));
-            h.Data = "My component data";
-            sendEventToHTMLSource(h, "MyMATLABEvent", "My event data");
+            % 读取 CIF 格式文件并保存在 html 组件中
+            cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
+                '3Dmol', 'MoS2_mp-2815_conventional_standard.cif');
+            cifFileContent = fileread(cifFilePath);
+            h.Data = cifFileContent;
 
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
