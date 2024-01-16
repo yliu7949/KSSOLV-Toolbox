@@ -140,5 +140,29 @@ classdef HomeTab < handle
         end
 
     end
+
+    methods (Static, Hidden)
+        function app = qeShow()
+            % 用于在单元测试中测试 HomeTab，可通过下面的命令使用：
+            % kssolv.ui.components.tab.HomeTab.qeShow();
+
+            % 创建 AppContainer          
+            appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
+            appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
+            appOptions.ToolstripEnabled = true;
+            app = matlab.ui.container.internal.AppContainer(appOptions);
+
+            % 添加 HomeTab
+            homeTab = kssolv.ui.components.tab.HomeTab();
+            tabGroup = matlab.ui.internal.toolstrip.TabGroup();
+            tabGroup.Tag = 'kssolvTabGroup';
+            tabGroup.add(homeTab.Tab);
+            app.add(tabGroup);
+
+            % 展示界面
+            app.Visible = true;
+        end
+    end
+
 end
 
