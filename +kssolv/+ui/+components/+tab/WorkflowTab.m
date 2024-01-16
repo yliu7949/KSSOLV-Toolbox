@@ -62,5 +62,29 @@ classdef WorkflowTab < handle
             this.Tab.add(section);
         end
     end
+
+    methods (Static, Hidden)
+        function app = qeShow()
+            % 用于在单元测试中测试 WorkflowTab，可通过下面的命令使用：
+            % kssolv.ui.components.tab.WorkflowTab.qeShow();
+
+            % 创建 AppContainer          
+            appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
+            appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
+            appOptions.ToolstripEnabled = true;
+            app = matlab.ui.container.internal.AppContainer(appOptions);
+
+            % 添加 WorkflowTab
+            workflowTab = kssolv.ui.components.tab.WorkflowTab();
+            tabGroup = matlab.ui.internal.toolstrip.TabGroup();
+            tabGroup.Tag = 'kssolvTabGroup';
+            tabGroup.add(workflowTab.Tab);
+            app.add(tabGroup);
+
+            % 展示界面
+            app.Visible = true;
+        end
+    end
+
 end
 
