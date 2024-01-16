@@ -18,6 +18,16 @@ classdef Browser < matlab.ui.internal.databrowser.AbstractDataBrowser
         end
     end
 
+    methods (Access = protected)
+        function buildUI(this)
+            fig = this.Figure;
+            g = uigridlayout(fig);
+            g.RowHeight = {'1x'};
+            g.ColumnWidth = {'1x'};
+            uitable(g, "Data", randi(100, 10, 3));
+        end
+    end
+
     methods (Hidden)
         function app = qeShow(this)
             % 用于在单元测试中测试 Browser，可通过下面的命令使用：
