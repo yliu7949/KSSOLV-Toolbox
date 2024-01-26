@@ -102,7 +102,8 @@ figure(2)
 isosurface(X,Y,Z,rho3,0.9*max(max(max(rho3)))) % 对等值面作图，等值面为0.9倍电子密度最大值
 % 这个等值面应该可以修改颜色和透明度，但patch调用时总是报参数错误（应该和等值面数目过多有关），我暂时无法解决，等后续改良
 hold on
-isosurface(X,Y,Z,rho3,0.1*max(max(max(rho3)))) % 对等值面作图，等值面为0.1倍电子密度最大值
+isosurface(X,Y,Z,rho3,0.2*max(max(max(rho3)))) % 对等值面作图，等值面为0.2倍电子密度最大值
+alpha(0.5)                            %设置透明度为0.5
 hold off
 view([-h -k -l]);                     % 调整视角
 % camtarget([d / sqrt(h^2 + k^2 + l^2)*h,d / sqrt(h^2 + k^2 + l^2)*k,d / sqrt(h^2 + k^2 + l^2)*l]) 
