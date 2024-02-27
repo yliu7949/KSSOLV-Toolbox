@@ -40,28 +40,44 @@ classdef Browser < matlab.ui.internal.databrowser.AbstractDataBrowser
                 [numRows, numCols] = size(src.Data);
                 
                 % 颜色设置
+                % 默认
                 style0 = uistyle("BackgroundColor", [1, 1, 1]);
-                style1 = uistyle("BackgroundColor", [0.5, 0.5, 0.5]);
+                % 选中
+                style1 = uistyle("BackgroundColor", [0.1, 0.1, 0.1]);
+                % 同行
                 style2 = uistyle("BackgroundColor", [0.8, 0.8, 0.8]);
 
                 % 判断选中
                 if ~isempty(event.Indices)
                     % 得到选中单元格
-                    row = event.Indices(1);
-                    col = event.Indices(2);
+                    rows = event.Indices(:, 1);
+                    cols = event.Indices(:, 2);
+
+                    % 获取单元格数量
+                    num = size(rows, 1);
 
                     % 颜色赋值
-                    addStyle(src, style1, "cell", [row col]);
-                    for c = 1:numCols
-                        if c ~= col
-                            addStyle(src, style2, "cell", [row c]);
+                    for i = 1:numRows
+                        for j = 1:numCols
+                            addStyle(src, style0, "cell", [i j]);
                         end
                     end
-                    for r = 1:numRows
-                        if r ~= row
-                            for c =1:numCols
-                                addStyle(src, style0, "cell", [r c]);
+                    
+                    for i = 1:num
+                        if i > 1
+                            if rows(i) == rows(i-1)
+                                addStyle(src, style1, "cell", [rows(i) cols(i)]);
+                            else
+                                for j = 1:numCols
+                                    addStyle(src, style2, "cell", [rows(i) j]);
+                                end
+                                addStyle(src, style1, "cell", [rows(i) cols(i)]);
                             end
+                        else
+                            for j = 1:numCols
+                                addStyle(src, style2, "cell", [rows(i) j]);
+                            end
+                            addStyle(src, style1, "cell", [rows(i) cols(i)]);
                         end
                     end
                 end
