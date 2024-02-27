@@ -21,28 +21,13 @@ classdef Workflow
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
 
+            % 添加 html 组件
             fig = document.Figure;
             g = uigridlayout(fig);
-            g.RowHeight = {400, '1x'};
-            g.ColumnWidth = {400, '1x'};
-
-            % 创建一个 uiaxes 对象并将其放置在网格布局中
-            canvasAxes = uiaxes(g);
-            canvasAxes.Layout.Row = 1;
-            canvasAxes.Layout.Column = 1;
-            %% 配置 uiaxes 属性
-            % 关闭坐标轴
-            canvasAxes.XAxis.Visible = 'off';
-            canvasAxes.YAxis.Visible = 'off';
-            canvasAxes.XLim = [0 200];
-            canvasAxes.YLim = [0 200];
-            % 关闭右上角的 Toolbar
-            canvasAxes.Toolbar = [];
-            % 打开网格线，设置网格线样式
-            axis(canvasAxes, 'square');
-            grid(canvasAxes, 'on');
-            grid(canvasAxes, 'minor');
-            hold(canvasAxes, 'on');
+            g.RowHeight = {'1x'};
+            g.ColumnWidth = {'1x'};
+            htmlFile = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'index.html');
+            uihtml(g, "HTMLSource", htmlFile);
 
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
