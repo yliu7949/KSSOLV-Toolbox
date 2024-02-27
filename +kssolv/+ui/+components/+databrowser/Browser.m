@@ -24,7 +24,64 @@ classdef Browser < matlab.ui.internal.databrowser.AbstractDataBrowser
             g = uigridlayout(fig);
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
-            uitable(g, "Data", randi(100, 10, 3));
+            table = uitable(g, "Data", randi(100, 10, 3));
+
+            % 警告符号
+            warningRows = find(table.Data(:, 2) > 30);
+            warningColunms = repmat(2, size(warningRows));
+            cells = [warningRows warningColunms];
+            Icon = uistyle("Icon", "warning", "IconAlignment", "right");
+            addStyle(table, Icon, "cell" ,cells);
+
+            % 表格点击行为
+            table.CellSelectionCallback = @cellSelectCallback;
+            function cellSelectCallback(src, event)
+                % 获得表格大小
+                [numRows, numCols] = size(src.Data);
+                
+                % 颜色设置
+                style0 = uistyle("BackgroundColor", [1, 1, 1]);
+                style1 = uistyle("BackgroundColor", [0.5, 0.5, 0.5]);
+                style2 = uistyle("BackgroundColor", [0.8, 0.8, 0.8]);
+
+                % 判断选中
+                if ~isempty(event.Indices)
+                    % 得到选中单元格
+                    row = event.Indices(1);
+                    col = event.Indices(2);
+
+                    % 颜色赋值
+                    addStyle(src, style1, "cell", [row col]);
+                    for c = 1:numCols
+                        if c ~= col
+                            addStyle(src, style2, "cell", [row c]);
+                        end
+                    end
+                    for r = 1:numRows
+                        if r ~= row
+                            for c =1:numCols
+                                addStyle(src, style0, "cell", [r c]);
+                            end
+                        end
+                    end
+                end
+            end
+
+            % 折叠按钮
+            tablePosition = table.Position;
+            buttonX = tablePosition(1);
+            buttonY = tablePosition(2) + tablePosition(4); 
+            buttonWidth = 100;
+            buttonHeight = 20;
+            uibutton(fig, 'Text', 'Toggle Table', 'Position', [buttonX, buttonY-50, buttonWidth, buttonHeight], 'ButtonPushedFcn', @(btn,event) toggleTableVisibility(table));
+            function toggleTableVisibility(table)
+                % 切换表格的可见性
+                if strcmp(table.Visible, 'on')
+                    table.Visible = 'off';
+                else
+                    table.Visible = 'on';
+                end
+            end
         end
     end
 
