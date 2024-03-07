@@ -50,5 +50,8 @@
         <!-- Data Browser -->
         <entry key="BrowserTitle">Browser</entry>
 
+        <!-- Document Group -->
+        <entry key="DocumentStructureTitle">Structure</entry>
+        <entry key="DocumentWorkflowTitle">Workflow</entry>
     </message>
 </rsccat>

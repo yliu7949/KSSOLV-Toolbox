@@ -5,7 +5,7 @@ import kssolv.ui.util.Localizer.*
 disp(message('KSSOLV:toolbox:WelcomeMessage'));
 
 % 切换至另一种语言
-setLocale('en');
+setLocale('en_US');
 disp(message('KSSOLV:toolbox:WelcomeMessage'));
 
 % 再次切换语言

@@ -15,7 +15,7 @@ classdef MoleculerDisplay < handle
         
         function Display(this)
             %DISPLAY 在 Document Group 中展示渲染的分子/晶体结构
-            figOptions.Title = '结构'; 
+            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentStructureTitle'); 
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
 

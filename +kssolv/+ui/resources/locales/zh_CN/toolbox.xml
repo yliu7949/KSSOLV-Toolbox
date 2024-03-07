@@ -50,5 +50,8 @@
         <!-- Data Browser -->
         <entry key="BrowserTitle">浏览器</entry>
 
+        <!-- Document Group -->
+        <entry key="DocumentStructureTitle">结构</entry>
+        <entry key="DocumentWorkflowTitle">工作流</entry>
     </message>
 </rsccat>

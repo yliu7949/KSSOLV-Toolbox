@@ -17,7 +17,7 @@ classdef Workflow
     methods
         function Display(this)
             %DISPLAY 在 Document Group 中展示工作流画布
-            figOptions.Title = '工作流'; 
+            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentWorkflowTitle'); 
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
 
