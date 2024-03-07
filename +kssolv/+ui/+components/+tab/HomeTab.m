@@ -124,6 +124,7 @@ classdef HomeTab < handle
             % 创建 Button
             ResourceLibraryButton = CreatButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
             ResourceCommunityButton = CreatButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
+            ResourceCommunityButton.ButtonPushedFcn = @this.workflowDisplay;
             ResourceHelpButton = CreatButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
             % 组装 Column 和 Button
             column1.add(ResourceLibraryButton);
@@ -137,6 +138,10 @@ classdef HomeTab < handle
 
         function moleculerDisplay(~, ~, ~)
             kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
+        end
+
+        function workflowDisplay(~, ~, ~)
+            kssolv.ui.components.figuredocument.Workflow().Display();
         end
 
     end

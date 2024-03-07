@@ -10,7 +10,7 @@ classdef Workflow
     methods
         function this = Workflow()
             %WORKFLOW 构造此类的实例
-            this.DocumentGroupTag = 'Workflow';
+            this.DocumentGroupTag = 'DocumentGroup';
         end
     end
 
