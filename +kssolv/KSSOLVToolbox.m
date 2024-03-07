@@ -37,8 +37,8 @@ classdef KSSOLVToolbox < handle
             group.DefaultRegion = 'left';
             this.AppContainer.add(group);
             % 添加多个 Data Browser 组件
-            browser = kssolv.ui.components.databrowser.Browser();
-            browser.addToAppContainer(this.AppContainer);
+            projectBrowser = kssolv.ui.components.databrowser.ProjectBrowser();
+            projectBrowser.addToAppContainer(this.AppContainer);
             infoBrowser = kssolv.ui.components.databrowser.InfoBrowser();
             infoBrowser.addToAppContainer(this.AppContainer);
             % 添加多个 Tab 组件

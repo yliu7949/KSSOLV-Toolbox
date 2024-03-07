@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Collapsible Tree Table</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    .table-container {
+      display: flex;
+      justify-content: center;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%; /* 宽度为100%，以便于响应式变化 */
+      border-radius: 2px;
+      overflow: hidden;
+      font-size: 13px;
+      color: #565656;
+    }
+    th, td {
+      border: 1px solid #e0e0e0;
+      padding: 4px;
+      text-align: left;
+      white-space: nowrap; /* Prevent text wrapping */
+      overflow: hidden; /* Hide text that overflows */
+      text-overflow: ellipsis; /* Optional: add ellipsis for overflowed text */
+    }
+    th {
+      background-color: #eeeeee;
+      user-select: none; /* 禁止选择文字 */
+      position: relative;
+    }
+    tr {
+      user-select: none;
+      background-color: white;
+    }
+    .selected {
+      background-color: #e2f1fb; /* 被选中行的背景色 */
+    }
+    .selected td {
+      background-color: #e2f1fb; /* 被选中单元格的更深背景色 */
+    }
+    .folder-icon {
+      background-image: url('./asserts/folder.svg');
+    }
+    .workflow-icon {
+      background-image: url("./asserts/workflow.svg");
+    }
+    .file-icon {
+      background-image: url("./asserts/file.svg");
+    }
+    .toggle-icon {
+      cursor: pointer;
+    }
+    .resize-handle {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 3px; /* width of the draggable area */
+      height: 100%;
+      cursor: col-resize;
+      background-color: transparent; /* or a color for visibility */
+    }
+    .icon-container {
+      display: inline-block;
+      width: 16px; /* Adjust the width as necessary */
+      height: 16px; /* Adjust the height as necessary */
+      vertical-align: middle; /* To align with the text */
+      background-size: contain; /* 或者使用 cover，根据需要调整 */
+      background-position: center; /* 使背景图像居中 */
+      background-repeat: no-repeat; /* 防止背景图像重复 */
+    }
+    .icon-container:hover {
+      opacity: 0.7;
+    }
+  </style>
+  <script>
+    // Data in JSON format
+    const tableData = [
+      {
+        "name": "Project",
+        "label": "Project",
+        "size": "",
+        "type": "project",
+        "children": [
+          {
+            "name": "Structures",
+            "label": "Structures",
+            "size": "1x1",
+            "type": "",
+            "children": []
+          },
+          {
+            "name": "Workflow1",
+            "label": "Workflow1",
+            "size": "",
+            "type": "simulation",
+            "children": [
+              {
+                "name": "LastRun",
+                "label": "LastRun",
+                "size": "",
+                "type": "",
+                "children": []
+              },
+              {
+                "name": "results",
+                "label": "results",
+                "size": "1x1",
+                "type": "SimData",
+                "children": [
+                  {
+                    "name": "time",
+                    "label": "time",
+                    "size": "2x1",
+                    "type": "double",
+                    "children": []
+                  },
+                  {
+                    "name": "Energy",
+                    "label": "Energy",
+                    "size": "2x1",
+                    "type": "double",
+                    "children": []
+                  },
+                  {
+                    "name": "Plot1",
+                    "label": "Plot1",
+                    "size": "1x1",
+                    "type": "percentile",
+                    "children": []
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ];
+
+    // Function to find all child node names of a given node name
+    function findAllChildNames(nodeName, treeData) {
+      let names = [];
+
+      // Helper function to recursively search for child names
+      function searchChildren(node, searchedName) {
+        if (node.name === searchedName) {
+          // Found the node, now get all its child names
+          if (node.children) {
+            node.children.forEach(child => {
+              names.push(child.name);
+              searchChildren(child, child.name); // Recurse to get sub-children
+            });
+          }
+        } else if (node.children) {
+          // Keep searching in children
+          node.children.forEach(child => searchChildren(child, searchedName));
+        }
+      }
+
+      // Start the recursive search
+      treeData.forEach(child => searchChildren(child, nodeName));
+
+      return names;
+    }
+
+    // Function to toggle child rows
+    function toggleChildren(event) {
+      const parentRowElement = event.target.parentElement.parentElement;
+      const childNames = findAllChildNames(parentRowElement.getAttribute('data-name'), tableData);
+
+      // 选择所有子节点
+      const allRows = document.querySelectorAll(`tr[data-name]`);
+      // 遍历所有行，判断是否为目标子节点或子节点的子节点
+      allRows.forEach(row => {
+        const rowDataName = row.getAttribute('data-name');
+
+        // 检查当前行是否是目标行的子行或子行的子行
+        if (childNames.includes(rowDataName)) {
+          // 切换显示状态：如果当前是隐藏（'none'），则显示（''）；否则隐藏（'none'）
+          row.style.display = row.style.display === 'none' ? '' : 'none';
+        }
+      });
+    }
+
+    // Function to toggle row selection
+    function toggleRowSelection(event) {
+      const allRows = document.querySelectorAll('tr');
+      allRows.forEach(row => {
+        row.classList.remove('selected'); // Remove the 'selected' class
+      });
+
+      const rowElement = event.target.closest('tr');
+      rowElement.classList.add('selected'); // Add the 'selected' class to the clicked row
+    }
+
+    // Function to create the table rows
+    function createRow(data, level, parentId) {
+      const row = document.createElement('tr');
+      row.setAttribute('data-level', level);
+      row.setAttribute('data-name', data.name);
+      row.setAttribute('data-parent', parentId);
+      row.addEventListener('click', toggleRowSelection);
+
+      const nameCell = document.createElement('td');
+      nameCell.style.paddingLeft = `${20 * level + 10}px`;
+
+      if (data.children && data.children.length > 0) {
+        // Create a container for the SVG to enable CSS styling and events
+        const folderIconContainer = document.createElement('div');
+        folderIconContainer.className = 'icon-container toggle-icon folder-icon';
+        folderIconContainer.setAttribute('data-target', data.name);
+        folderIconContainer.onclick = toggleChildren;
+
+        nameCell.appendChild(folderIconContainer);
+      } else {
+        const fileIconContainer = document.createElement('div');
+        fileIconContainer.className = 'icon-container file-icon';
+
+        nameCell.appendChild(fileIconContainer);
+      }
+
+      nameCell.append(` ${data.label}`);
+      row.appendChild(nameCell);
+
+      const sizeCell = document.createElement('td');
+      sizeCell.innerText = data.size;
+      row.appendChild(sizeCell);
+
+      const typeCell = document.createElement('td');
+      typeCell.innerText = data.type;
+      row.appendChild(typeCell);
+
+      return row;
+    }
+
+    // Function to build the table
+    function buildTable(data, table, level = 0, parentId = '') {
+      data.forEach(item => {
+        const row = createRow(item, level, parentId);
+        table.appendChild(row);
+
+        if (item.children && item.children.length > 0) {
+          buildTable(item.children, table, level + 1, item.name);
+        }
+      });
+    }
+
+    // Building the table on window load
+    window.onload = function() {
+      const table = document.getElementById('tree-table');
+      buildTable(tableData, table);
+
+      // JavaScript for resizable columns
+      const thElements = document.querySelectorAll('th');
+      thElements.forEach((th, index) => {
+        // Skip the last header cell
+        if (index === (thElements.length - 1)) return;
+
+        const resizeHandle = document.createElement('div');
+        resizeHandle.classList.add('resize-handle');
+
+        let start = 0;
+        let initialWidth = 0;
+
+        resizeHandle.addEventListener('mousedown', e => {
+          start = e.pageX;
+          initialWidth = th.offsetWidth;
+          // Prevent text wrapping and overflow
+          th.style['white-space'] = 'nowrap';
+
+          document.addEventListener('mousemove', onMouseMove);
+          document.addEventListener('mouseup', onMouseUp);
+
+          function onMouseMove(e) {
+            // Calculate the new width
+            const newWidth = initialWidth + (e.pageX - start);
+            th.style.width = newWidth + 'px';
+          }
+
+          function onMouseUp() {
+            document.removeEventListener('mousemove', onMouseMove);
+            document.removeEventListener('mouseup', onMouseUp);
+          }
+        });
+
+        th.appendChild(resizeHandle);
+      });
+    };
+  </script>
+</head>
+<body>
+
+<div class="table-container">
+  <table id="tree-table">
+    <thead>
+    <tr>
+      <th>Name</th>
+      <th>Size</th>
+      <th>Type</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Table rows will be inserted here dynamically -->
+    </tbody>
+  </table>
+</div>
+
+</body>
+</html>
