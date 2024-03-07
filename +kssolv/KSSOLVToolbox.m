@@ -52,6 +52,10 @@ classdef KSSOLVToolbox < handle
             % 添加位于底部的 FooterBar 组件
             footerBar = kssolv.ui.components.others.FooterBar();
             footerBar.addToAppContainer(this.AppContainer);
+            % 添加位于右上角的 QuickAccessBar 组件
+            quickAccessBar = kssolv.ui.components.others.QuickAccessBar();
+            quickAccessBar.addToAppContainer(this.AppContainer)
+
             % 展示布局好的界面
             show(this);
         end
