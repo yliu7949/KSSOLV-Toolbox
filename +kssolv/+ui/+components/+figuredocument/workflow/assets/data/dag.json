@@ -5,7 +5,7 @@
     "x": 290,
     "y": 110,
     "data": {
-      "label": "读数据",
+      "label": "Configuration",
       "status": "success"
     },
     "ports": [
@@ -21,7 +21,7 @@
     "x": 290,
     "y": 225,
     "data": {
-      "label": "逻辑回归",
+      "label": "SCF",
       "status": "success"
     },
     "ports": [
@@ -45,7 +45,7 @@
     "x": 170,
     "y": 350,
     "data": {
-      "label": "模型预测",
+      "label": "Plot1",
       "status": "default"
     },
     "ports": [
@@ -65,7 +65,7 @@
     "x": 450,
     "y": 350,
     "data": {
-      "label": "读取参数",
+      "label": "Plot2",
       "status": "failed"
     },
     "ports": [

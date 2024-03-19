@@ -44,13 +44,13 @@
       background-color: #e2f1fb; /* 被选中单元格的更深背景色 */
     }
     .folder-icon {
-      background-image: url('./asserts/folder.svg');
+      background-image: url('assets/folder.svg');
     }
     .workflow-icon {
-      background-image: url("./asserts/workflow.svg");
+      background-image: url("assets/workflow.svg");
     }
     .file-icon {
-      background-image: url("./asserts/file.svg");
+      background-image: url("assets/file.svg");
     }
     .toggle-icon {
       cursor: pointer;
@@ -249,39 +249,53 @@
       });
     }
 
-    // Building the table on window load
-    window.onload = function() {
-      const table = document.getElementById('tree-table');
-      buildTable(tableData, table);
-
-      // JavaScript for resizable columns
+    // Function to resizable columns
+    function addResizableColumns() {
       const thElements = document.querySelectorAll('th');
       thElements.forEach((th, index) => {
+        // 显式地设定 width 属性，避免折叠行时，列的宽度会发生变化
+        th.style.width = window.getComputedStyle(th).width;
+
         // Skip the last header cell
         if (index === (thElements.length - 1)) return;
 
         const resizeHandle = document.createElement('div');
         resizeHandle.classList.add('resize-handle');
 
-        let start = 0;
-        let initialWidth = 0;
+        // 获取右侧相邻的 th 元素
+        const nextTh = th.nextElementSibling;
+        const totalWidth = th.offsetWidth + nextTh.offsetWidth;
 
         resizeHandle.addEventListener('mousedown', e => {
-          start = e.pageX;
-          initialWidth = th.offsetWidth;
-          // Prevent text wrapping and overflow
-          th.style['white-space'] = 'nowrap';
+          let start = e.pageX;
+          let initialThWidth = parseFloat(window.getComputedStyle(th).width);
+          let initialNextThWidth = parseFloat(window.getComputedStyle(nextTh).width);
 
           document.addEventListener('mousemove', onMouseMove);
           document.addEventListener('mouseup', onMouseUp);
 
           function onMouseMove(e) {
-            // Calculate the new width
-            const newWidth = initialWidth + (e.pageX - start);
-            th.style.width = newWidth + 'px';
+            const diff = e.pageX - start;
+            if (diff < 0) {
+              const newThWidth = diff + initialThWidth;
+              if (newThWidth > 0) {
+                nextTh.style.width = '';
+                th.style.width = newThWidth + 'px';
+              }
+            } else {
+              const newNextThWidth = initialNextThWidth - diff;
+              if (newNextThWidth > 0) {
+                th.style.width = '';
+                nextTh.style.width = newNextThWidth + 'px';
+              }
+            }
           }
 
           function onMouseUp() {
+            thElements.forEach((th) => {
+              // 显式地设定 width 属性，避免折叠行时，列的宽度会发生变化
+              th.style.width = window.getComputedStyle(th).width;
+            });
             document.removeEventListener('mousemove', onMouseMove);
             document.removeEventListener('mouseup', onMouseUp);
           }
@@ -289,6 +303,13 @@
 
         th.appendChild(resizeHandle);
       });
+    }
+
+    // Building the table on window load
+    window.onload = function() {
+      const table = document.getElementById('tree-table');
+      buildTable(tableData, table);
+      addResizableColumns();
     };
   </script>
 </head>
