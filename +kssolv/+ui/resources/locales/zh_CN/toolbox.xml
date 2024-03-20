@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rsccat version="1.0" locale="en_US" product="MPC" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+<rsccat version="1.0" locale="en_US" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
     <!-- 该文件存储了与 UI 组件有关的本地化内容. -->
     <message>
         <!-- App -->
@@ -47,8 +47,17 @@
         
         <entry key="PlotSectionTitle">绘图</entry>
 
-        <!-- Data Browser -->
-        <entry key="BrowserTitle">浏览器</entry>
+        <!-- Project Browser -->
+        <entry key="ProjectBrowserTitle">项目浏览器</entry>
+
+        <!-- Info Browser -->
+        <entry key="InfoBrowserTitle">信息</entry>
+
+        <!-- Config Browser -->
+        <entry key="ConfigBrowserTitle">配置编辑器</entry>
+
+        <!-- Run Browser -->
+        <entry key="RunBrowserTitle">计算模拟</entry>
 
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">结构</entry>

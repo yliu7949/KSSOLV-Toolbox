@@ -42,6 +42,11 @@ classdef KSSOLVToolbox < handle
             projectBrowser.addToAppContainer(this.AppContainer);
             infoBrowser = kssolv.ui.components.databrowser.InfoBrowser();
             infoBrowser.addToAppContainer(this.AppContainer);
+            configBrowser = kssolv.ui.components.databrowser.ConfigBrowser();
+            configBrowser.addToAppContainer(this.AppContainer);
+            runBrowser = kssolv.ui.components.databrowser.RunBrowser();
+            runBrowser.addToAppContainer(this.AppContainer);
+            this.setPanelLayout();
             % 添加多个 Tab 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
             workflowTab = kssolv.ui.components.tab.WorkflowTab();
@@ -88,14 +93,30 @@ classdef KSSOLVToolbox < handle
     end
 
     methods (Access = private)
+        function setPanelLayout(this)
+            % 调整 Data Browsers 的布局
+            % 保持 projectBrowser 和 infoBrowser 在左侧，configBrowser 和 runBrowser 在右侧
+            InfoBrowserPanel = this.AppContainer.getPanel('InfoBrowser');
+            InfoBrowserPanel.Collapsed = true;
+            ConfigBrowserPanel = this.AppContainer.getPanel('ConfigBrowser');
+            ConfigBrowserPanel.Region = "right";
+            RunBrowserPanel = this.AppContainer.getPanel('RunBrowser');
+            RunBrowserPanel.Region = "right";
+            RunBrowserPanel.Collapsed = true;
+        end
+
         function callbackAppStateChanged(this)
             % 当 AppContainer 被关闭时，删除类的实例
             import matlab.ui.container.internal.appcontainer.*
-            if this.AppContainer.State == AppState.TERMINATED
-                % 清除本地化管理器的类的实例
-                kssolv.ui.util.Localizer.clearInstance();
-                % 清除 App Container 相关的实例
-                delete(this);
+            switch this.AppContainer.State
+                case AppState.RUNNING
+                    % 在 App 打开后进行一些操作，如折叠右侧面板
+                    this.AppContainer.RightCollapsed = true;
+                case AppState.TERMINATED
+                    % 清除本地化管理器的类的实例
+                    kssolv.ui.util.Localizer.clearInstance();
+                    % 清除 App Container 相关的实例
+                    delete(this);
             end
         end
     end

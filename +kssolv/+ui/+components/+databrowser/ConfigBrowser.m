@@ -1,4 +1,4 @@
-classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
+classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %BROWSER 自定义的 Data Browser 组件
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -8,15 +8,15 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     end
     
     methods
-        function this = ProjectBrowser()
+        function this = ConfigBrowser()
             %BROWSER 构造此类的实例
-            title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:ProjectBrowserTitle');
+            title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:ConfigBrowserTitle');
             % 调用超类构造函数
-            this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ProjectBrowser', title);          
+            this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ConfigBrowser', title);          
             % 自定义 widget 和 layout
             buildUI(this);
             % 设定 FigurePanel 的 Tag
-            this.Panel.Tag = 'ProjectBrowser';
+            this.Panel.Tag = 'ConfigBrowser';
         end
     end
 
@@ -28,9 +28,6 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             g.Padding = [0 0 0 0];
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
-            
-            htmlFile = fullfile(fileparts(mfilename('fullpath')), 'TreeTable', 'TreeTable.html');
-            uihtml(g, "HTMLSource", htmlFile);
         end
     end
 

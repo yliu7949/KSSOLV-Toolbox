@@ -47,8 +47,17 @@
 
         <entry key="PlotSectionTitle">Plot</entry>
 
-        <!-- Data Browser -->
-        <entry key="BrowserTitle">Browser</entry>
+        <!-- Project Browser -->
+        <entry key="ProjectBrowserTitle">Project Browser</entry>
+
+        <!-- Info Browser -->
+        <entry key="InfoBrowserTitle">Information</entry>
+
+        <!-- Config Browser -->
+        <entry key="ConfigBrowserTitle">Config Editor</entry>
+
+        <!-- Run Browser -->
+        <entry key="RunBrowserTitle">Simulation</entry>
 
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">Structure</entry>
