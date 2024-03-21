@@ -14,7 +14,7 @@ classdef KSSOLVToolbox < handle
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
             import kssolv.ui.util.Localizer.*
-            setLocale('en_US');
+            % setLocale('en_US');
             % App 标题
             title = message('KSSOLV:toolbox:AppTitle');
             % 创建 App Container
@@ -95,13 +95,10 @@ classdef KSSOLVToolbox < handle
     methods (Access = private)
         function setPanelLayout(this)
             % 调整 Data Browsers 的布局
-            % 保持 projectBrowser 和 infoBrowser 在左侧，configBrowser 和 runBrowser 在右侧
+            % 这里折叠了两个 Panel
             InfoBrowserPanel = this.AppContainer.getPanel('InfoBrowser');
             InfoBrowserPanel.Collapsed = true;
-            ConfigBrowserPanel = this.AppContainer.getPanel('ConfigBrowser');
-            ConfigBrowserPanel.Region = "right";
             RunBrowserPanel = this.AppContainer.getPanel('RunBrowser');
-            RunBrowserPanel.Region = "right";
             RunBrowserPanel.Collapsed = true;
         end
 

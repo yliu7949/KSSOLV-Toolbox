@@ -1,5 +1,5 @@
 classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
-    %BROWSER 自定义的 Data Browser 组件
+    %INFOBROWSER 自定义的 Data Browser 组件，显示 Project Browser 里对应项的具体信息
     %   开发者：杨柳 张致远
     %   版权 2024 合肥瀚海量子科技有限公司
     
@@ -9,7 +9,7 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     
     methods
         function this = InfoBrowser()
-            %BROWSER 构造此类的实例
+            %INFOBROWSER 构造此类的实例
             title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:InfoBrowserTitle');
             % 调用超类构造函数
             this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('InfoBrowser', title);          
@@ -105,8 +105,8 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
     methods (Hidden)
         function app = qeShow(this)
-            % 用于在单元测试中测试 Browser，可通过下面的命令使用：
-            % b = kssolv.ui.components.databrowser.Browser();
+            % 用于在单元测试中测试 InfoBrowser，可通过下面的命令使用：
+            % b = kssolv.ui.components.databrowser.InfoBrowser();
             % b.qeShow()
 
             % 创建 AppContainer          

@@ -1,5 +1,5 @@
 classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
-    %BROWSER 自定义的 Data Browser 组件
+    %CONFIGBROWSER 自定义的 Data Browser 组件，Workflow 中工作节点具体配置的编辑器
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
@@ -9,7 +9,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     
     methods
         function this = ConfigBrowser()
-            %BROWSER 构造此类的实例
+            %CONFIGBROWSER 构造此类的实例
             title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:ConfigBrowserTitle');
             % 调用超类构造函数
             this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ConfigBrowser', title);          
@@ -17,6 +17,8 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             buildUI(this);
             % 设定 FigurePanel 的 Tag
             this.Panel.Tag = 'ConfigBrowser';
+            % 将该 Browser 放在界面右侧
+            this.Panel.Region = "right";
         end
     end
 
@@ -33,8 +35,8 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
     methods (Hidden)
         function app = qeShow(this)
-            % 用于在单元测试中测试 ProjectBrowser，可通过下面的命令使用：
-            % b = kssolv.ui.components.databrowser.ProjectBrowser();
+            % 用于在单元测试中测试 ConfigBrowser，可通过下面的命令使用：
+            % b = kssolv.ui.components.databrowser.ConfigBrowser();
             % b.qeShow()
 
             % 创建 AppContainer          

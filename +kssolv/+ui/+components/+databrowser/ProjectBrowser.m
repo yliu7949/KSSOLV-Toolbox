@@ -1,5 +1,5 @@
 classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
-    %BROWSER 自定义的 Data Browser 组件
+    %PROJECTBROWSER 自定义的 Data Browser 组件，存放 ks 项目文件的 TreeTable 视图
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
@@ -9,7 +9,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     
     methods
         function this = ProjectBrowser()
-            %BROWSER 构造此类的实例
+            %PROJECTBROWSER 构造此类的实例
             title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:ProjectBrowserTitle');
             % 调用超类构造函数
             this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ProjectBrowser', title);          

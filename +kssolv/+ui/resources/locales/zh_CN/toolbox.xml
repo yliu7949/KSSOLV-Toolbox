@@ -57,7 +57,7 @@
         <entry key="ConfigBrowserTitle">配置编辑器</entry>
 
         <!-- Run Browser -->
-        <entry key="RunBrowserTitle">计算模拟</entry>
+        <entry key="RunBrowserTitle">模拟</entry>
 
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">结构</entry>
