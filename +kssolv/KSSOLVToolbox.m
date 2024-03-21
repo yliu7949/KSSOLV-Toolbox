@@ -14,7 +14,7 @@ classdef KSSOLVToolbox < handle
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
             import kssolv.ui.util.Localizer.*
-            % setLocale('en_US');
+            setLocale('en_US');
             % App 标题
             title = message('KSSOLV:toolbox:AppTitle');
             % 创建 App Container
@@ -103,7 +103,7 @@ classdef KSSOLVToolbox < handle
         end
 
         function callbackAppStateChanged(this)
-            % 当 AppContainer 被关闭时，删除类的实例
+            % 当 AppContainer 状态改变时，执行相关的操作
             import matlab.ui.container.internal.appcontainer.*
             switch this.AppContainer.State
                 case AppState.RUNNING
