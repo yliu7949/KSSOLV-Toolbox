@@ -1,6 +1,6 @@
 classdef HomeTab < handle
     %HOMETAB Toolstrip 菜单栏中的 Home 标签页
-    %   开发者：杨柳、高俊
+    %   开发者：杨柳、高俊、林海饶
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
@@ -26,10 +26,73 @@ classdef HomeTab < handle
             this.Tab = matlab.ui.internal.toolstrip.Tab(this.Title);
             this.Tab.Tag = this.Tag;
             % 分别创建各个 Section 并添加到 Home Tab 中
+            createFileSection(this);
             createProjectSection(this);
             createOperationSection(this);
             createEnvironmentSection(this);
             createResourceSection(this);
+            % createTestSection(this);
+        end
+
+        function createFileSection(this) 
+            %CREATEFILESECTION 创建"文件"小节，并添加到 HomeTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateListItem
+            % 创建 File Section
+            section = Section(message("KSSOLV:toolbox:FileSectionTitle"));
+            section.Tag = 'FileSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+            % 创建 Button
+            FileProjectButton = CreatButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
+            FileSaveButton = CreatButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
+            FileCloseButton = CreatButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
+
+            %创建 PopupList(下拉菜单)
+
+            FileProjectButtonPopup = PopupList();
+            FileProjectButtonPopup_Open = CreateListItem('FileProject', 'Open', section.Tag, Icon.ADD_16);
+            FileProjectButtonPopup.add(FileProjectButtonPopup_Open);
+            FileProjectButton.Popup = FileProjectButtonPopup;
+
+            FileSaveButtonPopup = PopupList();
+            FileSaveButtonPopup_SaveProject = CreateListItem('FileSave', 'SaveProject', section.Tag, 'none');
+            FileSaveButtonPopup_SaveProjectAs = CreateListItem('FileSave', 'SaveProjectAs', section.Tag, 'none');
+            FileSaveButtonPopup_SaveStructureAs = CreateListItem('FileSave', 'SaveStructureAs', section.Tag, 'none');
+            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveProject);
+            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveProjectAs);
+            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveStructureAs);
+            FileSaveButton.Popup = FileSaveButtonPopup;
+
+            % sub_item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot');
+            % sub_item2 = matlab.ui.internal.toolstrip.ListItem('Delete Plot');
+            % sub_popup = matlab.ui.internal.toolstrip.PopupList();
+            % sub_popup.add(sub_item1);
+            % sub_popup.add(sub_item2);
+            % 
+            % item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot',matlab.ui.internal.toolstrip.Icon.ADD_16);
+            % item2 = matlab.ui.internal.toolstrip.ListItemWithPopup('Delete Plot',matlab.ui.internal.toolstrip.Icon.CUT_16);
+            % item2.Popup = sub_popup;
+            % 
+            % popup = matlab.ui.internal.toolstrip.PopupList();
+            % popup.add(item1);
+            % popup.add(item2);
+
+
+
+
+            % 组装 Column 和 Button
+            column1.add(FileProjectButton);
+            column2.add(FileSaveButton);
+            column3.add(FileCloseButton);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
         end
 
         function createProjectSection(this) 
@@ -87,7 +150,7 @@ classdef HomeTab < handle
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
-            % 创建 Project Section
+            % 创建 Environment Section
             section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));
             section.Tag = 'EnvironmentSection';
             % 创建 Column
@@ -135,6 +198,54 @@ classdef HomeTab < handle
             section.add(column3);
             this.Tab.add(section);
         end
+
+        % function createTestSection(this) 
+        %     %CREATEFILESECTION 创建"文件"小节，并添加到 HomeTab 中
+        %     import matlab.ui.internal.toolstrip.*
+        %     import kssolv.ui.util.Localizer.message
+        %     import kssolv.ui.util.CreatButton
+        %     % 创建 File Section
+        %     section = Section(message("KSSOLV:toolbox:FileSectionTitle"));
+        %     section.Tag = 'FileSection';
+        % 
+        % 
+        %     sub_item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot');
+        %     sub_item2 = matlab.ui.internal.toolstrip.ListItem('Delete Plot');
+        %     sub_popup = matlab.ui.internal.toolstrip.PopupList();
+        %     sub_popup.add(sub_item1);
+        %     sub_popup.add(sub_item2);
+        % 
+        %     item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot',matlab.ui.internal.toolstrip.Icon.ADD_16);
+        %     item2 = matlab.ui.internal.toolstrip.ListItemWithPopup('Delete Plot',matlab.ui.internal.toolstrip.Icon.CUT_16);
+        %     item2.Popup = sub_popup;
+        % 
+        %     popup = matlab.ui.internal.toolstrip.PopupList();
+        %     popup.add(item1);
+        %     popup.add(item2);
+        % 
+        % 
+        %     % 创建 Column
+        %     column1 = Column();
+        %     column2 = Column();
+        %     column3 = Column();
+        %     column4 = Column();
+        %     % 创建 Button
+        %     FileProjectButton = CreatButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
+        %     FileSaveButton = CreatButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
+        %     FileCloseButton = CreatButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
+        %     MyTestButton = CreatButton('dropdown', 'FileClose', section.Tag, Icon.CLOSE_24);
+        %     MyTestButton.Popup = popup;
+        %     % 组装 Column 和 Button
+        %     column1.add(FileProjectButton);
+        %     column2.add(FileSaveButton);
+        %     column3.add(FileCloseButton);
+        %     column4.add(MyTestButton);
+        %     section.add(column1);
+        %     section.add(column2);
+        %     section.add(column3);
+        %     section.add(column4);
+        %     this.Tab.add(section);
+        % end
 
         function moleculerDisplay(~, ~, ~)
             kssolv.ui.components.figuredocument.MoleculerDisplay().Display();

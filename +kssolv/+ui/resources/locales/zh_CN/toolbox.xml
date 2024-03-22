@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<rsccat version="1.0" locale="en_US" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+<rsccat version="1.0" locale="zh_CN" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
     <!-- 该文件存储了与 UI 组件有关的本地化内容. -->
     <message>
         <!-- App -->
@@ -9,6 +9,23 @@
 
         <!-- ToolStrip Home tab -->
         <entry key="HomeTabTitle">主页</entry>
+
+        <entry key="FileSectionTitle">文件</entry>
+        <entry key="FileProjectButtonLabel">项目</entry>
+        <entry key="FileProjectButtonTooltip">调整项目文件</entry>
+        <entry key="FileProjectButtonPopItemOpen">打开...</entry>
+
+        <entry key="FileSaveButtonLabel">保存</entry>
+        <entry key="FileSaveButtonTooltip">保存项目或结构</entry>
+        <entry key="FileSaveButtonPopItemSaveProject">保存当前项目</entry>
+        <entry key="FileSaveButtonPopItemSaveProjectAs">项目另存为...</entry>
+        <entry key="FileSaveButtonPopItemSaveStructureAs">结构另存为...</entry>
+
+        <entry key="FileCloseButtonLabel">关闭</entry>
+        <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
+
+
+
 
         <entry key="ProjectSectionTitle">项目</entry>
         <entry key="ProjectOpenButtonLabel">打开</entry>
