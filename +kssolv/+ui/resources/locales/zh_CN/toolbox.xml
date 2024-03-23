@@ -74,7 +74,7 @@
         <entry key="OpenDocumentItemText">文档</entry>
         <entry key="OfficialSiteItemText">官方网站</entry>
         <entry key="CheckUpdateItemText">检查更新</entry>
-        <entry key="CheckLicenceItemText">许可</entry>
+        <entry key="CheckLicenseItemText">许可</entry>
         <entry key="TermsOfUseItemText">使用条款</entry>
         <entry key="AboutUsItemText">关于KSSOLV</entry>
         
@@ -87,8 +87,25 @@
         
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>
+        <entry key="SaveSectionTitle">保存</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为工作流模板</entry>
+        <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
+
+
+        <entry key="ZoomSectionTitle">缩放</entry>
+        <entry key="ZoomInButtonLabel">放大</entry>
+        <entry key="ZoomInButtonTooltip">放大视角</entry>
+        <entry key="ZoomOutButtonLabel">缩小</entry>
+        <entry key="ZoomOutButtonTooltip">缩小视角</entry>
+        <entry key="ZoomResetButtonLabel">重置缩放</entry>
+        <entry key="ZoomResetButtonTooltip">重置为默认视角</entry>
         
-        <entry key="PlotSectionTitle">绘图</entry>
+
+        <entry key="SettingsSectionTitle">设置</entry>
+        <entry key="SetNodeButtonLabel">设置节点</entry>
+        <entry key="SetNodeButtonTooltip">设置节点</entry>
+        
+        
 
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">项目浏览器</entry>

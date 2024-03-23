@@ -1,6 +1,6 @@
 classdef WorkflowTab < handle
     %WORKFLOWTAB Toolstrip 菜单栏中的 Workflow 标签页
-    %   开发者：杨柳、高俊
+    %   开发者：杨柳、高俊、林海饶
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
@@ -22,14 +22,110 @@ classdef WorkflowTab < handle
         end
         
         function buildTab(this)
-            %BUILDTAB 创建 Home Tab 对象
+            %BUILDTAB 创建 WorkflowTab 对象
             this.Tab = matlab.ui.internal.toolstrip.Tab(this.Title);
             this.Tab.Tag = this.Tag;
-            % 分别创建各个 Section 并添加到 Home Tab 中
-            createPlotSection(this);
+            % 分别创建各个 Section 并添加到 WorkflowTab 中
+            createSaveSection(this);
+            createOperationSection(this);
+            createZoomSection(this);
+            createSettingsSection(this);
         end
 
-        function createPlotSection(this)
+
+
+        function createZoomSection(this) 
+            %CREATERUNNINGSECTION 创建"缩放"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Zoom Section
+            section = Section(message("KSSOLV:toolbox:ZoomSectionTitle"));
+            section.Tag = 'ZoomSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+            % 创建 Button
+            ZoomInButton = CreatButton('push', 'ZoomIn', section.Tag, Icon.ZOOM_IN_24);
+            ZoomOutButton = CreatButton('push', 'ZoomOut', section.Tag, Icon.ZOOM_OUT_24);
+            ZoomResetButton = CreatButton('push', 'ZoomReset', section.Tag, Icon.REFRESH_24);
+
+            % 组装 Column 和 Button
+            column1.add(ZoomInButton);
+            column2.add(ZoomOutButton);
+            column3.add(ZoomResetButton);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
+        end
+
+
+        function createSaveSection(this) 
+            %CREATESAVESECTION 创建"保存"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Save Section
+            section = Section(message("KSSOLV:toolbox:SaveSectionTitle"));
+
+            section.Tag = 'SaveSection';
+            % 创建 Column
+            column1 = Column();
+            % 创建 Button
+            SaveWorkflowAsTemplateButton = CreatButton('push', 'SaveWorkflowAsTemplate', section.Tag, Icon.SAVE_24);
+            % 组装 Column 和 Button
+            column1.add(SaveWorkflowAsTemplateButton);
+            section.add(column1);
+            this.Tab.add(section);
+        end
+
+
+
+        function createOperationSection(this) 
+            %CREATEOPERATIONSECTION 创建"操作"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Operation Section
+            section = Section(message("KSSOLV:toolbox:OperationSectionTitle"));
+            section.Tag = 'OperationSection';
+            % 创建 Column
+            column1 = Column();
+            % 创建 Button
+            OperationUndoButton = CreatButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
+            OperationRedoButton = CreatButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
+            % 组装 Column 和 Button
+            column1.add(OperationUndoButton);
+            column1.add(OperationRedoButton);
+            section.add(column1);
+            this.Tab.add(section);
+        end
+
+
+
+        function createSettingsSection(this) 
+            %CREATESAVESECTION 创建"设置"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            % 创建 Settings Section
+            section = Section(message("KSSOLV:toolbox:SettingsSectionTitle"));
+
+            section.Tag = 'SettingsSection';
+            % 创建 Column
+            column1 = Column();
+            % 创建 Button
+            SetNodeButton = CreatButton('push', 'SetNode', section.Tag, Icon.SAVE_24);
+            % 组装 Column 和 Button
+            column1.add(SetNodeButton);
+            section.add(column1);
+            this.Tab.add(section);
+        end
+
+
+        function createTestGallerySection(this)
             %CREATEPLOTSECTION 创建"绘图"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message

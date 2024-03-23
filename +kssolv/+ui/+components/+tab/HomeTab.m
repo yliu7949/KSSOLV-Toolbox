@@ -31,7 +31,7 @@ classdef HomeTab < handle
             createRunningSection(this)
             createEnvironmentSection(this);
             createResourceSection(this);
-            createOperationSection(this);
+            
             % createTestSection(this);
         end
 
@@ -137,25 +137,7 @@ classdef HomeTab < handle
             this.Tab.add(section);
         end
         
-        function createOperationSection(this) 
-            %CREATEOPERATIONSECTION 创建"操作"小节，并添加到 HomeTab 中
-            import matlab.ui.internal.toolstrip.*
-            import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
-            % 创建 Operation Section
-            section = Section(message("KSSOLV:toolbox:OperationSectionTitle"));
-            section.Tag = 'OperationSection';
-            % 创建 Column
-            column1 = Column();
-            % 创建 Button
-            OperationUndoButton = CreatButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
-            OperationRedoButton = CreatButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
-            % 组装 Column 和 Button
-            column1.add(OperationUndoButton);
-            column1.add(OperationRedoButton);
-            section.add(column1);
-            this.Tab.add(section);
-        end
+
         
         function createRunningSection(this) 
             %CREATERUNNINGSECTION 创建"运行"小节，并添加到 HomeTab 中
@@ -165,7 +147,6 @@ classdef HomeTab < handle
             import kssolv.ui.util.CreateListItem
             % 创建 File Section
             section = Section(message("KSSOLV:toolbox:RunningSectionTitle"));
-            % section = Section("运行");
             section.Tag = 'RunningSection';
             % 创建 Column
             column1 = Column();
@@ -262,13 +243,13 @@ classdef HomeTab < handle
             OpenDocument = CreateListItem('OpenDocument', section.Tag, 'none');
             OfficialSite = CreateListItem('OfficialSite', section.Tag, 'none');
             CheckUpdate = CreateListItem('CheckUpdate', section.Tag, 'none');
-            CheckLicence = CreateListItem('CheckLicence', section.Tag, 'none');
+            CheckLicense = CreateListItem('CheckLicense', section.Tag, 'none');
             TermsOfUse = CreateListItem('TermsOfUse', section.Tag, 'none');
             AboutUs = CreateListItem('AboutUs', section.Tag, 'none');
             HelpPopup.add(OpenDocument);
             HelpPopup.add(OfficialSite);
             HelpPopup.add(CheckUpdate);
-            HelpPopup.add(CheckLicence);
+            HelpPopup.add(CheckLicense);
             HelpPopup.add(TermsOfUse);
             HelpPopup.add(AboutUs);
             ResourceHelpButton.Popup = HelpPopup;
