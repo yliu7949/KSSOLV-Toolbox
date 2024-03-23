@@ -2,7 +2,7 @@ function listitem = CreateListItem(name, tagPrefix, inputIcon)
     %CREATELISTITEM 创建 LISTIEM，并获取本地化选项名
     %   使用示例：
     %       FileProjectButtonPopup = PopupList();
-    %       FileProjectButtonPopup_Open = CreateListItem('FileProject', 'Open', 'ProjectSection', Icon.ADD_16);
+    %       FileProjectButtonPopup_Open = CreateListItem('OpenFile', 'ProjectSection', Icon.ADD_16);
     %   参数说明：
     %   (1) 参数 parentname 规定为此 ListItem 所属的 Button 在创建时使用的 name 参数；
     %       如果该 ListItem 属于另一 ListItem，则 parentname 为

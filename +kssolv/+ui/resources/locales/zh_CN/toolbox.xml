@@ -23,20 +23,24 @@
         <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
 
 
-
-
         <entry key="ProjectSectionTitle">项目</entry>
-
         <entry key="ProjectStructureButtonLabel">结构</entry>
         <entry key="ProjectStructureButtonTooltip">导入/导出结构</entry>
-        <entry key="ProjectWorkflowButtonLabel">打开</entry>
-        <entry key="ProjectWorkflowButtonTooltip">打开项目文件</entry>
-        <entry key="ProjectVariableButtonLabel">打开</entry>
-        <entry key="ProjectVariableButtonTooltip">打开项目文件</entry>
+        <entry key="ImportStructureFromFileItemText">从文件导入结构...</entry>
+        <entry key="ImportStructureFromLinkItemText">从链接导入结构...</entry>
+        <entry key="ImportStructureFromLibraryItemText">从材料库导入结构...</entry>
+        <entry key="ImportStructureFromMatlabItemText">从MATLAB工作区导入结构...</entry>
+        <entry key="ProjectWorkflowButtonLabel">工作流</entry>
+        <entry key="ProjectWorkflowButtonTooltip">编辑工作流</entry>
+        <entry key="NewWorkflowItemText">新建空白工作流</entry>
+        <entry key="ImportTemplateWorkflowItemText">从模板建立工作流...</entry>
+        <entry key="ExportTemplateWorkflowItemText">将工作流保存为模板...</entry>
+        <entry key="ProjectVariableButtonLabel">变量</entry>
+        <entry key="ProjectVariableButtonTooltip">编辑变量</entry>
+        <entry key="NewVariableItemText">新建变量...</entry>
+        <entry key="ImportVariableFromFileItemText">从文件导入变量...</entry>
+        <entry key="ImportVariableFromMATLABItemText">从MATLAB工作区导入变量...</entry>
         
-
-
-
         <entry key="OperationSectionTitle">操作</entry>
         <entry key="OperationUndoButtonLabel">撤销</entry>
         <entry key="OperationUndoButtonTooltip">撤销操作</entry>

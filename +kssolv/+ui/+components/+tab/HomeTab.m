@@ -93,6 +93,39 @@ classdef HomeTab < handle
             ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.OPEN_24);
             ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.IMPORT_24);
             ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.SAVE_24);
+            
+            
+            % 创建并组装 PopupList(下拉菜单)
+            ProjectStructureButtonPopup = PopupList();
+            ImportStructureFromFile = CreateListItem('ImportStructureFromFile', section.Tag, 'none');
+            ImportStructureFromLink = CreateListItem('ImportStructureFromLink', section.Tag, 'none');
+            ImportStructureFromLibrary = CreateListItem('ImportStructureFromLibrary', section.Tag, 'none');
+            ImportStructureFromMatlab = CreateListItem('ImportStructureFromMatlab', section.Tag, 'none');
+
+            ProjectWorkflowButtonPopup = PopupList();
+            NewWorkflow = CreateListItem('NewWorkflow', section.Tag, 'none');
+            ImportTemplateWorkflow = CreateListItem('ImportTemplateWorkflow', section.Tag, 'none');
+            ExportTemplateWorkflow = CreateListItem('ExportTemplateWorkflow', section.Tag, 'none');
+
+            ProjectVariableButtonPopup = PopupList();
+            NewVariable = CreateListItem('NewVariable', section.Tag, 'none');
+            ImportVariableFromFile = CreateListItem('ImportVariableFromFile', section.Tag, 'none');
+            ImportVariableFromMATLAB = CreateListItem('ImportVariableFromMATLAB', section.Tag, 'none');
+           
+            ProjectStructureButtonPopup.add(ImportStructureFromFile)
+            ProjectStructureButtonPopup.add(ImportStructureFromLink);
+            ProjectStructureButtonPopup.add(ImportStructureFromLibrary);
+            ProjectStructureButtonPopup.add(ImportStructureFromMatlab);
+            ProjectWorkflowButtonPopup.add(NewWorkflow);
+            ProjectWorkflowButtonPopup.add(ImportTemplateWorkflow);
+            ProjectWorkflowButtonPopup.add(ExportTemplateWorkflow);
+            ProjectVariableButtonPopup.add(NewVariable);
+            ProjectVariableButtonPopup.add(ImportVariableFromFile);
+            ProjectVariableButtonPopup.add(ImportVariableFromMATLAB);
+            ProjectStructureButton.Popup = ProjectStructureButtonPopup;
+            ProjectWorkflowButton.Popup = ProjectWorkflowButtonPopup;
+            ProjectVariableButton.Popup = ProjectVariableButtonPopup;
+            
             % 组装 Column 和 Button
             column1.add(ProjectStructureButton);
             column2.add(ProjectWorkflowButton);
