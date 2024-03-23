@@ -14,7 +14,7 @@ classdef KSSOLVToolbox < handle
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
             import kssolv.ui.util.Localizer.*
-            setLocale('en_US');
+            setLocale('zh_CN');
             % App 标题
             title = message('KSSOLV:toolbox:AppTitle');
             % 创建 App Container
