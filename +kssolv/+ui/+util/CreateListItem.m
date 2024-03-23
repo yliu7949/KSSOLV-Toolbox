@@ -1,4 +1,4 @@
-function listitem = CreateListItem(parentname, itemname, tagPrefix, inputIcon)
+function listitem = CreateListItem(name, tagPrefix, inputIcon)
     %CREATELISTITEM 创建 LISTIEM，并获取本地化选项名
     %   使用示例：
     %       FileProjectButtonPopup = PopupList();
@@ -15,7 +15,7 @@ function listitem = CreateListItem(parentname, itemname, tagPrefix, inputIcon)
 import matlab.ui.internal.toolstrip.*
 import kssolv.ui.util.Localizer.message
 noicon = false;
-label = message(['KSSOLV:toolbox:' parentname 'ButtonPopItem' itemname]);
+label = message(['KSSOLV:toolbox:' name 'ItemText']);
 if inputIcon == "none"
     noicon = true;
 elseif class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
@@ -24,9 +24,9 @@ elseif ischar(inputIcon) || isstring(inputIcon)
     icon = Icon(inputIcon);
 
 else
-    error('KSSOLV:CreatButton:inputIcon', 'Incorrect parameter data type.')
+    error('KSSOLV:CreateListItem:inputIcon', 'Incorrect parameter data type.')
 end
-tag = [tagPrefix '_' itemname];
+tag = [tagPrefix '_' name];
 
 if noicon == true
     listitem = ListItem(label);

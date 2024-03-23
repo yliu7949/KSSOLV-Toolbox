@@ -52,38 +52,19 @@ classdef HomeTab < handle
             FileSaveButton = CreatButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
             FileCloseButton = CreatButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
 
-            %创建 PopupList(下拉菜单)
-
+            %创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
-            FileProjectButtonPopup_Open = CreateListItem('FileProject', 'Open', section.Tag, Icon.ADD_16);
-            FileProjectButtonPopup.add(FileProjectButtonPopup_Open);
+            OpenFile = CreateListItem('OpenFile', section.Tag, Icon.ADD_16);
+            FileProjectButtonPopup.add(OpenFile);
             FileProjectButton.Popup = FileProjectButtonPopup;
-
             FileSaveButtonPopup = PopupList();
-            FileSaveButtonPopup_SaveProject = CreateListItem('FileSave', 'SaveProject', section.Tag, 'none');
-            FileSaveButtonPopup_SaveProjectAs = CreateListItem('FileSave', 'SaveProjectAs', section.Tag, 'none');
-            FileSaveButtonPopup_SaveStructureAs = CreateListItem('FileSave', 'SaveStructureAs', section.Tag, 'none');
-            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveProject);
-            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveProjectAs);
-            FileSaveButtonPopup.add(FileSaveButtonPopup_SaveStructureAs);
+            SaveProject = CreateListItem('SaveProject', section.Tag, 'none');
+            SaveProjectAs = CreateListItem('SaveProjectAs', section.Tag, 'none');
+            SaveStructureAs = CreateListItem('SaveStructureAs', section.Tag, 'none');
+            FileSaveButtonPopup.add(SaveProject);
+            FileSaveButtonPopup.add(SaveProjectAs);
+            FileSaveButtonPopup.add(SaveStructureAs);
             FileSaveButton.Popup = FileSaveButtonPopup;
-
-            % sub_item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot');
-            % sub_item2 = matlab.ui.internal.toolstrip.ListItem('Delete Plot');
-            % sub_popup = matlab.ui.internal.toolstrip.PopupList();
-            % sub_popup.add(sub_item1);
-            % sub_popup.add(sub_item2);
-            % 
-            % item1 = matlab.ui.internal.toolstrip.ListItem('Add Plot',matlab.ui.internal.toolstrip.Icon.ADD_16);
-            % item2 = matlab.ui.internal.toolstrip.ListItemWithPopup('Delete Plot',matlab.ui.internal.toolstrip.Icon.CUT_16);
-            % item2.Popup = sub_popup;
-            % 
-            % popup = matlab.ui.internal.toolstrip.PopupList();
-            % popup.add(item1);
-            % popup.add(item2);
-
-
-
 
             % 组装 Column 和 Button
             column1.add(FileProjectButton);
@@ -100,6 +81,7 @@ classdef HomeTab < handle
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateListItem
             % 创建 Project Section
             section = Section(message("KSSOLV:toolbox:ProjectSectionTitle"));
             section.Tag = 'ProjectSection';
@@ -107,21 +89,17 @@ classdef HomeTab < handle
             column1 = Column();
             column2 = Column();
             column3 = Column();
-            column4 = Column();
             % 创建 Button
-            ProjectOpenButton = CreatButton('split', 'ProjectOpen', section.Tag, Icon.OPEN_24);
-            ProjectModelButton = CreatButton('split', 'ProjectModel', section.Tag, Icon.IMPORT_24);
-            ProjectSaveButton = CreatButton('split', 'ProjectSave', section.Tag, Icon.SAVE_24);
-            ProjectCloseButton = CreatButton('push', 'ProjectClose', section.Tag, Icon.CLOSE_24);
+            ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.OPEN_24);
+            ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.IMPORT_24);
+            ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.SAVE_24);
             % 组装 Column 和 Button
-            column1.add(ProjectOpenButton);
-            column2.add(ProjectModelButton);
-            column3.add(ProjectSaveButton);
-            column4.add(ProjectCloseButton);
+            column1.add(ProjectStructureButton);
+            column2.add(ProjectWorkflowButton);
+            column3.add(ProjectVariableButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
-            section.add(column4);
             this.Tab.add(section);
         end
         

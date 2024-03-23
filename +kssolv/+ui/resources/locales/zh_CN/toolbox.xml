@@ -13,14 +13,12 @@
         <entry key="FileSectionTitle">文件</entry>
         <entry key="FileProjectButtonLabel">项目</entry>
         <entry key="FileProjectButtonTooltip">调整项目文件</entry>
-        <entry key="FileProjectButtonPopItemOpen">打开...</entry>
-
+        <entry key="OpenFileItemText">打开...</entry>
         <entry key="FileSaveButtonLabel">保存</entry>
         <entry key="FileSaveButtonTooltip">保存项目或结构</entry>
-        <entry key="FileSaveButtonPopItemSaveProject">保存当前项目</entry>
-        <entry key="FileSaveButtonPopItemSaveProjectAs">项目另存为...</entry>
-        <entry key="FileSaveButtonPopItemSaveStructureAs">结构另存为...</entry>
-
+        <entry key="SaveProjectItemText">保存当前项目</entry>
+        <entry key="SaveProjectAsItemText">项目另存为...</entry>
+        <entry key="SaveStructureAsItemText">结构另存为...</entry>
         <entry key="FileCloseButtonLabel">关闭</entry>
         <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
 
@@ -28,15 +26,17 @@
 
 
         <entry key="ProjectSectionTitle">项目</entry>
-        <entry key="ProjectOpenButtonLabel">打开</entry>
-        <entry key="ProjectOpenButtonTooltip">打开项目文件</entry>
-        <entry key="ProjectModelButtonLabel">模型</entry>
-        <entry key="ProjectModelButtonTooltip">以文件形式或从数据库导入结构模型</entry>
-        <entry key="ProjectSaveButtonLabel">保存</entry>
-        <entry key="ProjectSaveButtonTooltip">保存当前项目</entry>
-        <entry key="ProjectCloseButtonLabel">关闭</entry>
-        <entry key="ProjectCloseButtonTooltip">关闭当前项目</entry>
+
+        <entry key="ProjectStructureButtonLabel">结构</entry>
+        <entry key="ProjectStructureButtonTooltip">导入/导出结构</entry>
+        <entry key="ProjectWorkflowButtonLabel">打开</entry>
+        <entry key="ProjectWorkflowButtonTooltip">打开项目文件</entry>
+        <entry key="ProjectVariableButtonLabel">打开</entry>
+        <entry key="ProjectVariableButtonTooltip">打开项目文件</entry>
         
+
+
+
         <entry key="OperationSectionTitle">操作</entry>
         <entry key="OperationUndoButtonLabel">撤销</entry>
         <entry key="OperationUndoButtonTooltip">撤销操作</entry>
