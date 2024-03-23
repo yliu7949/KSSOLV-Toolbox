@@ -51,12 +51,16 @@
         <entry key="RunAndTimeItemText">运行并计时</entry>
         
         <entry key="EnvironmentSectionTitle">环境</entry>
-        <entry key="EnvironmentLayoutButtonLabel">布局</entry>
-        <entry key="EnvironmentLayoutButtonTooltip">调整桌面布局</entry>
-        <entry key="EnvironmentPreferenceButtonLabel">偏好</entry>
-        <entry key="EnvironmentPreferenceButtonTooltip">偏好设定</entry>
-        <entry key="EnvironmentToolsButtonLabel">工具</entry>
-        <entry key="EnvironmentToolsButtonTooltip">KSSOLV相关工具</entry>
+        <entry key="EnvironmentSettingsButtonLabel">设置</entry>
+        <entry key="EnvironmentSettingsButtonTooltip">调整设置</entry>
+        <entry key="EnvironmentRemoteButtonLabel">远程</entry>
+        <entry key="EnvironmentRemoteButtonTooltip">连接远程服务器</entry>
+        <entry key="EnvironmentParallelButtonLabel">并行</entry>
+        <entry key="EnvironmentParallelButtonTooltip">设置并行计算</entry>
+        <entry key="EnvironmentExtraButtonLabel">附加功能</entry>
+        <entry key="EnvironmentExtraButtonTooltip">添加附加功能</entry>
+        <entry key="ConnectToClusterItemText">连接到计算集群...</entry>
+        <entry key="GetExtraFeatureItemText">获取附加功能...</entry>
 
         <entry key="ResourceSectionTitle">资源</entry>
         <entry key="ResourceLibraryButtonLabel">图书馆</entry>
@@ -65,6 +69,15 @@
         <entry key="ResourceCommunityButtonTooltip">访问KSSOLV在线社区</entry>
         <entry key="ResourceHelpButtonLabel">帮助</entry>
         <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
+        <entry key="ResourceSupportButtonLabel">请求支持</entry>
+        <entry key="ResourceSupportButtonTooltip">请求技术支持</entry>
+        <entry key="OpenDocumentItemText">文档</entry>
+        <entry key="OfficialSiteItemText">官方网站</entry>
+        <entry key="CheckUpdateItemText">检查更新</entry>
+        <entry key="CheckLicenceItemText">许可</entry>
+        <entry key="TermsOfUseItemText">使用条款</entry>
+        <entry key="AboutUsItemText">关于KSSOLV</entry>
+        
 
         <entry key="OperationSectionTitle">操作</entry>
         <entry key="OperationUndoButtonLabel">撤销</entry>

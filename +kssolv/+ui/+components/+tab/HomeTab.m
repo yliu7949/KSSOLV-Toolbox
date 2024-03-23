@@ -176,7 +176,7 @@ classdef HomeTab < handle
             RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.SAVE_24);
             RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.SAVE_24);
 
-            %创建并组装 PopupList(下拉菜单)
+            % 创建并组装 PopupList(下拉菜单)
             RunPopup = PopupList();
             RunAndTime = CreateListItem('RunAndTime', section.Tag, 'none');
             RunPopup.add(RunAndTime);
@@ -198,6 +198,7 @@ classdef HomeTab < handle
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateListItem
             % 创建 Environment Section
             section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));
             section.Tag = 'EnvironmentSection';
@@ -205,18 +206,33 @@ classdef HomeTab < handle
             column1 = Column();
             column2 = Column();
             column3 = Column();
+            column4 = Column();
             % 创建 Button
-            EnvironmentLayoutButton = CreatButton('split', 'EnvironmentLayout', section.Tag, Icon.LAYOUT_24);
-            EnvironmentPreferenceButton = CreatButton('push', 'EnvironmentPreference', section.Tag, Icon.SETTINGS_24);
-            EnvironmentPreferenceButton.ButtonPushedFcn = @this.moleculerDisplay;
-            EnvironmentToolsButton = CreatButton('split', 'EnvironmentTools', section.Tag, Icon.TOOLS_24);
+            EnvironmentSettingsButton = CreatButton('push', 'EnvironmentSettings', section.Tag, Icon.LAYOUT_24);
+            EnvironmentRemoteButton = CreatButton('split', 'EnvironmentRemote', section.Tag, Icon.SETTINGS_24);
+            EnvironmentRemoteButton.ButtonPushedFcn = @this.moleculerDisplay;
+            EnvironmentParallelButton = CreatButton('push', 'EnvironmentParallel', section.Tag, Icon.TOOLS_24);
+            EnvironmentExtraButton = CreatButton('split', 'EnvironmentExtra', section.Tag, Icon.TOOLS_24);
+            
+            % 创建并组装 PopupList(下拉菜单)
+            RemotePopup = PopupList();
+            ExtraPopup = PopupList();
+            ConnectToCluster = CreateListItem('ConnectToCluster', section.Tag, 'none');
+            GetExtraFeature = CreateListItem('GetExtraFeature', section.Tag, 'none');
+            RemotePopup.add(ConnectToCluster);
+            ExtraPopup.add(GetExtraFeature);
+            EnvironmentRemoteButton.Popup = RemotePopup;
+            EnvironmentExtraButton.Popup = ExtraPopup;
+        
             % 组装 Column 和 Button
-            column1.add(EnvironmentLayoutButton);
-            column2.add(EnvironmentPreferenceButton);
-            column3.add(EnvironmentToolsButton);
+            column1.add(EnvironmentSettingsButton);
+            column2.add(EnvironmentRemoteButton);
+            column3.add(EnvironmentParallelButton);
+            column4.add(EnvironmentExtraButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
+            section.add(column4);
             this.Tab.add(section);
         end
 
@@ -225,25 +241,47 @@ classdef HomeTab < handle
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreatButton
-            % 创建 Project Section
+            import kssolv.ui.util.CreateListItem
+            % 创建 Resource Section
             section = Section(message("KSSOLV:toolbox:ResourceSectionTitle"));
             section.Tag = 'ResourceSection';
             % 创建 Column
             column1 = Column();
             column2 = Column();
             column3 = Column();
+            column4 = Column();
             % 创建 Button
             ResourceLibraryButton = CreatButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
             ResourceCommunityButton = CreatButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
             ResourceCommunityButton.ButtonPushedFcn = @this.workflowDisplay;
             ResourceHelpButton = CreatButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
+            ResourceSupportButton = CreatButton('push', 'ResourceSupport', section.Tag, Icon.HELP_24);
+            
+            % 创建并组装 PopupList(下拉菜单)
+            HelpPopup = PopupList();
+            OpenDocument = CreateListItem('OpenDocument', section.Tag, 'none');
+            OfficialSite = CreateListItem('OfficialSite', section.Tag, 'none');
+            CheckUpdate = CreateListItem('CheckUpdate', section.Tag, 'none');
+            CheckLicence = CreateListItem('CheckLicence', section.Tag, 'none');
+            TermsOfUse = CreateListItem('TermsOfUse', section.Tag, 'none');
+            AboutUs = CreateListItem('AboutUs', section.Tag, 'none');
+            HelpPopup.add(OpenDocument);
+            HelpPopup.add(OfficialSite);
+            HelpPopup.add(CheckUpdate);
+            HelpPopup.add(CheckLicence);
+            HelpPopup.add(TermsOfUse);
+            HelpPopup.add(AboutUs);
+            ResourceHelpButton.Popup = HelpPopup;
+
             % 组装 Column 和 Button
             column1.add(ResourceLibraryButton);
             column2.add(ResourceCommunityButton);
             column3.add(ResourceHelpButton);
+            column4.add(ResourceSupportButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
+            section.add(column4);
             this.Tab.add(section);
         end
 
