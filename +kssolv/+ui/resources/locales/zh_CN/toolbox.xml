@@ -41,11 +41,14 @@
         <entry key="ImportVariableFromFileItemText">从文件导入变量...</entry>
         <entry key="ImportVariableFromMATLABItemText">从MATLAB工作区导入变量...</entry>
         
-        <entry key="OperationSectionTitle">操作</entry>
-        <entry key="OperationUndoButtonLabel">撤销</entry>
-        <entry key="OperationUndoButtonTooltip">撤销操作</entry>
-        <entry key="OperationRedoButtonLabel">重做</entry>
-        <entry key="OperationRedoButtonTooltip">重做操作</entry>
+        <entry key="RunningSectionTitle">运行</entry>
+        <entry key="RunningRunButtonLabel">运行</entry>
+        <entry key="RunningRunButtonTooltip">运行程序</entry>
+        <entry key="RunningStepButtonLabel">步进</entry>
+        <entry key="RunningStepButtonTooltip">逐步运行程序</entry>   
+        <entry key="RunningStopButtonLabel">停止</entry>
+        <entry key="RunningStopButtonTooltip">结束程序</entry>
+        <entry key="RunAndTimeItemText">运行并计时</entry>
         
         <entry key="EnvironmentSectionTitle">环境</entry>
         <entry key="EnvironmentLayoutButtonLabel">布局</entry>
@@ -62,6 +65,12 @@
         <entry key="ResourceCommunityButtonTooltip">访问KSSOLV在线社区</entry>
         <entry key="ResourceHelpButtonLabel">帮助</entry>
         <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
+
+        <entry key="OperationSectionTitle">操作</entry>
+        <entry key="OperationUndoButtonLabel">撤销</entry>
+        <entry key="OperationUndoButtonTooltip">撤销操作</entry>
+        <entry key="OperationRedoButtonLabel">重做</entry>
+        <entry key="OperationRedoButtonTooltip">重做操作</entry>
         
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>

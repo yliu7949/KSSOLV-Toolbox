@@ -28,9 +28,10 @@ classdef HomeTab < handle
             % 分别创建各个 Section 并添加到 Home Tab 中
             createFileSection(this);
             createProjectSection(this);
-            createOperationSection(this);
+            createRunningSection(this)
             createEnvironmentSection(this);
             createResourceSection(this);
+            createOperationSection(this);
             % createTestSection(this);
         end
 
@@ -155,6 +156,42 @@ classdef HomeTab < handle
             section.add(column1);
             this.Tab.add(section);
         end
+        
+        function createRunningSection(this) 
+            %CREATERUNNINGSECTION 创建"运行"小节，并添加到 HomeTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateListItem
+            % 创建 File Section
+            section = Section(message("KSSOLV:toolbox:RunningSectionTitle"));
+            % section = Section("运行");
+            section.Tag = 'RunningSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+            % 创建 Button
+            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.OPEN_24);
+            RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.SAVE_24);
+            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.SAVE_24);
+
+            %创建并组装 PopupList(下拉菜单)
+            RunPopup = PopupList();
+            RunAndTime = CreateListItem('RunAndTime', section.Tag, 'none');
+            RunPopup.add(RunAndTime);
+            RunningRunButton.Popup = RunPopup;
+
+            % 组装 Column 和 Button
+            column1.add(RunningRunButton);
+            column2.add(RunningStepButton);
+            column3.add(RunningStopButton);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
+        end
+        
         
         function createEnvironmentSection(this) 
             %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
