@@ -28,6 +28,7 @@ classdef WorkflowTab < handle
             % 分别创建各个 Section 并添加到 WorkflowTab 中
             createSaveSection(this);
             createOperationSection(this);
+            createNodeSection(this);
             createZoomSection(this);
             createSettingsSection(this);
         end
@@ -61,6 +62,79 @@ classdef WorkflowTab < handle
             this.Tab.add(section);
         end
 
+
+
+        function createNodeSection(this) 
+            %CREATERUNNINGSECTION 创建"节点"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateListItem
+            % 创建 Node Section
+            section = Section(message("KSSOLV:toolbox:NodeSectionTitle"));
+            section.Tag = 'NodeSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+
+            % 创建 Button
+            AddNoteButton = CreatButton('split', 'AddNote', section.Tag, Icon.ZOOM_IN_24);
+            EditNoteButton = CreatButton('split', 'EditNote', section.Tag, Icon.ZOOM_OUT_24);
+
+            % 创建并组装 PopupList(下拉菜单)
+            AddNotePopup = PopupList();
+            EditNotePopup = PopupList();
+            % Zeroslot = CreateListItem('OpenDocument', section.Tag, 'none');
+            % OneSlot = CreateListItem('OfficialSite', section.Tag, 'none');
+            % TwoSlot = CreateListItem('CheckUpdate', section.Tag, 'none');
+            % node00 = CreateListItem('CheckLicense', section.Tag, 'none');
+            % node01 = CreateListItem('TermsOfUse', section.Tag, 'none');
+            % node10 = CreateListItem('AboutUs', section.Tag, 'none');
+            % node11 = CreateListItem('CheckLicense', section.Tag, 'none');
+            % node12 = CreateListItem('TermsOfUse', section.Tag, 'none');
+            % node21 = CreateListItem('AboutUs', section.Tag, 'none');
+            % nodexy = CreateListItem('AboutUs', section.Tag, 'none');
+            % AddTopSlot = CreateListItem('AboutUs', section.Tag, 'none');
+            % DelTopSlot = CreateListItem('AboutUs', section.Tag, 'none');
+            % AddBottomSlot = CreateListItem('AboutUs', section.Tag, 'none');
+            % DelBottomSlot = CreateListItem('AboutUs', section.Tag, 'none');
+            node00 = CreateListItem('node00', section.Tag, 'none');
+            node01 = CreateListItem('node01', section.Tag, 'none');
+            node10 = CreateListItem('node10', section.Tag, 'none');
+            node11 = CreateListItem('node11', section.Tag, 'none');
+            node12 = CreateListItem('node12', section.Tag, 'none');
+            node21 = CreateListItem('node21', section.Tag, 'none');
+            nodexy = CreateListItem('nodexy', section.Tag, 'none');
+            AddTopSlot = CreateListItem('AddTopSlot', section.Tag, 'none');
+            DelTopSlot = CreateListItem('DelTopSlot', section.Tag, 'none');
+            AddBottomSlot = CreateListItem('AddBottomSlot', section.Tag, 'none');
+            DelBottomSlot = CreateListItem('DelBottomSlot', section.Tag, 'none');
+            AddNotePopup.add(node00);
+            AddNotePopup.addSeparator;
+            AddNotePopup.add(node01);
+            AddNotePopup.add(node10);
+            AddNotePopup.addSeparator;
+            AddNotePopup.add(node11);
+            AddNotePopup.add(node12);
+            AddNotePopup.add(node21);
+            AddNotePopup.addSeparator;
+            AddNotePopup.add(nodexy);
+            EditNotePopup.add(AddTopSlot);
+            EditNotePopup.add(DelTopSlot);
+            EditNotePopup.add(AddBottomSlot);
+            EditNotePopup.add(DelBottomSlot);
+
+            AddNoteButton.Popup = AddNotePopup;
+            EditNoteButton.Popup = EditNotePopup;         
+            % 组装 Column 和 Button
+            column1.add(AddNoteButton);
+            column2.add(EditNoteButton);
+
+            section.add(column1);
+            section.add(column2);
+
+            this.Tab.add(section);
+        end
 
         function createSaveSection(this) 
             %CREATESAVESECTION 创建"保存"小节，并添加到 WorkflowTab 中

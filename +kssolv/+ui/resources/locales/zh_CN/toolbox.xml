@@ -92,6 +92,29 @@
         <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
 
 
+        <entry key="NodeSectionTitle">节点</entry>
+        <entry key="AddNoteButtonLabel">新增节点</entry>
+        <entry key="AddNoteButtonTooltip">增加一个新节点</entry>
+        <entry key="EditNoteButtonLabel">编辑节点</entry>
+        <entry key="EditNoteButtonTooltip">调整选中节点</entry>
+        <entry key="node00ItemText">0-0节点</entry>
+        <entry key="node01ItemText">0-1节点</entry>
+        <entry key="node10ItemText">1-0节点</entry>
+        <entry key="node11ItemText">1-1节点</entry>
+        <entry key="node12ItemText">1-2节点</entry>
+        <entry key="node21ItemText">2-1节点</entry>
+        <entry key="nodexyItemText">x-y节点</entry>
+        <entry key="AddTopSlotItemText">增加上连接桩</entry>
+        <entry key="DelTopSlotItemText">减少上连接桩</entry>
+        <entry key="AddBottomSlotItemText">增加下连接桩</entry>
+        <entry key="DelBottomSlotItemText">减少下连接桩</entry>
+        
+
+
+
+
+
+
         <entry key="ZoomSectionTitle">缩放</entry>
         <entry key="ZoomInButtonLabel">放大</entry>
         <entry key="ZoomInButtonTooltip">放大视角</entry>
