@@ -5,6 +5,7 @@ classdef Project < kssolv.services.fileManager.AbstractItem
     
     methods
         function obj = Project()
+            %PROJECT 构造函数
             obj = obj@kssolv.services.fileManager.AbstractItem("Project", "Project");
             obj.name = "Project";
         end
