@@ -78,8 +78,8 @@ classdef WorkflowTab < handle
             column2 = Column();
 
             % 创建 Button
-            AddNoteButton = CreatButton('split', 'AddNote', section.Tag, Icon.ZOOM_IN_24);
-            EditNoteButton = CreatButton('split', 'EditNote', section.Tag, Icon.ZOOM_OUT_24);
+            AddNoteButton = CreatButton('split', 'AddNote', section.Tag, Icon.ADD_24);
+            EditNoteButton = CreatButton('split', 'EditNote', section.Tag, Icon.LEGEND_24);
 
             % 创建并组装 PopupList(下拉菜单)
             AddNotePopup = PopupList();
@@ -191,7 +191,7 @@ classdef WorkflowTab < handle
             % 创建 Column
             column1 = Column();
             % 创建 Button
-            SetNodeButton = CreatButton('push', 'SetNode', section.Tag, Icon.SAVE_24);
+            SetNodeButton = CreatButton('push', 'SetNode', section.Tag, Icon.SETTINGS_24);
             % 组装 Column 和 Button
             column1.add(SetNodeButton);
             section.add(column1);

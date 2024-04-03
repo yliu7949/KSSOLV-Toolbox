@@ -91,9 +91,9 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.OPEN_24);
-            ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.IMPORT_24);
-            ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.SAVE_24);
+            ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.FIND_FILES_24);
+            ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.PLAY_24);
+            ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.LEGEND_24);
             
             
             % 创建并组装 PopupList(下拉菜单)
@@ -153,9 +153,9 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.OPEN_24);
-            RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.SAVE_24);
-            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.SAVE_24);
+            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
+            RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.FORWARD_24);
+            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.END_24);
 
             % 创建并组装 PopupList(下拉菜单)
             RunPopup = PopupList();
@@ -189,10 +189,10 @@ classdef HomeTab < handle
             column3 = Column();
             column4 = Column();
             % 创建 Button
-            EnvironmentSettingsButton = CreatButton('push', 'EnvironmentSettings', section.Tag, Icon.LAYOUT_24);
-            EnvironmentRemoteButton = CreatButton('split', 'EnvironmentRemote', section.Tag, Icon.SETTINGS_24);
+            EnvironmentSettingsButton = CreatButton('push', 'EnvironmentSettings', section.Tag, Icon.SETTINGS_24);
+            EnvironmentRemoteButton = CreatButton('split', 'EnvironmentRemote', section.Tag, Icon.PROPERTIES_24);
             EnvironmentRemoteButton.ButtonPushedFcn = @this.moleculerDisplay;
-            EnvironmentParallelButton = CreatButton('push', 'EnvironmentParallel', section.Tag, Icon.TOOLS_24);
+            EnvironmentParallelButton = CreatButton('push', 'EnvironmentParallel', section.Tag, Icon.PARALLEL_24);
             EnvironmentExtraButton = CreatButton('split', 'EnvironmentExtra', section.Tag, Icon.TOOLS_24);
             
             % 创建并组装 PopupList(下拉菜单)
