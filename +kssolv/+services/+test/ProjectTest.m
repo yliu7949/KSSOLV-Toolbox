@@ -4,10 +4,10 @@ import kssolv.services.fileManager.Project
 
 project = Project();
 structure = Project.newItem('Structure');
-structureName = project.addChildrenItem('Project', structure);
-structureName2 = project.addChildrenItem(structureName, structure);
-structureName3 = project.addChildrenItem(structureName2, structure);
-structureName4 = project.addChildrenItem(structureName, structure);
+structureName = project.addChildrenItemByName('Project', structure);
+structureName2 = project.addChildrenItemByName(structureName, structure);
+structureName3 = project.addChildrenItemByName(structureName2, structure);
+structureName4 = project.addChildrenItemByName(structureName, structure);
 project.removeItemByName(structureName3);
 % project.getItemByName(structureName);
 % project.removeItemByName(structureName);
