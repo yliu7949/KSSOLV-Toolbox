@@ -1,4 +1,4 @@
-classdef Project < kssolv.services.fileManager.AbstractItem
+classdef Project < kssolv.services.filemanager.AbstractItem
     %PROJECT 定义了以".ks"为扩展名的 KSSOLV Toolbox 项目文件类和相关操作函数
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -6,7 +6,7 @@ classdef Project < kssolv.services.fileManager.AbstractItem
     methods
         function obj = Project()
             %PROJECT 构造函数
-            obj = obj@kssolv.services.fileManager.AbstractItem("Project", "Project");
+            obj = obj@kssolv.services.filemanager.AbstractItem("Project", "Project");
             obj.name = "Project";
         end
 

@@ -4,13 +4,13 @@ classdef AbstractItem < handle
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
-        name      % 代码自动生成的唯一的节点名，不允许修改
-        label     % 向用户展示的节点名，允许用户设置和修改
-        type      % 节点类型
-        data      % 节点数据
-        createdAt % 创建时间
-        updatedAt % 更新时间
-        children  % 子节点
+        name        % 代码自动生成的唯一的节点名，不允许修改
+        label       % 向用户展示的节点名，允许用户设置和修改
+        type        % 节点类型
+        data        % 节点数据
+        createdAt   % 创建时间
+        updatedAt   % 更新时间
+        children    % 子节点
     end
     
     methods
@@ -44,7 +44,7 @@ classdef AbstractItem < handle
             if ~isfield(newItem, 'name') || ~isfield(newItem, 'label') || ...
                 ~isfield(newItem, 'type') || ~isfield(newItem, 'children') || ...
                 ~isfield(newItem, 'createdAt') || ~isfield(newItem, 'updatedAt')
-                error('KSSOLV:FileManager:Project:FieldNotFound', ...
+                error('KSSOLV:FileManager:Item:FieldNotFound', ...
                     'The new item added to the project is missing some fields.');
             end
 
@@ -62,7 +62,7 @@ classdef AbstractItem < handle
                 % 对于非根节点的逻辑
                 parentIndex = obj.findItem(obj, parentName, []);
                 if isempty(parentIndex)
-                    error('KSSOLV:FileManager:Project:ItemNotFound', ...
+                    error('KSSOLV:FileManager:Item:ItemNotFound', ...
                         ['Parent item named "', parentName, '" not found.']);
                 end
                 evalString = "obj";
@@ -84,7 +84,7 @@ classdef AbstractItem < handle
         function removeItemByName(obj, itemName)
             % 从项目结构体中删除名为 itemName 的节点
             if itemName == obj.name
-                error('KSSOLV:FileManager:Project:DeleteNotAllowed', ...
+                error('KSSOLV:FileManager:Item:DeleteNotAllowed', ...
                         "The root item of Project cannot be deleted.");
             end
             itemIndex = obj.findItem(obj, itemName, []);
@@ -103,7 +103,7 @@ classdef AbstractItem < handle
             % 获取名为 itemName 的节点
             itemIndex = obj.findItem(obj, itemName, []);
             if isempty(itemIndex)
-                error('KSSOLV:FileManager:Project:ItemNotFound', ...
+                error('KSSOLV:FileManager:Item:ItemNotFound', ...
                       ['Item named "', itemName, '" not found.']);
             end
             evalString = "obj";
@@ -118,7 +118,7 @@ classdef AbstractItem < handle
             % updates 应该是一个结构体，包含要更新的字段和值
             itemIndex = obj.findItem(obj, itemName, []);
             if isempty(itemIndex)
-                error('KSSOLV:FileManager:Project:ItemNotFound', ...
+                error('KSSOLV:FileManager:Item:ItemNotFound', ...
                       ['Item named "', itemName, '" not found.']);
             end
             evalString = "obj";
@@ -157,7 +157,7 @@ classdef AbstractItem < handle
         function itemIndex = findItem(data, itemName, currentIndex)
             % 递归函数寻找名为 itemName 的节点的索引
             % 若对应节点为 data.children(1).children(1).children(1)，则返回值为 [1, 1, 1] 
-            import kssolv.services.fileManager.Project;
+            import kssolv.services.filemanager.Project;
             itemIndex = [];
             if data.name == itemName
                 itemIndex = currentIndex;

@@ -1,6 +1,6 @@
 function project = ProjectTest()
 %PROJECTTEST 测试项目文件相关的函数
-import kssolv.services.fileManager.Project
+import kssolv.services.filemanager.Project
 
 project = Project();
 structure = Project.newItem('Structure');
