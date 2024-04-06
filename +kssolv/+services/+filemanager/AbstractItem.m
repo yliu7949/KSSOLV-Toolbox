@@ -1,11 +1,13 @@
 classdef AbstractItem < handle
     %ABSTRACTITEM 项目文件树中节点的抽象定义
+    
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
         name        % 代码自动生成的唯一的节点名，不允许修改
         label       % 向用户展示的节点名，允许用户设置和修改
+        description % 节点描述
         type        % 节点类型
         data        % 节点数据
         createdAt   % 创建时间
@@ -23,6 +25,7 @@ classdef AbstractItem < handle
 
             this.name = sprintf('%s(%s)', label, char(matlab.lang.internal.uuid));
             this.label = label;
+            this.description = "";
             this.type = type;
             this.createdAt = datetime;
             this.updatedAt = datetime;
@@ -38,7 +41,7 @@ classdef AbstractItem < handle
             this.children(end+1) = childrenItem;
         end
 
-        function childrenItemName = addChildrenItemByName(obj, parentName, newItem)
+        function childrenItemName = addChildrenItemByName(this, parentName, newItem)
             % 在 data 中迭代查找名为 parentName 的父节点，并为其添加一个新的子节点
             % newItem 是一个结构体，需要包含 name、label、type、children 字段
             if ~isfield(newItem, 'name') || ~isfield(newItem, 'label') || ...
@@ -49,23 +52,23 @@ classdef AbstractItem < handle
             end
 
             newItem.name = sprintf('%s(%s)', newItem.name, char(matlab.lang.internal.uuid));
-            if parentName == obj.name
+            if parentName == this.name
                 % 如果父节点是根节点
-                if isempty(obj.children)
+                if isempty(this.children)
                     % 如果 children 是空的，初始化为一个结构体数组
-                    obj.children = newItem;
+                    this.children = newItem;
                 else
                     % 否则，正常添加新的子节点
-                    obj.children(end+1) = newItem;
+                    this.children(end+1) = newItem;
                 end
             else
                 % 对于非根节点的逻辑
-                parentIndex = obj.findItem(obj, parentName, []);
+                parentIndex = this.findItem(this, parentName, []);
                 if isempty(parentIndex)
                     error('KSSOLV:FileManager:Item:ItemNotFound', ...
                         ['Parent item named "', parentName, '" not found.']);
                 end
-                evalString = "obj";
+                evalString = "this";
                 for idx = parentIndex
                     evalString = evalString + ".children(" + idx + ")";
                 end
@@ -81,17 +84,17 @@ classdef AbstractItem < handle
             childrenItemName = newItem.name;
         end
         
-        function removeItemByName(obj, itemName)
+        function removeItemByName(this, itemName)
             % 从项目结构体中删除名为 itemName 的节点
-            if itemName == obj.name
+            if itemName == this.name
                 error('KSSOLV:FileManager:Item:DeleteNotAllowed', ...
                         "The root item of Project cannot be deleted.");
             end
-            itemIndex = obj.findItem(obj, itemName, []);
+            itemIndex = this.findItem(this, itemName, []);
             if isempty(itemIndex)
                 error(['Item named "', itemName, '" not found.']);
             end
-            evalString = "obj";
+            evalString = "this";
             for idx = itemIndex
                 evalString = evalString + ".children(" + idx + ")";
             end
@@ -99,29 +102,29 @@ classdef AbstractItem < handle
             eval(evalString);
         end
 
-        function item = getItemByName(obj, itemName)
+        function item = getItemByName(this, itemName)
             % 获取名为 itemName 的节点
-            itemIndex = obj.findItem(obj, itemName, []);
+            itemIndex = this.findItem(this, itemName, []);
             if isempty(itemIndex)
                 error('KSSOLV:FileManager:Item:ItemNotFound', ...
                       ['Item named "', itemName, '" not found.']);
             end
-            evalString = "obj";
+            evalString = "this";
             for idx = itemIndex
                 evalString = evalString + ".children(" + idx + ")";
             end
             item = eval(evalString);
         end
 
-        function item = updateItemByName(obj, itemName, updates)
+        function item = updateItemByName(this, itemName, updates)
             % 更新名为 itemName 的节点的字段，如 label、type 和 data
             % updates 应该是一个结构体，包含要更新的字段和值
-            itemIndex = obj.findItem(obj, itemName, []);
+            itemIndex = this.findItem(this, itemName, []);
             if isempty(itemIndex)
                 error('KSSOLV:FileManager:Item:ItemNotFound', ...
                       ['Item named "', itemName, '" not found.']);
             end
-            evalString = "obj";
+            evalString = "this";
             for idx = itemIndex
                 evalString = evalString + ".children(" + idx + ")";
             end
@@ -135,7 +138,7 @@ classdef AbstractItem < handle
                 eval(evalString + ".data = updates.data;");
             end
             eval(evalString + ".updatedAt = datetime;");
-            item = obj.getItemByName(itemName);
+            item = this.getItemByName(itemName);
         end
 
     end

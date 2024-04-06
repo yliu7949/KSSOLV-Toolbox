@@ -1,20 +1,21 @@
 classdef Project < kssolv.services.filemanager.AbstractItem
     %PROJECT 定义了以".ks"为扩展名的 KSSOLV Toolbox 项目文件类和相关操作函数
+    
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
     methods
-        function obj = Project()
+        function this = Project()
             %PROJECT 构造函数
-            obj = obj@kssolv.services.filemanager.AbstractItem("Project", "Project");
-            obj.name = "Project";
+            this = this@kssolv.services.filemanager.AbstractItem("Project", "Project");
+            this.name = "Project";
         end
 
-        function saveToKsFile(obj, filename)
+        function saveToKsFile(this, filename)
             % 将项目数据结构体保存到 .ks 文件中
             arguments
-                obj
-                filename (1,1) string = obj.label + '.ks'
+                this
+                filename (1,1) string = this.label + '.ks'
             end
         
             % 检查filename是否为绝对路径，并检查目录是否存在，不存在则创建
@@ -25,7 +26,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                 warning('on');
             end
         
-            data = obj;
+            data = this;
             try
                 save(filename, 'data', "-mat", "-v7.3");
             catch ME
