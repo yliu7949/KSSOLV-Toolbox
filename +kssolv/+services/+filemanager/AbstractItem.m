@@ -9,18 +9,23 @@ classdef AbstractItem < handle
         label       % 向用户展示的节点名，允许用户设置和修改
         description % 节点描述
         type        % 节点类型
+        size        % 子节点数量
+        children    % 子节点
+    end
+
+    properties (Hidden)
+        % 当类的实例被编码为 JSON 时，设置为 Hidden 属性的成员可以避免被编码
         data        % 节点数据
         createdAt   % 创建时间
         updatedAt   % 更新时间
-        children    % 子节点
     end
     
     methods
         function this = AbstractItem(label, type)
             %ABSTRACTITEM 构造函数，构建空的节点
             arguments
-                label string = "default"
-                type  string = "plain"
+                label string = "DefaultItem"
+                type  string = "Data"
             end
 
             this.name = sprintf('%s(%s)', label, char(matlab.lang.internal.uuid));
@@ -141,6 +146,38 @@ classdef AbstractItem < handle
             item = this.getItemByName(itemName);
         end
 
+        function replaceItemByName(this, itemName, newItem)
+            % 整体替换名为 itemName 的节点
+            % newItem 应该是一个结构体，完全替换原有节点
+            if ~isfield(newItem, 'name') || ~isfield(newItem, 'label') || ...
+                ~isfield(newItem, 'type') || ~isfield(newItem, 'children') || ...
+                ~isfield(newItem, 'createdAt') || ~isfield(newItem, 'updatedAt')
+                error('KSSOLV:FileManager:Item:FieldNotFound', ...
+                      'The new item replacing the project item is missing some fields.');
+            end
+        
+            % 如果是根节点，不允许替换
+            if itemName == this.name
+                error('KSSOLV:FileManager:Item:ReplaceNotAllowed', ...
+                      'The root item of the Project cannot be replaced.');
+            end
+        
+            % 寻找要替换的节点索引
+            itemIndex = this.findItem(this, itemName, []);
+            if isempty(itemIndex)
+                error('KSSOLV:FileManager:Item:ItemNotFound', ...
+                      ['Item named "', itemName, '" not found.']);
+            end
+        
+            % 构建到要替换节点父节点的 eval 字符串
+            evalString = "this";
+            for idx = itemIndex(1:end-1)
+                evalString = evalString + ".children(" + idx + ")";
+            end
+        
+            % 执行替换操作
+            eval(evalString + ".children(" + itemIndex(end) + ") = newItem;");
+        end
     end
 
     methods (Static)

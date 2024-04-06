@@ -14,7 +14,7 @@ project.removeItemByName(structureName3);
 % project.updateItemByName(structureName, struct('label', 's'));
 workflow = Project.newItem('Workflow');
 project.replaceItemByName(structureName4, workflow);
-% project.saveToKsFile('ks.ks');
+project.saveToKsFile('ks.ks');
 % project.loadKsFile('ks.ks');
 end
 

@@ -1,6 +1,6 @@
 classdef Project < kssolv.services.filemanager.AbstractItem
     %PROJECT 定义了以".ks"为扩展名的 KSSOLV Toolbox 项目文件类和相关操作函数
-    
+
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
@@ -34,11 +34,20 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                       'Error saving the Project file: %s', ME.message);
             end
         end
+        
+        encodedJSON = encodeToJSON(this, prettyPrint)
     end
 
     methods (Static)
         function data = loadKsFile(fileName)
             % 从 .ks 文件中加载项目数据结构体
+            [~, ~, ext] = fileparts(fileName);
+            if ~strcmp(ext, '.ks')
+                % 检查文件的扩展名是否为 .ks
+                error('KSSOLV:FileManager:Project:FileLoadError', ...
+                    'Specified file does not have a .ks extension');
+            end
+
             try
                 load(fileName, "-mat", 'data');
             catch ME
