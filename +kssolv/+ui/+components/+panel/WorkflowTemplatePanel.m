@@ -8,8 +8,8 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
     properties
         parent   % 保存父 GridLayout 对象
         industryDropDown
-        industryDropDownValue
         workflowDropDown
+        workflowDemoImage
         industryWorkflows
     end
     
@@ -27,20 +27,21 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
             workflows(4) = {{"集成电路", "通信技术", "人工智能"}};
             workflows(5) = {{"国防科技", "军事装备", "信息化作战"}};
             this.industryWorkflows = dictionary(industries, workflows);
-            this.industryDropDownValue = "化学化工";
 
             this.buildContainer();
         end
     end
 
     methods (Access = private)
-        function onIndustryDropDownValueChanged(this, ~, event)
-            this.industryDropDownValue = event.Value;
-
-            workflows = this.industryWorkflows(this.industryDropDownValue);
+        function onIndustryDropDownValueChanged(this, ~, ~)
+            workflows = this.industryWorkflows(this.industryDropDown.Value);
             import kssolv.ui.components.panel.WorkflowTemplatePanel.cell2array
             this.workflowDropDown.Items = cell2array(workflows);
             this.workflowDropDown.Value = this.workflowDropDown.Items(1);
+
+            if this.industryDropDown.Value == "新能源"
+                this.workflowDemoImage.ImageSource = '+kssolv/+ui/resources/images/workflowDemo.png';
+            end
         end
     end
 
@@ -69,7 +70,7 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
             % 创建 GridLayout
             gridLayout = uigridlayout(panel);
             gridLayout.ColumnWidth = {'fit', '1x', 'fit', '1x'};
-            gridLayout.RowHeight = {30, 30, 'fit'};
+            gridLayout.RowHeight = {30, 30, '1x'};
 
             % 创建 IndustryTemplateLabel
             industryTemplateLabel = uilabel(gridLayout);
@@ -104,7 +105,7 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
 
             % 创建 WorkflowDropDown
             this.workflowDropDown = uidropdown(gridLayout);
-            workflows = this.industryWorkflows(this.industryDropDownValue);
+            workflows = this.industryWorkflows(this.industryDropDown.Value);
             import kssolv.ui.components.panel.WorkflowTemplatePanel.cell2array
             this.workflowDropDown.Items = cell2array(workflows);
             this.workflowDropDown.Layout.Row = 2;
@@ -115,6 +116,13 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
             imagePanel = uipanel(gridLayout);
             imagePanel.Layout.Row = 3;
             imagePanel.Layout.Column = [1 4];
+
+            gridLayout2 = uigridlayout(imagePanel);
+            gridLayout2.ColumnWidth = {'1x'};
+            gridLayout2.RowHeight = {'1x'};
+
+            this.workflowDemoImage = uiimage(gridLayout2);
+            this.workflowDemoImage.ScaleMethod = 'scaledown';
         end
     end
 end

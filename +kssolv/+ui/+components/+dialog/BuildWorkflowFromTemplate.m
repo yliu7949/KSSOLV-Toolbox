@@ -27,7 +27,7 @@ classdef BuildWorkflowFromTemplate < controllib.ui.internal.dialog.AbstractDialo
     methods (Access = protected)
         function buildUI(this)
             g = uigridlayout('Parent', this.UIFigure);
-            g.RowHeight = {'fit', 40};
+            g.RowHeight = {350, 40, 'fit'};
             g.ColumnWidth = {'1x'};
 
             % 创建 WorkflowTemplatePanel
@@ -48,10 +48,17 @@ classdef BuildWorkflowFromTemplate < controllib.ui.internal.dialog.AbstractDialo
             importWorkflowButton.Layout.Column = 2;
             importWorkflowButton.Text = '插入';
         end
+
+        function cleanupUI(this)
+            % 清理 Panel
+            if ~isempty(this.workflowTemplatePanel) && this.workflowTemplatePanel.IsWidgetValid
+                delete(this.workflowTemplatePanel);
+            end
+        end
     end
 
     methods (Hidden)
-        function app = qeShow(this, openInspect)
+        function this = qeShow(this, openInspect)
             arguments
                 this 
                 openInspect logical = false
