@@ -10,6 +10,10 @@ classdef HomeTab < handle
         Tag
         % 标题
         Title
+
+        % 组件
+        RunningRunButton
+        RunningStopButton
     end
     
     methods
@@ -153,20 +157,24 @@ classdef HomeTab < handle
             column2 = Column();
             column3 = Column();
             % 创建 Button
-            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
+            this.RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
+            this.RunningRunButton.ButtonPushedFcn = @this.run;
             RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.FORWARD_24);
-            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.END_24);
+            RunningStepButton.Enabled = false;
+            this.RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.END_24);
+            this.RunningStopButton.Enabled = false;
+            this.RunningStopButton.ButtonPushedFcn = @this.stop;
 
             % 创建并组装 PopupList(下拉菜单)
             RunPopup = PopupList();
             RunAndTime = CreateListItem('RunAndTime', section.Tag, 'none');
             RunPopup.add(RunAndTime);
-            RunningRunButton.Popup = RunPopup;
+            this.RunningRunButton.Popup = RunPopup;
 
             % 组装 Column 和 Button
-            column1.add(RunningRunButton);
+            column1.add(this.RunningRunButton);
             column2.add(RunningStepButton);
-            column3.add(RunningStopButton);
+            column3.add(this.RunningStopButton);
             section.add(column1);
             section.add(column2);
             section.add(column3);
@@ -313,6 +321,16 @@ classdef HomeTab < handle
         %     section.add(column4);
         %     this.Tab.add(section);
         % end
+
+        function run(this, ~, ~)
+            this.RunningRunButton.Enabled = false;
+            this.RunningStopButton.Enabled = true;
+        end
+
+        function stop(this, ~, ~)
+            this.RunningRunButton.Enabled = true;
+            this.RunningStopButton.Enabled = false;
+        end
 
         function moleculerDisplay(~, ~, ~)
             kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
