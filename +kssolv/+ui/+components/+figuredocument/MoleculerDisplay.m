@@ -5,11 +5,21 @@ classdef MoleculerDisplay < handle
     
     properties
         DocumentGroupTag
+        cifFilePath
     end
     
     methods
-        function this = MoleculerDisplay()
+        function this = MoleculerDisplay(cifFilePath)
             %MOLECULERDISPLAY 构造此类的实例
+            arguments
+                cifFilePath string = ""
+            end
+            if cifFilePath == ""
+                this.cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
+                '3Dmol', 'MoS2_mp-2815_conventional_standard.cif');
+            else
+                this.cifFilePath = cifFilePath;
+            end
             this.DocumentGroupTag = 'DocumentGroup';
         end
         
@@ -28,9 +38,7 @@ classdef MoleculerDisplay < handle
             h = uihtml(g, "HTMLSource", htmlFile);
 
             % 读取 CIF 格式文件并保存在 html 组件中
-            cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
-                '3Dmol', 'MoS2_mp-2815_conventional_standard.cif');
-            cifFileContent = fileread(cifFilePath);
+            cifFileContent = fileread(this.cifFilePath);
             h.Data = cifFileContent;
 
             % 添加到 App Container
