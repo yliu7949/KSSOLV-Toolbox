@@ -21,6 +21,7 @@ classdef BuildWorkflowFromTemplate < controllib.ui.internal.dialog.AbstractDialo
         function onImportWorkflowButtonPushed(this, ~, ~)
             % 关闭对话框
             close(this);
+            kssolv.ui.components.figuredocument.Workflow().Display();
         end
     end
 

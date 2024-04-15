@@ -110,6 +110,7 @@ classdef HomeTab < handle
             ProjectWorkflowButtonPopup = PopupList();
             NewWorkflow = CreateListItem('NewWorkflow', section.Tag, 'none');
             ImportTemplateWorkflow = CreateListItem('ImportTemplateWorkflow', section.Tag, 'none');
+            ImportTemplateWorkflow.ItemPushedFcn = @this.openWorkflowTemplateDialog;
             ExportTemplateWorkflow = CreateListItem('ExportTemplateWorkflow', section.Tag, 'none');
 
             ProjectVariableButtonPopup = PopupList();
@@ -322,9 +323,24 @@ classdef HomeTab < handle
         %     this.Tab.add(section);
         % end
 
+        function openWorkflowTemplateDialog(~, ~, ~)
+            import kssolv.ui.components.dialog.BuildWorkflowFromTemplate
+            import kssolv.ui.util.DataStorage
+            BuildWorkflowFromTemplate().show(DataStorage.getData('AppContainer'));
+        end
+
         function run(this, ~, ~)
             this.RunningRunButton.Enabled = false;
             this.RunningStopButton.Enabled = true;
+            pause(3)
+            kssolv.ui.components.figuredocument.DataPlot('Temp/gtk.png').Display();
+            pause(2)
+            kssolv.ui.components.figuredocument.DataPlot('Temp/h2o.png').Display();
+            pause(2)
+            kssolv.ui.components.figuredocument.DataPlot('Temp/si.png').Display();
+            pause(1)
+            this.RunningRunButton.Enabled = true;
+            this.RunningStopButton.Enabled = false;
         end
 
         function stop(this, ~, ~)
