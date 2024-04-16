@@ -64,9 +64,9 @@
 
         <entry key="ResourceSectionTitle">Resources</entry>
         <entry key="ResourceLibraryButtonLabel">Library</entry>
-        <entry key="ResourceLibraryButtonTooltip">Compilation of related theoretical materials</entry>
+        <entry key="ResourceLibraryButtonTooltip">Summary of relevant theoretical data</entry>
         <entry key="ResourceCommunityButtonLabel">Community</entry>
-        <entry key="ResourceCommunityButtonTooltip">Visit KSSOLV online community</entry>
+        <entry key="ResourceCommunityButtonTooltip">Visit the KSSOLV online community</entry>
         <entry key="ResourceHelpButtonLabel">Help</entry>
         <entry key="ResourceHelpButtonTooltip">Get help</entry>
         <entry key="ResourceSupportButtonLabel">Request Support</entry>
@@ -123,7 +123,6 @@
         <entry key="ZoomResetButtonLabel">Reset Zoom</entry>
         <entry key="ZoomResetButtonTooltip">Reset to default view</entry>
         
-
         <entry key="SettingsSectionTitle">Settings</entry>
         <entry key="SetNodeButtonLabel">Set Node</entry>
         <entry key="SetNodeButtonTooltip">Set Node</entry>
@@ -137,7 +136,7 @@
         <entry key="InfoBrowserTitle">Information</entry>
 
         <!-- Config Browser -->
-        <entry key="ConfigBrowserTitle">Configuration Editor</entry>
+        <entry key="ConfigBrowserTitle">Config Editor</entry>
 
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">Simulation</entry>
