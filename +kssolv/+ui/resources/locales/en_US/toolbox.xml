@@ -10,42 +10,125 @@
         <!-- ToolStrip Home tab -->
         <entry key="HomeTabTitle">Home</entry>
 
+        <entry key="FileSectionTitle">File</entry>
+        <entry key="FileProjectButtonLabel">Project</entry>
+        <entry key="FileProjectButtonTooltip">Adjust project file</entry>
+        <entry key="OpenFileItemText">Open...</entry>
+        <entry key="FileSaveButtonLabel">Save</entry>
+        <entry key="FileSaveButtonTooltip">Save project or structure</entry>
+        <entry key="SaveProjectItemText">Save current project</entry>
+        <entry key="SaveProjectAsItemText">Save project as...</entry>
+        <entry key="SaveStructureAsItemText">Save structure as...</entry>
+        <entry key="FileCloseButtonLabel">Close</entry>
+        <entry key="FileCloseButtonTooltip">Close current project</entry>
+
+
         <entry key="ProjectSectionTitle">Project</entry>
-        <entry key="ProjectOpenButtonLabel">Open</entry>
-        <entry key="ProjectOpenButtonTooltip">Open project file</entry>
-        <entry key="ProjectModelButtonLabel">Model</entry>
-        <entry key="ProjectModelButtonTooltip">Import the structural model as a file or from a database</entry>
-        <entry key="ProjectSaveButtonLabel">Save</entry>
-        <entry key="ProjectSaveButtonTooltip">Save current project</entry>
-        <entry key="ProjectCloseButtonLabel">Close</entry>
-        <entry key="ProjectCloseButtonTooltip">Close current project</entry>
+        <entry key="ProjectStructureButtonLabel">Structure</entry>
+        <entry key="ProjectStructureButtonTooltip">Import/export structure</entry>
+        <entry key="ImportStructureFromFileItemText">Import structure from file...</entry>
+        <entry key="ImportStructureFromLinkItemText">Import structure from link...</entry>
+        <entry key="ImportStructureFromLibraryItemText">Import structure from material library...</entry>
+        <entry key="ImportStructureFromMatlabItemText">Import structure from MATLAB workspace...</entry>
+        <entry key="ProjectWorkflowButtonLabel">Workflow</entry>
+        <entry key="ProjectWorkflowButtonTooltip">Edit workflow</entry>
+        <entry key="NewWorkflowItemText">New blank workflow</entry>
+        <entry key="ImportTemplateWorkflowItemText">Import workflow from template...</entry>
+        <entry key="ExportTemplateWorkflowItemText">Save workflow as template...</entry>
+        <entry key="ProjectVariableButtonLabel">Variable</entry>
+        <entry key="ProjectVariableButtonTooltip">Edit variable</entry>
+        <entry key="NewVariableItemText">Create new variable...</entry>
+        <entry key="ImportVariableFromFileItemText">Import variable from file...</entry>
+        <entry key="ImportVariableFromMATLABItemText">Import variable from MATLAB workspace...</entry>
         
+        <entry key="RunningSectionTitle">Running</entry>
+        <entry key="RunningRunButtonLabel">Run</entry>
+        <entry key="RunningRunButtonTooltip">Run program</entry>
+        <entry key="RunningStepButtonLabel">Step</entry>
+        <entry key="RunningStepButtonTooltip">Step through program</entry>   
+        <entry key="RunningStopButtonLabel">Stop</entry>
+        <entry key="RunningStopButtonTooltip">End program</entry>
+        <entry key="RunAndTimeItemText">Run and time</entry>
+        
+        <entry key="EnvironmentSectionTitle">Environment</entry>
+        <entry key="EnvironmentSettingsButtonLabel">Settings</entry>
+        <entry key="EnvironmentSettingsButtonTooltip">Adjust settings</entry>
+        <entry key="EnvironmentRemoteButtonLabel">Remote</entry>
+        <entry key="EnvironmentRemoteButtonTooltip">Connect to remote server</entry>
+        <entry key="EnvironmentParallelButtonLabel">Parallel</entry>
+        <entry key="EnvironmentParallelButtonTooltip">Set up parallel computing</entry>
+        <entry key="EnvironmentExtraButtonLabel">Additional Features</entry>
+        <entry key="EnvironmentExtraButtonTooltip">Add additional features</entry>
+        <entry key="ConnectToClusterItemText">Connect to computing cluster...</entry>
+        <entry key="GetExtraFeatureItemText">Get additional features...</entry>
+
+        <entry key="ResourceSectionTitle">Resources</entry>
+        <entry key="ResourceLibraryButtonLabel">Library</entry>
+        <entry key="ResourceLibraryButtonTooltip">Compilation of related theoretical materials</entry>
+        <entry key="ResourceCommunityButtonLabel">Community</entry>
+        <entry key="ResourceCommunityButtonTooltip">Visit KSSOLV online community</entry>
+        <entry key="ResourceHelpButtonLabel">Help</entry>
+        <entry key="ResourceHelpButtonTooltip">Get help</entry>
+        <entry key="ResourceSupportButtonLabel">Request Support</entry>
+        <entry key="ResourceSupportButtonTooltip">Request technical support</entry>
+        <entry key="OpenDocumentItemText">Documents</entry>
+        <entry key="OfficialSiteItemText">Official Website</entry>
+        <entry key="CheckUpdateItemText">Check for updates</entry>
+        <entry key="CheckLicenseItemText">License</entry>
+        <entry key="TermsOfUseItemText">Terms of use</entry>
+        <entry key="AboutUsItemText">About KSSOLV</entry>
+        
+
         <entry key="OperationSectionTitle">Operation</entry>
         <entry key="OperationUndoButtonLabel">Undo</entry>
         <entry key="OperationUndoButtonTooltip">Undo operation</entry>
         <entry key="OperationRedoButtonLabel">Redo</entry>
         <entry key="OperationRedoButtonTooltip">Redo operation</entry>
-
-        <entry key="EnvironmentSectionTitle">Environment</entry>
-        <entry key="EnvironmentLayoutButtonLabel">Layout</entry>
-        <entry key="EnvironmentLayoutButtonTooltip">Adjust desktop layout</entry>
-        <entry key="EnvironmentPreferenceButtonLabel">Preference</entry>
-        <entry key="EnvironmentPreferenceButtonTooltip">Preference setting</entry>
-        <entry key="EnvironmentToolsButtonLabel">Tools</entry>
-        <entry key="EnvironmentToolsButtonTooltip">KSSOLV-related tools</entry>
-
-        <entry key="ResourceSectionTitle">Resource</entry>
-        <entry key="ResourceLibraryButtonLabel">Library</entry>
-        <entry key="ResourceLibraryButtonTooltip">Summary of relevant theoretical data</entry>
-        <entry key="ResourceCommunityButtonLabel">Community</entry>
-        <entry key="ResourceCommunityButtonTooltip">Visit the KSSOLV online community</entry>
-        <entry key="ResourceHelpButtonLabel">Help</entry>
-        <entry key="ResourceHelpButtonTooltip">Get help</entry>
-
+        
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">Workflow</entry>
+        <entry key="SaveSectionTitle">Save</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as Workflow Template</entry>
+        <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
 
-        <entry key="PlotSectionTitle">Plot</entry>
+
+        <entry key="NodeSectionTitle">Nodes</entry>
+        <entry key="AddNoteButtonLabel">Add Node</entry>
+        <entry key="AddNoteButtonTooltip">Add a new node</entry>
+        <entry key="EditNoteButtonLabel">Edit Node</entry>
+        <entry key="EditNoteButtonTooltip">Adjust selected node</entry>
+        <entry key="node00ItemText">Node 0-0</entry>
+        <entry key="node01ItemText">Node 0-1</entry>
+        <entry key="node10ItemText">Node 1-0</entry>
+        <entry key="node11ItemText">Node 1-1</entry>
+        <entry key="node12ItemText">Node 1-2</entry>
+        <entry key="node21ItemText">Node 2-1</entry>
+        <entry key="nodexyItemText">Node x-y</entry>
+        <entry key="AddTopSlotItemText">Add top connector</entry>
+        <entry key="DelTopSlotItemText">Remove top connector</entry>
+        <entry key="AddBottomSlotItemText">Add bottom connector</entry>
+        <entry key="DelBottomSlotItemText">Remove bottom connector</entry>
+        
+
+
+
+
+
+
+        <entry key="ZoomSectionTitle">Zoom</entry>
+        <entry key="ZoomInButtonLabel">Zoom In</entry>
+        <entry key="ZoomInButtonTooltip">Zoom in view</entry>
+        <entry key="ZoomOutButtonLabel">Zoom Out</entry>
+        <entry key="ZoomOutButtonTooltip">Zoom out view</entry>
+        <entry key="ZoomResetButtonLabel">Reset Zoom</entry>
+        <entry key="ZoomResetButtonTooltip">Reset to default view</entry>
+        
+
+        <entry key="SettingsSectionTitle">Settings</entry>
+        <entry key="SetNodeButtonLabel">Set Node</entry>
+        <entry key="SetNodeButtonTooltip">Set Node</entry>
+        
+        
 
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">Project Browser</entry>
@@ -54,7 +137,7 @@
         <entry key="InfoBrowserTitle">Information</entry>
 
         <!-- Config Browser -->
-        <entry key="ConfigBrowserTitle">Config Editor</entry>
+        <entry key="ConfigBrowserTitle">Configuration Editor</entry>
 
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">Simulation</entry>
