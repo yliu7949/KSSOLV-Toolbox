@@ -16,7 +16,7 @@ classdef MoleculerDisplay < handle
             end
             if cifFilePath == ""
                 this.cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
-                '3Dmol', 'MoS2_mp-2815_conventional_standard.cif');
+                'test', 'MoS2_mp-2815_conventional_standard.cif');
             else
                 this.cifFilePath = cifFilePath;
             end

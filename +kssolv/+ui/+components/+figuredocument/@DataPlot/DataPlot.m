@@ -6,21 +6,24 @@ classdef DataPlot < handle
     
     properties
         DocumentGroupTag
-        figureFilePath
+        figureFilePath string
     end
     
     methods
-        function this = DataPlot(figFilePath)
+        function this = DataPlot(figureFilePath)
             %DATAPLOT 构造函数
             arguments
-                figFilePath string
+                figureFilePath string
             end
-            this.figureFilePath = figFilePath;
+            this.figureFilePath = figureFilePath;
             this.DocumentGroupTag = 'DocumentGroup';
         end
         
         function Display(this)
             %DISPLAY 在 Document Group 中展示图像
+            if this.figureFilePath == ""
+                return
+            end
             figOptions.Title = '数据绘图'; 
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
@@ -78,7 +81,8 @@ classdef DataPlot < handle
 
             % 展示 MolecularDisplay
             this.DocumentGroupTag = 'DocumentGroupTest';
-            this.figureFilePath = '/Users/liu/Documents/kssolv-gui/Temp/gtk.fig';
+            this.figureFilePath = fullfile(fileparts(mfilename('fullpath')), ...
+                'test', 'gtk.fig');
             this.Display();
         end
     end

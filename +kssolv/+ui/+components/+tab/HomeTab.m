@@ -333,11 +333,11 @@ classdef HomeTab < handle
             this.RunningRunButton.Enabled = false;
             this.RunningStopButton.Enabled = true;
             pause(3)
-            kssolv.ui.components.figuredocument.DataPlot('Temp/gtk.png').Display();
+            kssolv.ui.components.figuredocument.DataPlot('+kssolv/+ui/+components/+figuredocument/@DataPlot/test/gtk.fig').Display();
             pause(2)
-            kssolv.ui.components.figuredocument.DataPlot('Temp/h2o.png').Display();
+            kssolv.ui.components.figuredocument.DataPlot('+kssolv/+ui/+components/+figuredocument/@DataPlot/test/h2o.fig').Display();
             pause(2)
-            kssolv.ui.components.figuredocument.DataPlot('Temp/si.png').Display();
+            kssolv.ui.components.figuredocument.DataPlot('+kssolv/+ui/+components/+figuredocument/@DataPlot/test/si.fig').Display();
             pause(1)
             this.RunningRunButton.Enabled = true;
             this.RunningStopButton.Enabled = false;
