@@ -6,40 +6,43 @@ classdef DataPlot < handle
     
     properties
         DocumentGroupTag
-        figFilePath
+        figureFilePath
     end
     
     methods
         function this = DataPlot(figFilePath)
             %DATAPLOT 构造函数
             arguments
-                figFilePath string = '/Users/liu/Documents/kssolv-gui/Temp/gtk.png'
+                figFilePath string
             end
-            this.figFilePath = figFilePath;
+            this.figureFilePath = figFilePath;
             this.DocumentGroupTag = 'DocumentGroup';
         end
         
         function Display(this)
-            %DISPLAY 在 Document Group 中展示 fig 图像
+            %DISPLAY 在 Document Group 中展示图像
             figOptions.Title = '数据绘图'; 
             figOptions.DocumentGroupTag = this.DocumentGroupTag; 
             document = matlab.ui.internal.FigureDocument(figOptions);
 
-            % 添加 html 组件
-            fig = document.Figure;
-            
+            % 创建 uigrid
+            fig = document.Figure; 
             g = uigridlayout(fig);
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
-            %{
-            uiax = uiaxes(g);
-            fig = openfig(this.figFilePath, 'invisible');
-            ax = findobj(fig, 'Type', 'Axes');
-            copyobj(ax.Children, uiax);
-            delete(fig);
-            %}
-            image = uiimage(g);
-            image.ImageSource = this.figFilePath;
+
+            % 获取图片文件扩展名，并分别进行渲染
+            [~, ~, ext] = fileparts(this.figureFilePath);
+            switch ext
+                case '.fig'
+                    fig = openfig(this.figureFilePath, 'invisible');
+                    ax = findobj(fig, 'Type', 'Axes');
+                    ax.Parent = g;
+                    delete(fig);
+                otherwise
+                    image = uiimage(g);
+                    image.ImageSource = this.figureFilePath;
+            end
 
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
@@ -75,7 +78,7 @@ classdef DataPlot < handle
 
             % 展示 MolecularDisplay
             this.DocumentGroupTag = 'DocumentGroupTest';
-            %this.figFilePath = '/Users/liu/Documents/kssolv-gui/Temp/gtk.png';
+            this.figureFilePath = '/Users/liu/Documents/kssolv-gui/Temp/gtk.fig';
             this.Display();
         end
     end
