@@ -44,6 +44,8 @@ classdef HomeTab < handle
             % Project Section
             addlistener(this.Widgets.ProjectSection.ProjectStructureButton, ...
                 'ButtonPushed', @(src, data) callbackProjectStructureButton(this));
+            addlistener(this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackImportStructureFromFile(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton, ...
                 'ButtonPushed', @(src, data) callbackProjectWorkflowButton(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(2), ...
@@ -324,6 +326,31 @@ classdef HomeTab < handle
         end
 
         %% 回调函数
+        function callbackProjectStructureButton(~, ~, ~)
+            kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
+        end
+
+        function callbackImportStructureFromFile(~, ~, ~)
+            import kssolv.ui.util.Localizer.message
+            [files, path] = uigetfile({'*.cif';'*.vasp';'*.*'}, ...
+                message("KSSOLV:dialog:ImportStructureFromFile"), 'MultiSelect', 'on');
+            if ~isequal(files, 0)
+                % 如果用户没有点击取消按钮，并且选择了文件
+                for i = 1:length(files)
+                    % 拼接完整的文件路径
+                    fullPath = fullfile(path, files{i});
+
+                    % 渲染结构文件中的结构
+                    displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(fullPath);
+                    displayObj.Display();
+                end
+            end
+        end
+
+        function callbackProjectWorkflowButton(~, ~, ~)
+            kssolv.ui.components.figuredocument.Workflow().Display();
+        end
+
         function callbackImportTemplateWorkflow(~, ~, ~)
             import kssolv.ui.components.dialog.BuildWorkflowFromTemplate
             import kssolv.ui.util.DataStorage
@@ -348,14 +375,6 @@ classdef HomeTab < handle
         function callbackRunningStopButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
-        end
-
-        function callbackProjectStructureButton(~, ~, ~)
-            kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
-        end
-
-        function callbackProjectWorkflowButton(~, ~, ~)
-            kssolv.ui.components.figuredocument.Workflow().Display();
         end
     end
 

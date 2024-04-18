@@ -52,7 +52,7 @@
         <entry key="EnvironmentSectionTitle">Environment</entry>
         <entry key="EnvironmentSettingsButtonLabel">Settings</entry>
         <entry key="EnvironmentSettingsButtonTooltip">Adjust settings</entry>
-        <entry key="EnvironmentRemoteButtonLabel">Remote</entry>
+        <entry key="EnvironmentRemoteButtonLabel">Remote computing</entry>
         <entry key="EnvironmentRemoteButtonTooltip">Connect to remote server</entry>
         <entry key="EnvironmentParallelButtonLabel">Parallel</entry>
         <entry key="EnvironmentParallelButtonTooltip">Set up parallel computing</entry>

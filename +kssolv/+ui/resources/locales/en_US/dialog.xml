@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rsccat version="1.0" locale="en_US" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+    <!-- This file stores localized content related to Dialog components. -->
+    <message>
+        <!-- HomeTab: callbackImportStructureFromFile -->
+        <entry key="ImportStructureFromFile">Select the Structure File to Import</entry>
+    </message>
+</rsccat>
