@@ -3,7 +3,7 @@ function item = CreatGalleryItem(name, tagPrefix, inputIcon)
     %   使用示例：
     %       import kssolv.ui.util.CreatGalleryItem
     %       item = CreatGalleryItem('Import', 'PlotSection', Icon.IMPORT_24);
-    % 
+
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
 

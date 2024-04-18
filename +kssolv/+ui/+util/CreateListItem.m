@@ -8,7 +8,7 @@ function listitem = CreateListItem(name, tagPrefix, inputIcon)
     %       如果该 ListItem 属于另一 ListItem，则 parentname 为
     %       父 ListItem 创建时使用的 itemname 参数.
     %   (2) 参数 inputIcon 指定图标；设置为 'none' 可创建不带有图标的条目.
-    %
+
     %   开发者：林海饶
     %   版权 2024 合肥瀚海量子科技有限公司
 

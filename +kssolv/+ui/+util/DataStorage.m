@@ -4,9 +4,10 @@ classdef DataStorage
     %       import kssolv.ui.util.DataStorage.*
     %       setData('MyKey', myVariable);
     %       value = getData('MyKey');
-    %
+
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
+    
     properties (Access = private)
         DataMap
     end

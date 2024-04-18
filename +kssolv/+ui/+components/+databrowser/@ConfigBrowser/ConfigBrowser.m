@@ -1,5 +1,6 @@
 classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %CONFIGBROWSER 自定义的 Data Browser 组件，Workflow 中工作节点具体配置的编辑器
+    
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     

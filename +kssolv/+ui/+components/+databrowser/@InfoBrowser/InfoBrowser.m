@@ -1,5 +1,6 @@
 classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %INFOBROWSER 自定义的 Data Browser 组件，显示 Project Browser 里对应项的具体信息
+    
     %   开发者：杨柳 张致远
     %   版权 2024 合肥瀚海量子科技有限公司
     
