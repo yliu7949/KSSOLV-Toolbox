@@ -4,3 +4,5 @@
 # Editor
 **/*.asv
 
+# KSSOLV Toolbox Project files
+**/*.ks
