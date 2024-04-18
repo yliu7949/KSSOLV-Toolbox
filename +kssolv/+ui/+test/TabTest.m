@@ -1,8 +1,8 @@
-classdef TestTab < handle
-    %TESTTAB Toolstrip 菜单栏中的测试标签页
+classdef TabTest < handle
+    %TABTEST Toolstrip 菜单栏中的测试标签页
     %   参考代码：
-    %       C:\Program Files\MATLAB\R2023b\toolbox\matlab\toolstrip\+matlab\+ui\+internal\+toolstrip\ListItem.m
-    %       C:\Program Files\MATLAB\R2023b\toolbox\matlab\toolstrip\+matlab\+ui\+internal\+toolstrip\PopupList.m
+    %       MATLAB_ROOT\R2023b\toolbox\matlab\toolstrip\+matlab\+ui\+internal\+toolstrip\ListItem.m
+    %       MATLAB_ROOT\R2023b\toolbox\matlab\toolstrip\+matlab\+ui\+internal\+toolstrip\PopupList.m
     %
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -19,7 +19,7 @@ classdef TestTab < handle
     end
     
     methods
-        function this = TestTab()
+        function this = TabTest()
             %TESTTAB 构造函数，初始设置相关参数
             import kssolv.ui.util.Localizer.message
             this.Title = '测试主页';
@@ -120,8 +120,8 @@ classdef TestTab < handle
 
     methods (Static, Hidden)
         function app = qeShow()
-            % 用于在单元测试中测试 TestTab，可通过下面的命令使用：
-            % kssolv.ui.test.TestTab.qeShow();
+            % 用于在单元测试中测试 TabTest，可通过下面的命令使用：
+            % kssolv.ui.test.TabTest.qeShow();
 
             % 创建 AppContainer          
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
@@ -129,8 +129,8 @@ classdef TestTab < handle
             appOptions.ToolstripEnabled = true;
             app = matlab.ui.container.internal.AppContainer(appOptions);
 
-            % 添加 TestTab
-            homeTab = kssolv.ui.test.TestTab();
+            % 添加 TabTest
+            homeTab = kssolv.ui.test.TabTest();
             tabGroup = matlab.ui.internal.toolstrip.TabGroup();
             tabGroup.Tag = 'kssolvTabGroup';
             tabGroup.add(homeTab.Tab);
