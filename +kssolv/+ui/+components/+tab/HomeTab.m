@@ -360,14 +360,20 @@ classdef HomeTab < handle
         function callbackRunningRunButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = false;
             this.Widgets.RunningSection.RunningStopButton.Enabled = true;
-            figFileDir = '+kssolv/+ui/+components/+figuredocument/@DataPlot/test/';
+
+            app = kssolv.ui.util.DataStorage.getData('AppContainer');
+            app.Busy = true;
             pause(3)
+            app.Busy = false;
+
+            figFileDir = '+kssolv/+ui/+components/+figuredocument/@DataPlot/test/';
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'gtk.fig')).Display();
             pause(2)
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'h2o.fig')).Display();
             pause(2)
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'si.fig')).Display();
             pause(1)
+            
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
         end
