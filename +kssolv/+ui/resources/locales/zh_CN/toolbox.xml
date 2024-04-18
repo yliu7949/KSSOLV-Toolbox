@@ -22,14 +22,13 @@
         <entry key="FileCloseButtonLabel">关闭</entry>
         <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
 
-
         <entry key="ProjectSectionTitle">项目</entry>
         <entry key="ProjectStructureButtonLabel">结构</entry>
         <entry key="ProjectStructureButtonTooltip">导入/导出结构</entry>
         <entry key="ImportStructureFromFileItemText">从文件导入结构...</entry>
         <entry key="ImportStructureFromLinkItemText">从链接导入结构...</entry>
         <entry key="ImportStructureFromLibraryItemText">从材料库导入结构...</entry>
-        <entry key="ImportStructureFromMatlabItemText">从MATLAB工作区导入结构...</entry>
+        <entry key="ImportStructureFromMatlabItemText">从 MATLAB 工作区导入结构...</entry>
         <entry key="ProjectWorkflowButtonLabel">工作流</entry>
         <entry key="ProjectWorkflowButtonTooltip">编辑工作流</entry>
         <entry key="NewWorkflowItemText">新建空白工作流</entry>
@@ -39,7 +38,7 @@
         <entry key="ProjectVariableButtonTooltip">编辑变量</entry>
         <entry key="NewVariableItemText">新建变量...</entry>
         <entry key="ImportVariableFromFileItemText">从文件导入变量...</entry>
-        <entry key="ImportVariableFromMATLABItemText">从MATLAB工作区导入变量...</entry>
+        <entry key="ImportVariableFromMATLABItemText">从 MATLAB 工作区导入变量...</entry>
         
         <entry key="RunningSectionTitle">运行</entry>
         <entry key="RunningRunButtonLabel">运行</entry>
@@ -66,7 +65,7 @@
         <entry key="ResourceLibraryButtonLabel">图书馆</entry>
         <entry key="ResourceLibraryButtonTooltip">相关理论资料的汇总</entry>
         <entry key="ResourceCommunityButtonLabel">社区</entry>
-        <entry key="ResourceCommunityButtonTooltip">访问KSSOLV在线社区</entry>
+        <entry key="ResourceCommunityButtonTooltip">访问 KSSOLV 在线社区</entry>
         <entry key="ResourceHelpButtonLabel">帮助</entry>
         <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
         <entry key="ResourceSupportButtonLabel">请求支持</entry>
@@ -78,7 +77,6 @@
         <entry key="TermsOfUseItemText">使用条款</entry>
         <entry key="AboutUsItemText">关于KSSOLV</entry>
         
-
         <entry key="OperationSectionTitle">操作</entry>
         <entry key="OperationUndoButtonLabel">撤销</entry>
         <entry key="OperationUndoButtonTooltip">撤销操作</entry>
@@ -91,30 +89,23 @@
         <entry key="SaveWorkflowAsTemplateButtonLabel">另存为工作流模板</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
 
-
         <entry key="NodeSectionTitle">节点</entry>
         <entry key="AddNoteButtonLabel">新增节点</entry>
         <entry key="AddNoteButtonTooltip">增加一个新节点</entry>
         <entry key="EditNoteButtonLabel">编辑节点</entry>
         <entry key="EditNoteButtonTooltip">调整选中节点</entry>
-        <entry key="node00ItemText">0-0节点</entry>
-        <entry key="node01ItemText">0-1节点</entry>
-        <entry key="node10ItemText">1-0节点</entry>
-        <entry key="node11ItemText">1-1节点</entry>
-        <entry key="node12ItemText">1-2节点</entry>
-        <entry key="node21ItemText">2-1节点</entry>
-        <entry key="nodexyItemText">x-y节点</entry>
+        <entry key="node00ItemText">0-0 节点</entry>
+        <entry key="node01ItemText">0-1 节点</entry>
+        <entry key="node10ItemText">1-0 节点</entry>
+        <entry key="node11ItemText">1-1 节点</entry>
+        <entry key="node12ItemText">1-2 节点</entry>
+        <entry key="node21ItemText">2-1 节点</entry>
+        <entry key="nodexyItemText">x-y 节点</entry>
         <entry key="AddTopSlotItemText">增加上连接桩</entry>
         <entry key="DelTopSlotItemText">减少上连接桩</entry>
         <entry key="AddBottomSlotItemText">增加下连接桩</entry>
         <entry key="DelBottomSlotItemText">减少下连接桩</entry>
         
-
-
-
-
-
-
         <entry key="ZoomSectionTitle">缩放</entry>
         <entry key="ZoomInButtonLabel">放大</entry>
         <entry key="ZoomInButtonTooltip">放大视角</entry>
@@ -123,12 +114,9 @@
         <entry key="ZoomResetButtonLabel">重置缩放</entry>
         <entry key="ZoomResetButtonTooltip">重置为默认视角</entry>
         
-
         <entry key="SettingsSectionTitle">设置</entry>
         <entry key="SetNodeButtonLabel">设置节点</entry>
         <entry key="SetNodeButtonTooltip">设置节点</entry>
-        
-        
 
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">项目浏览器</entry>

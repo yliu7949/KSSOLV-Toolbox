@@ -22,7 +22,6 @@
         <entry key="FileCloseButtonLabel">Close</entry>
         <entry key="FileCloseButtonTooltip">Close current project</entry>
 
-
         <entry key="ProjectSectionTitle">Project</entry>
         <entry key="ProjectStructureButtonLabel">Structure</entry>
         <entry key="ProjectStructureButtonTooltip">Import/export structure</entry>
@@ -78,7 +77,6 @@
         <entry key="TermsOfUseItemText">Terms of use</entry>
         <entry key="AboutUsItemText">About KSSOLV</entry>
         
-
         <entry key="OperationSectionTitle">Operation</entry>
         <entry key="OperationUndoButtonLabel">Undo</entry>
         <entry key="OperationUndoButtonTooltip">Undo operation</entry>
@@ -90,7 +88,6 @@
         <entry key="SaveSectionTitle">Save</entry>
         <entry key="SaveWorkflowAsTemplateButtonLabel">Save as Workflow Template</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
-
 
         <entry key="NodeSectionTitle">Nodes</entry>
         <entry key="AddNoteButtonLabel">Add Node</entry>
@@ -109,12 +106,6 @@
         <entry key="AddBottomSlotItemText">Add bottom connector</entry>
         <entry key="DelBottomSlotItemText">Remove bottom connector</entry>
         
-
-
-
-
-
-
         <entry key="ZoomSectionTitle">Zoom</entry>
         <entry key="ZoomInButtonLabel">Zoom In</entry>
         <entry key="ZoomInButtonTooltip">Zoom in view</entry>
@@ -127,8 +118,6 @@
         <entry key="SetNodeButtonLabel">Set Node</entry>
         <entry key="SetNodeButtonTooltip">Set Node</entry>
         
-        
-
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">Project Browser</entry>
 
