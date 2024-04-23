@@ -333,7 +333,7 @@ classdef HomeTab < handle
         function callbackImportStructureFromFile(~, ~, ~)
             import kssolv.ui.util.Localizer.message
             [files, path] = uigetfile({'*.cif';'*.vasp';'*.*'}, ...
-                message("KSSOLV:dialog:ImportStructureFromFile"), 'MultiSelect', 'on');
+                message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
             if ~isequal(files, 0)
                 % 如果用户没有点击取消按钮，并且选择了文件
                 for i = 1:length(files)

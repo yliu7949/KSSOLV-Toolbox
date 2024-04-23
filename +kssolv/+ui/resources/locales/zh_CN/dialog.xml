@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-<rsccat version="1.0" locale="zh_CN" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
-    <!-- 该文件存储了与对话框组件有关的本地化内容. -->
-    <message>
-        <!-- HomeTab: callbackImportStructureFromFile -->
-        <entry key="ImportStructureFromFile">选择要导入的结构文件</entry>
-    </message>
-</rsccat>

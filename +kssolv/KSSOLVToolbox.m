@@ -65,6 +65,9 @@ classdef KSSOLVToolbox < handle
 
             % 展示布局好的界面
             show(this);
+
+            % 注册关闭时的提示对话框
+            this.AppContainer.CanCloseFcn = @(varargin) canClose(this,varargin{:});
         end
         
         function delete(this)
@@ -115,6 +118,29 @@ classdef KSSOLVToolbox < handle
                     kssolv.ui.util.Localizer.clearInstance();
                     % 清除 App Container 相关的实例
                     delete(this);
+            end
+        end
+
+        function status = canClose(this, ~)
+            status = false;
+
+            import kssolv.ui.util.Localizer.*
+            YesLabel = message('KSSOLV:dialogs:AppCanCloseSave');
+            NoLabel = message('KSSOLV:dialogs:AppCanCloseDoNotSave');
+            CancelLabel = message('KSSOLV:dialogs:AppCanCloseCancel');
+            selection = uiconfirm(this.AppContainer, ...
+                message('KSSOLV:dialogs:AppCanCloseMessage'), ...
+                message('KSSOLV:dialogs:AppCanCloseTitle'), ...
+                'Options', {YesLabel, NoLabel, CancelLabel}, ...
+                'DefaultOption', 1, ...
+                'CancelOption', 3);
+            
+            switch selection
+                case YesLabel
+                    status = true;
+                case NoLabel
+                    status = true;
+                otherwise
             end
         end
     end
