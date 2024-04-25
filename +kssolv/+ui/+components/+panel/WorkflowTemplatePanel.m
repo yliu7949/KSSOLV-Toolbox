@@ -40,7 +40,8 @@ classdef WorkflowTemplatePanel < controllib.ui.internal.dialog.AbstractContainer
             this.workflowDropDown.Value = this.workflowDropDown.Items(1);
 
             if this.industryDropDown.Value == "新能源"
-                this.workflowDemoImage.ImageSource = '+kssolv/+ui/resources/images/workflowDemo.png';
+                this.workflowDemoImage.ImageSource = fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))), ...
+                'resources/images/workflowDemo.png');
             end
         end
     end

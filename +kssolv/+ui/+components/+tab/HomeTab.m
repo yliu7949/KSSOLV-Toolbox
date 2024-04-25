@@ -366,7 +366,8 @@ classdef HomeTab < handle
             pause(3)
             app.Busy = false;
 
-            figFileDir = '+kssolv/+ui/+components/+figuredocument/@DataPlot/test/';
+            figFileDir = fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))), ...
+                '+components/+figuredocument/@DataPlot/test/');
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'gtk.fig')).Display();
             pause(2)
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'h2o.fig')).Display();
