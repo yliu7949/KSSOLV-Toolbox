@@ -8,8 +8,7 @@
         <!-- KSSOLVToolbox: canClose -->
         <entry key="AppCanCloseTitle">Save this project file</entry>
         <entry key="AppCanCloseMessage">
-            Before closing KSSOLV Toolbox, would you like to save the current
-            project files?
+            Before closing KSSOLV Toolbox, would you like to save the current project files?
 
             •	Project files will use the .ks extension
             •	Existing project files with the same name will be overwritten
