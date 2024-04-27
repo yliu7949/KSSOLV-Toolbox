@@ -6,20 +6,22 @@ classdef POSCARReader < handle
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties
-        filePath                % POSCAR 文件路径
-        fileContent             % POSCAR 文件内容
-        rawFileContent string   % 原始 POSCAR 文件内容
-        POSCARObject   struct   % 从 POSCAR 文件中解析出的数据结构
+        filePath                   % POSCAR 文件路径
+        fileContent                % POSCAR 文件内容
+        rawFileContent    string   % POSCAR 文件原始内容
+        POSCARObject      struct   % 从 POSCAR 文件中解析出的数据结构
+        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据 
     end
 
     properties (Access = private)
-        currentLineIndex        % 当前处理的行的索引
+        currentLineIndex           % 当前处理的行的索引
     end
 
     methods
         function this = POSCARReader(filePath)
             % 构造函数，初始化读取和解析 POSCAR 文件
             this.filePath = filePath;
+            this.KSSOLVSetupObject = struct();
             this.readFile();
             this.parseFile();
         end
@@ -58,7 +60,8 @@ classdef POSCARReader < handle
     methods (Access = private)
         function extractCommentLine(this)
             % 提取注释行
-            this.POSCARObject.name = this.fileContent{this.currentLineIndex};
+            this.POSCARObject.comment = this.fileContent{this.currentLineIndex};
+            this.KSSOLVSetupObject.name = this.POSCARObject.comment;
             this.currentLineIndex = this.currentLineIndex + 1;
         end
 
@@ -94,7 +97,7 @@ classdef POSCARReader < handle
                 C = latticeVectors * diag(this.POSCARObject.scalingFactor);
             end
 
-            this.POSCARObject.C = C;
+            this.KSSOLVSetupObject.C = C;
         end
 
         function extractAtomSpecies(this)
@@ -119,7 +122,7 @@ classdef POSCARReader < handle
                 startIndex = endIndex + 1;
             end
 
-            this.POSCARObject.atomList = string(atomList);
+            this.KSSOLVSetupObject.atomList = string(atomList);
         end
 
         function extractSelectiveDynamics(this)
@@ -142,8 +145,8 @@ classdef POSCARReader < handle
             end
             this.currentLineIndex = this.currentLineIndex + 1;
 
-            ionPositons = zeros(length(this.POSCARObject.atomList), 3, 'double');
-            for i = 1:length(this.POSCARObject.atomList)
+            ionPositons = zeros(length(this.KSSOLVSetupObject.atomList), 3, 'double');
+            for i = 1:length(this.KSSOLVSetupObject.atomList)
                 lineData = strsplit(this.fileContent{this.currentLineIndex});
                 ionPositons(i, :) = str2double(lineData(1:3));
                 this.currentLineIndex = this.currentLineIndex + 1;
@@ -152,10 +155,10 @@ classdef POSCARReader < handle
 
             if isDirectMode
                 % 如果为 Direct Mode
-                this.POSCARObject.xyzList = ionPositons * this.POSCARObject.C;
+                this.KSSOLVSetupObject.xyzList = ionPositons * this.KSSOLVSetupObject.C;
             else
                 % 如果为 Cartesian Mode
-                this.POSCARObject.xyzList = ionPositons * diag(this.POSCARObject.scalingFactor);
+                this.KSSOLVSetupObject.xyzList = ionPositons * diag(this.POSCARObject.scalingFactor);
             end
         end
     end

@@ -5,19 +5,22 @@ classdef CIFReader < handle
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties
-        filePath           % CIF 文件路径
-        fileContent        % CIF 文件内容
-        CIFObject struct   % 从 CIF 文件中解析出的数据结构
+        filePath                   % CIF 文件路径
+        fileContent                % CIF 文件内容
+        rawFileContent    string   % CIF 文件原始内容
+        CIFObject         struct   % 从 CIF 文件中解析出的数据结构
+        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据 
     end
 
     properties (Access = private)
-        currentLineIndex   % 当前处理的行的索引
+        currentLineIndex           % 当前处理的行的索引
     end
     
     methods
         function this = CIFReader(filePath)
             % 构造函数，初始化读取和解析 .cif 文件
             this.filePath = filePath;
+            this.KSSOLVSetupObject = struct();
             this.readFile();
             try
                 this.extractData();
@@ -25,6 +28,7 @@ classdef CIFReader < handle
                 error('KSSOLV:FileParser:CIFReader:ParseFileError', ...
                     'Error extracting data from %s: %s', this.filePath, ME.message);
             end
+            this.buildKSSOLVSetupObject();
         end
 
         function readFile(this)
@@ -36,6 +40,7 @@ classdef CIFReader < handle
             fileRawContent = textscan(fid, '%s', 'Delimiter', '\n', 'Whitespace', '');
             fclose(fid);
             this.fileContent = fileRawContent{1};
+            this.rawFileContent = strjoin(this.fileContent, '\n');
         end
     end
 
@@ -49,7 +54,7 @@ classdef CIFReader < handle
             while this.currentLineIndex <= totalLines
                 line = this.fileContent{this.currentLineIndex};
                 if startsWith(line, 'data_')
-                    this.CIFObject.name = this.extractName(line);
+                    this.extractName(line);
                 elseif startsWith(line, '_')
                     this.processEntry(line);
                 elseif startsWith(line, 'loop_')
@@ -59,10 +64,10 @@ classdef CIFReader < handle
             end
         end
         
-        function name = extractName(~, line)
+        function extractName(this, line)
             % 提取数据名称
             dataLine = regexp(line, 'data_\S*', 'match');
-            name = dataLine{1}(6:end);
+            this.CIFObject.name = dataLine{1}(6:end);
         end
         
         function processEntry(this, line)
@@ -177,6 +182,45 @@ classdef CIFReader < handle
             end
             % 调整索引以在循环后继续正确处理
             this.currentLineIndex = this.currentLineIndex - 1;
+        end
+
+        function buildKSSOLVSetupObject(this)
+            % 使用 CIFObject 中的数据来计算 KSSOLVSetupObject
+            this.KSSOLVSetupObject.name = this.CIFObject.name;
+
+            % 获取晶胞参数
+            a = this.CIFObject.a;
+            b = this.CIFObject.b;
+            c = this.CIFObject.c;
+            alpha = this.CIFObject.alpha;
+            beta = this.CIFObject.beta;
+            gamma = this.CIFObject.gamma;
+        
+            % 计算晶胞向量
+            a1 = [a, 0, 0];
+            a2 = [b * cosd(gamma), b * sind(gamma), 0];
+            tmpCos = ((c * sind(beta))^2 + (b * sind(gamma))^2 - ...
+                       ((b^2 + c^2 - 2 * b * c * cosd(alpha)) - ...
+                        (b * cosd(gamma) - c * cosd(beta))^2)) / ...
+                      (2 * (c * sind(beta)) * (b * sind(gamma)));
+            tmpSin = sqrt(1 - tmpCos^2);
+            a3 = [c * cosd(beta), c * sind(beta) * tmpCos, c * sind(beta) * tmpSin];
+            C = [a1; a2; a3];
+            this.KSSOLVSetupObject.C = C;
+        
+            % 读取原子信息
+            nAtoms = length(this.CIFObject.atomTypeSymbol);
+            atomList = strings(1, nAtoms);
+            for i = 1:nAtoms
+                atomList(i) = this.CIFObject.atomTypeSymbol{i};
+            end
+            this.KSSOLVSetupObject.atomList = atomList;
+        
+            % 计算原子坐标
+            latticeVectors = [this.CIFObject.atomFractionalX, ...
+                      this.CIFObject.atomFractionalY, ...
+                      this.CIFObject.atomFractionalZ];
+            this.KSSOLVSetupObject.xyzList = latticeVectors * C;
         end
     end
 
