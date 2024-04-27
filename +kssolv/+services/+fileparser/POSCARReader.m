@@ -49,7 +49,7 @@ classdef POSCARReader < handle
                 this.extractSelectiveDynamics();
                 this.extractAtomicCoordinates();
             catch ME
-                error('KSSOLV:FileParser:POSCARReader:ExtractDataError', ...
+                error('KSSOLV:FileParser:POSCARReader:ParseFileError', ...
                     'Error extracting data from %s: %s', this.filePath, ME.message);
             end
         end

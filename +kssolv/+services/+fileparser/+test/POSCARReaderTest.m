@@ -17,11 +17,10 @@ classdef POSCARReaderTest < matlab.unittest.TestCase
     
     methods(Test)    
         function Al2O3(testCase)
-            % 测试 Al2O3.poscar 文件的读取和解析
-            filePath = fullfile(testCase.POSCARDirectory, 'Al2O3.poscar');
+            % 测试 Al2O3.POSCAR 文件的读取和解析
+            filePath = fullfile(testCase.POSCARDirectory, 'Al2O3.POSCAR');
             poscar = kssolv.services.fileparser.POSCARReader(filePath);
             testCase.verifyEqual(poscar.POSCARObject.C(1,1), 4.805028, 'Non equal');
-            % testCase.verifyEqual(poscar.POSCARObject.equivalentPositionAsXyz, {'x, y, z'}, 'Non equal');
         end
     end
 end

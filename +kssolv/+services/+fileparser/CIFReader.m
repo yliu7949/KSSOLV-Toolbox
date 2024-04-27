@@ -22,7 +22,7 @@ classdef CIFReader < handle
             try
                 this.extractData();
             catch ME
-                error('KSSOLV:FileParser:CIFReader:ExtractDataError', ...
+                error('KSSOLV:FileParser:CIFReader:ParseFileError', ...
                     'Error extracting data from %s: %s', this.filePath, ME.message);
             end
         end

@@ -21,7 +21,6 @@ classdef CIFReaderTest < matlab.unittest.TestCase
             filePath = fullfile(testCase.CIFDirectory, 'Al2O3.cif');
             cif = kssolv.services.fileparser.CIFReader(filePath);
             testCase.verifyEqual(cif.CIFObject.a, 5.17795526, 'Non equal');
-            % testCase.verifyEqual(cif.CIFObject.equivalentPositionAsXyz, {'x, y, z'}, 'Non equal');
         end
     end
     
