@@ -72,7 +72,7 @@ classdef HomeTab < handle
             %CREATEFILESECTION 创建"文件"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 File Section
@@ -84,9 +84,9 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            FileProjectButton = CreatButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
-            FileSaveButton = CreatButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
-            FileCloseButton = CreatButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
+            FileProjectButton = CreateButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
+            FileSaveButton = CreateButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
+            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
 
             % 创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
@@ -120,7 +120,7 @@ classdef HomeTab < handle
             %CREATEPROJECTSECTION 创建"项目"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Project Section
@@ -132,9 +132,9 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.FIND_FILES_24);
-            ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.PLAY_24);
-            ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.LEGEND_24);
+            ProjectStructureButton = CreateButton('split', 'ProjectStructure', section.Tag, Icon.FIND_FILES_24);
+            ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, Icon.PLAY_24);
+            ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, Icon.LEGEND_24);
             
             % 创建并组装 PopupList(下拉菜单)
             ProjectStructureButtonPopup = PopupList();
@@ -185,7 +185,7 @@ classdef HomeTab < handle
             %CREATERUNNINGSECTION 创建"运行"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 File Section
@@ -197,9 +197,9 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
-            RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.FORWARD_24);
-            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.END_24);
+            RunningRunButton = CreateButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
+            RunningStepButton = CreateButton('push', 'RunningStep', section.Tag, Icon.FORWARD_24);
+            RunningStopButton = CreateButton('push', 'RunningStop', section.Tag, Icon.END_24);
 
             % 创建并组装 PopupList(下拉菜单)
             RunPopup = PopupList();
@@ -225,7 +225,7 @@ classdef HomeTab < handle
             %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Environment Section
@@ -238,10 +238,10 @@ classdef HomeTab < handle
             column4 = Column();
 
             % 创建 Button
-            EnvironmentSettingsButton = CreatButton('push', 'EnvironmentSettings', section.Tag, Icon.SETTINGS_24);
-            EnvironmentRemoteButton = CreatButton('split', 'EnvironmentRemote', section.Tag, Icon.PROPERTIES_24);
-            EnvironmentParallelButton = CreatButton('push', 'EnvironmentParallel', section.Tag, Icon.PARALLEL_24);
-            EnvironmentExtraButton = CreatButton('split', 'EnvironmentExtra', section.Tag, Icon.TOOLS_24);
+            EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, Icon.SETTINGS_24);
+            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, Icon.PROPERTIES_24);
+            EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, Icon.PARALLEL_24);
+            EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, Icon.TOOLS_24);
             
             % 创建并组装 PopupList(下拉菜单)
             RemotePopup = PopupList();
@@ -274,7 +274,7 @@ classdef HomeTab < handle
             %CREATERESOURCESECTION 创建"资源"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Resource Section
@@ -287,10 +287,10 @@ classdef HomeTab < handle
             column4 = Column();
 
             % 创建 Button
-            ResourceLibraryButton = CreatButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
-            ResourceCommunityButton = CreatButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
-            ResourceHelpButton = CreatButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
-            ResourceSupportButton = CreatButton('push', 'ResourceSupport', section.Tag, Icon.HELP_24);
+            ResourceLibraryButton = CreateButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
+            ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
+            ResourceHelpButton = CreateButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
+            ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, Icon.HELP_24);
             
             % 创建并组装 PopupList(下拉菜单)
             HelpPopup = PopupList();

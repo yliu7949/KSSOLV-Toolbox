@@ -1,8 +1,8 @@
-function button = CreatButton(type, name, tagPrefix, inputIcon)
-    %CREATBUTTON 创建不同形式的 Button 控件
+function button = CreateButton(type, name, tagPrefix, inputIcon)
+    %CREATEBUTTON 创建不同形式的 Button 控件
     %   使用示例：
-    %       import kssolv.ui.util.CreatButton
-    %       ProjectOpenButton = CreatButton('push', 'ProjectOpen', 'ProjectSection', Icon.OPEN_24);
+    %       import kssolv.ui.util.CreateButton
+    %       ProjectOpenButton = CreateButton('push', 'ProjectOpen', 'ProjectSection', Icon.OPEN_24);
 
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -15,7 +15,7 @@ if class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
 elseif ischar(inputIcon) || isstring(inputIcon)
     icon = Icon(inputIcon);
 else
-    error('KSSOLV:CreatButton:inputIcon', 'Incorrect parameter data type.')
+    error('KSSOLV:CreateButton:inputIcon', 'Incorrect parameter data type.')
 end
 description = message(['KSSOLV:toolbox:' name 'ButtonTooltip']);
 tag = [tagPrefix '_' name];

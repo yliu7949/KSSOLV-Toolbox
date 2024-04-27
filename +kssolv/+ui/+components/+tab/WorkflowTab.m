@@ -53,7 +53,7 @@ classdef WorkflowTab < handle
             %CREATERUNNINGSECTION 创建"缩放"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Zoom Section
             section = Section(message("KSSOLV:toolbox:ZoomSectionTitle"));
@@ -64,9 +64,9 @@ classdef WorkflowTab < handle
             column3 = Column();
 
             % 创建 Button
-            ZoomInButton = CreatButton('push', 'ZoomIn', section.Tag, Icon.ZOOM_IN_24);
-            ZoomOutButton = CreatButton('push', 'ZoomOut', section.Tag, Icon.ZOOM_OUT_24);
-            ZoomResetButton = CreatButton('push', 'ZoomReset', section.Tag, Icon.REFRESH_24);
+            ZoomInButton = CreateButton('push', 'ZoomIn', section.Tag, Icon.ZOOM_IN_24);
+            ZoomOutButton = CreateButton('push', 'ZoomOut', section.Tag, Icon.ZOOM_OUT_24);
+            ZoomResetButton = CreateButton('push', 'ZoomReset', section.Tag, Icon.REFRESH_24);
 
             % 组装 Column 和 Button
             column1.add(ZoomInButton);
@@ -86,7 +86,7 @@ classdef WorkflowTab < handle
             %CREATERUNNINGSECTION 创建"节点"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Node Section
@@ -97,8 +97,8 @@ classdef WorkflowTab < handle
             column2 = Column();
 
             % 创建 Button
-            AddNoteButton = CreatButton('split', 'AddNote', section.Tag, Icon.ADD_24);
-            EditNoteButton = CreatButton('split', 'EditNote', section.Tag, Icon.LEGEND_24);
+            AddNoteButton = CreateButton('split', 'AddNote', section.Tag, Icon.ADD_24);
+            EditNoteButton = CreateButton('split', 'EditNote', section.Tag, Icon.LEGEND_24);
 
             % 创建并组装 PopupList(下拉菜单)
             AddNotePopup = PopupList();
@@ -161,7 +161,7 @@ classdef WorkflowTab < handle
             %CREATESAVESECTION 创建"保存"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Save Section
             section = Section(message("KSSOLV:toolbox:SaveSectionTitle"));
@@ -170,7 +170,7 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            SaveWorkflowAsTemplateButton = CreatButton('push', 'SaveWorkflowAsTemplate', section.Tag, Icon.SAVE_24);
+            SaveWorkflowAsTemplateButton = CreateButton('push', 'SaveWorkflowAsTemplate', section.Tag, Icon.SAVE_24);
 
             % 组装 Column 和 Button
             column1.add(SaveWorkflowAsTemplateButton);
@@ -185,7 +185,7 @@ classdef WorkflowTab < handle
             %CREATEOPERATIONSECTION 创建"操作"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Operation Section
             section = Section(message("KSSOLV:toolbox:OperationSectionTitle"));
@@ -194,8 +194,8 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            OperationUndoButton = CreatButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
-            OperationRedoButton = CreatButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
+            OperationUndoButton = CreateButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
+            OperationRedoButton = CreateButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
 
             % 组装 Column 和 Button
             column1.add(OperationUndoButton);
@@ -212,7 +212,7 @@ classdef WorkflowTab < handle
             %CREATESAVESECTION 创建"设置"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Settings Section
             section = Section(message("KSSOLV:toolbox:SettingsSectionTitle"));
@@ -221,7 +221,7 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            SetNodeButton = CreatButton('push', 'SetNode', section.Tag, Icon.SETTINGS_24);
+            SetNodeButton = CreateButton('push', 'SetNode', section.Tag, Icon.SETTINGS_24);
 
             % 组装 Column 和 Button
             column1.add(SetNodeButton);
@@ -236,7 +236,7 @@ classdef WorkflowTab < handle
             %CREATEPLOTSECTION 创建"绘图"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Project Section
             section = Section(message("KSSOLV:toolbox:PlotSectionTitle"));

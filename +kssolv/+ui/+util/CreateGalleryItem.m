@@ -1,8 +1,8 @@
-function item = CreatGalleryItem(name, tagPrefix, inputIcon)
+function item = CreateGalleryItem(name, tagPrefix, inputIcon)
     %CREATGALLERYITEM 创建不同形式的 GalleryItem 控件
     %   使用示例：
-    %       import kssolv.ui.util.CreatGalleryItem
-    %       item = CreatGalleryItem('Import', 'PlotSection', Icon.IMPORT_24);
+    %       import kssolv.ui.util.CreateGalleryItem
+    %       item = CreateGalleryItem('Import', 'PlotSection', Icon.IMPORT_24);
 
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -15,7 +15,7 @@ if class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
 elseif ischar(inputIcon) || isstring(inputIcon)
     icon = Icon(inputIcon);
 else
-    error('KSSOLV:CreatGalleryItem:inputIcon', 'Incorrect parameter data type.')
+    error('KSSOLV:CreateGalleryItem:inputIcon', 'Incorrect parameter data type.')
 end
 description = message(['KSSOLV:toolbox:' name 'GalleryItemTooltip']);
 tag = [tagPrefix '_' name];
