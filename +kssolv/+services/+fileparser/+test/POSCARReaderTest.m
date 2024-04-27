@@ -1,7 +1,7 @@
 classdef POSCARReaderTest < matlab.unittest.TestCase
     %POSCARREADERTEST 测试 POSCARReader 函数
 
-    %   �?发�?�：杨柳
+    %   开发者：付礼中 杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties
@@ -10,7 +10,7 @@ classdef POSCARReaderTest < matlab.unittest.TestCase
     
     methods(TestClassSetup)
         function setFilePath(testCase)
-            % 设置文件路径为测试类文件�?在文件夹�? POSCAR 子文件夹
+            % 设置文件路径，指向测试类文件所在文件夹的 POSCAR 子文件夹
             testCase.POSCARDirectory = fullfile(fileparts(mfilename('fullpath')), 'POSCAR');
         end
     end

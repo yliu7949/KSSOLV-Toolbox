@@ -1,147 +1,162 @@
 classdef POSCARReader < handle
-    % POSCARReader 用于读取和解�? POSCAR 文件的类
+    % POSCARREADER 用于读取和解析 POSCAR 文件的类
+    % POSCAR 文件格式的定义可参考：https://www.vasp.at/wiki/index.php/POSCAR
 
-    %   �?发�?�：付礼�? 杨柳
+    %   开发者：付礼中 杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties
-        filePath           % POSCAR 文件路径
-        fileContent        % POSCAR 文件内容
-        POSCARObject struct   % �? POSCAR 文件中解析出的数据结�?
+        filePath                % POSCAR 文件路径
+        fileContent             % POSCAR 文件内容
+        rawFileContent string   % 原始 POSCAR 文件内容
+        POSCARObject   struct   % 从 POSCAR 文件中解析出的数据结构
     end
 
     properties (Access = private)
-        currentLineIndex   % 当前处理的行的索�?
+        currentLineIndex        % 当前处理的行的索引
     end
-    
+
     methods
         function this = POSCARReader(filePath)
-            % 构�?�函数，初始化读取和解析 POSCAR 文件
+            % 构造函数，初始化读取和解析 POSCAR 文件
             this.filePath = filePath;
             this.readFile();
-            try
-                this.extractData();
-            catch ME
-                error('KSSOLV:FileParser:POSCARReader:ExtractDataError', ...
-                    'Error extracting data from %s: %s', this.filePath, ME.message);
-            end
+            this.parseFile();
         end
 
         function readFile(this)
             % 读取文件内容
             fid = fopen(this.filePath, 'r');
             if fid == -1
-                error('KSSOLV:FileParser:POSCARReader:OpenFileError', 'Cannot open this POSCAR file: %s', this.filePath);
+                error('KSSOLV:FileParser:POSCARReader:OpenFileError', ...
+                    'Cannot open this POSCAR file: %s', this.filePath);
             end
             fileRawContent = textscan(fid, '%s', 'Delimiter', '\n', 'Whitespace', '');
             fclose(fid);
             this.fileContent = fileRawContent{1};
+            this.rawFileContent = strjoin(this.fileContent, '\n');
+        end
+
+        function parseFile(this)
+            % 解析文件内容
+            this.POSCARObject = struct();
+            this.currentLineIndex = 1;
+            try
+                this.extractCommentLine();
+                this.extractScalingFactor();
+                this.extractLatticeVectors();
+                this.extractAtomSpecies();
+                this.extractSelectiveDynamics();
+                this.extractAtomicCoordinates();
+            catch ME
+                error('KSSOLV:FileParser:POSCARReader:ExtractDataError', ...
+                    'Error extracting data from %s: %s', this.filePath, ME.message);
+            end
         end
     end
 
     methods (Access = private)
-        function extractData(this)
-            % 从文件内容中提取数据
-            this.POSCARObject = struct();
-            this.currentLineIndex = 1;
-            totalLines = length(this.fileContent);
-
-
-            %Get the comment line
-            name = this.fileContent{this.currentLineIndex};
+        function extractCommentLine(this)
+            % 提取注释行
+            this.POSCARObject.name = this.fileContent{this.currentLineIndex};
             this.currentLineIndex = this.currentLineIndex + 1;
-            this.POSCARObject.name = name;
+        end
 
-            %Get scaling factor; negative scaling factor represents the desired cell volume
-            seperate_scaling = false;
-            volume_scaling = false;
+        function extractScalingFactor(this)
+            % 提取缩放因子
             scaling = strsplit(this.fileContent{this.currentLineIndex});
-            if length(scaling) == 1
-                scaling = str2double(scaling);
-                if scaling < 0
-                    volume_scaling = true;
-                    volume = -scaling;
-                end
-            else
-                seperate_scaling = true;
-                scaling = str2double(scaling);
+            this.POSCARObject.scalingFactor = str2double(scaling);
+            this.currentLineIndex = this.currentLineIndex + 1;
+        end
+
+        function extractLatticeVectors(this)
+            % 提取晶格矢量
+            latticeVectors = zeros(3, 3, 'double');
+            for i = 1:3
+                latticeVectors(i, :) = str2double(strsplit(this.fileContent{this.currentLineIndex}));
+                this.currentLineIndex = this.currentLineIndex + 1;
             end
-            this.currentLineIndex = this.currentLineIndex + 1;
+            this.POSCARObject.latticeVectors = latticeVectors;
 
-            %Read lattice vectors
-            a1=str2double(strsplit(this.fileContent{this.currentLineIndex}));
-            this.currentLineIndex = this.currentLineIndex + 1;
-            a2=str2double(strsplit(this.fileContent{this.currentLineIndex}));
-            this.currentLineIndex = this.currentLineIndex + 1;
-            a3=str2double(strsplit(this.fileContent{this.currentLineIndex}));
-            this.currentLineIndex = this.currentLineIndex + 1;
-
-            if ~seperate_scaling
-                if ~volume_scaling
-                    C=scaling*[a1;a2;a3];
+            % 根据缩放因子进行调整
+            if isscalar(this.POSCARObject.scalingFactor)
+                % 如果仅有一个缩放因子
+                if this.POSCARObject.scalingFactor > 0
+                    % 如果该缩放因子为正值
+                    C = this.POSCARObject.scalingFactor * latticeVectors;
                 else
-                    C=[a1;a2;a3];
-                    scaling=nthroot((volume/abs(det(C))),3);
-                    C=scaling*C;
+                    % 如果该缩放因子为负值，则绝对值为晶胞的体积
+                    scaling = nthroot(abs(this.POSCARObject.scalingFactor) / abs(det(latticeVectors)), 3);
+                    C = scaling * latticeVectors;
                 end
             else
-                C=[a1;a2;a3];
-                C=C*diag(scaling);
+                % 如果有三个缩放因子，则分别对 xyz 进行缩放
+                C = latticeVectors * diag(this.POSCARObject.scalingFactor);
             end
-            this.POSCARObject.C = C;
 
-            %Read atom species
+            this.POSCARObject.C = C;
+        end
+
+        function extractAtomSpecies(this)
+            % 提取原子种类和数量并构造 atomList
             species = strsplit(this.fileContent{this.currentLineIndex});
             this.currentLineIndex = this.currentLineIndex + 1;
-            num = str2double(strsplit(this.fileContent{this.currentLineIndex}));
+            atomNumber = str2double(strsplit(this.fileContent{this.currentLineIndex}));
             this.currentLineIndex = this.currentLineIndex + 1;
-            n_species = length(species);
-            n_atoms = sum(num);
-            a = cell(1,n_species);
-            atomlist = cell(1,n_atoms);
-            idx = 1;
-            for i = 1:n_species
-                a(i) = species(i);
-                for j = 1:num(i)
-                    atomlist(idx) =a(i);
-                    idx =idx+1;
-                end
-            end
-            this.POSCARObject.atomlist = atomlist;
 
-            is_selectivedymanics = false;
-            tmpline = upper(this.fileContent{this.currentLineIndex});
-            this.currentLineIndex = this.currentLineIndex + 1;
-            if tmpline(1) == 'S'
-                is_selectivedymanics = true;
-                tmpline = upper(this.fileContent{this.currentLineIndex});
+            % 预分配 atomList，提升性能
+            atomList = cell(1, sum(atomNumber));
+            startIndex = 1;
+            for i = 1:length(species)
+                % 当前种类的原子数量
+                numAtoms = atomNumber(i);
+                endIndex = startIndex + numAtoms - 1;
+                
+                % 将当前种类的原子名称填充到 atomList
+                atomList(startIndex:endIndex) = repmat(species(i), 1, numAtoms);
+                
+                % 更新起始索引
+                startIndex = endIndex + 1;
+            end
+
+            this.POSCARObject.atomList = string(atomList);
+        end
+
+        function extractSelectiveDynamics(this)
+            % 提取选择性动力学
+            this.POSCARObject.isSelectiveDynamics = false;
+            if upper(this.fileContent{this.currentLineIndex}(1)) == 'S'
+                % 如果这一行包含 Selective dynamics 字样（实际上仅判断首字母）
+                this.POSCARObject.isSelectiveDynamics = true;
                 this.currentLineIndex = this.currentLineIndex + 1;
             end
-            this.POSCARObject.is_selectivedymanics = is_selectivedymanics;
-            
-            is_direct = true;
-            if tmpline(1) == 'C' || tmpline(1) == 'K'
-                is_direct = false;
-            end
+        end
 
-            %Read atomic coordinates
-            coeffs=zeros(n_atoms,3);
-            for i = 1:n_atoms
-                tmpline=strsplit(this.fileContent{this.currentLineIndex});
+        function extractAtomicCoordinates(this)
+            % 提取原子坐标
+            isDirectMode = true;
+            if upper(this.fileContent{this.currentLineIndex}(1)) == 'C' ...
+                    || upper(this.fileContent{this.currentLineIndex}(1)) == 'K'
+                % 如果该行首字母大写后是字母 C 或 K，则为 Cartesian Mode
+                isDirectMode = false;
+            end
+            this.currentLineIndex = this.currentLineIndex + 1;
+
+            ionPositons = zeros(length(this.POSCARObject.atomList), 3, 'double');
+            for i = 1:length(this.POSCARObject.atomList)
+                lineData = strsplit(this.fileContent{this.currentLineIndex});
+                ionPositons(i, :) = str2double(lineData(1:3));
                 this.currentLineIndex = this.currentLineIndex + 1;
-                coeffs(i,:)=str2double(tmpline(1:3));
             end
+            this.POSCARObject.ionPositons = ionPositons;
 
-            if is_direct
-                xyzlist=coeffs*C;
+            if isDirectMode
+                % 如果为 Direct Mode
+                this.POSCARObject.xyzList = ionPositons * this.POSCARObject.C;
             else
-                if ~seperate_scaling
-                    xyzlist=coeffs*scaling;
-                else
-                    xyzlist=coeffs*diag(scaling);
-                end
+                % 如果为 Cartesian Mode
+                this.POSCARObject.xyzList = ionPositons * diag(this.POSCARObject.scalingFactor);
             end
-            this.POSCARObject.xyzlist = xyzlist;
         end
     end
 end

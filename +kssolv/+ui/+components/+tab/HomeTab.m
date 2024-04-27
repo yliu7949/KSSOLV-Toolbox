@@ -152,7 +152,7 @@ classdef HomeTab < handle
             % kssolv.ui.components.tab.HomeTab.qeShow();
 
             % 创建 AppContainer          
-            appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
+            appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
             app = matlab.ui.container.internal.AppContainer(appOptions);

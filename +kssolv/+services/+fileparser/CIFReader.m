@@ -1,5 +1,5 @@
 classdef CIFReader < handle
-    % CIFReader 用于读取和解析 .cif 文件的类
+    % CIFREADER 用于读取和解析 .cif 文件的类
 
     %   开发者：付礼中 杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
