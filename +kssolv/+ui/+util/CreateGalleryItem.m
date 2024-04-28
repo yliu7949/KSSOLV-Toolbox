@@ -9,10 +9,11 @@ function item = CreateGalleryItem(name, tagPrefix, inputIcon)
 
 import matlab.ui.internal.toolstrip.*
 import kssolv.ui.util.Localizer.message
+
 label = message(['KSSOLV:toolbox:' name 'GalleryItemLabel']);
 if class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
     icon = inputIcon;
-elseif ischar(inputIcon) || isstring(inputIcon)
+elseif ischar(inputIcon)
     icon = Icon(inputIcon);
 else
     error('KSSOLV:CreateGalleryItem:inputIcon', 'Incorrect parameter data type.')
@@ -22,3 +23,4 @@ tag = [tagPrefix '_' name];
 item = GalleryItem(label, icon);
 item.Tag = tag;
 item.Description = description; 
+

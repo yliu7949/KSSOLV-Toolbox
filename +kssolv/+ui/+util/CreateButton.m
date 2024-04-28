@@ -2,17 +2,37 @@ function button = CreateButton(type, name, tagPrefix, inputIcon)
     %CREATEBUTTON 创建不同形式的 Button 控件
     %   使用示例：
     %       import kssolv.ui.util.CreateButton
-    %       ProjectOpenButton = CreateButton('push', 'ProjectOpen', 'ProjectSection', Icon.OPEN_24);
-
+    %       FileProjectButton = CreateButton('push', 'FileProject', 'ProjectSection', Icon.OPEN_24);
+    %       FileProjectButton = CreateButton('split', 'FileProject', 'ProjectSection', 'openFolder');
+    %       FileProjectButton = CreateButton('dropdown', 'FileProject', 'ProjectSection');
+    %   参数说明：
+    %   type 用于指定建立特定类型的 Button 组件；
+    %   name 用于获取 Button 组件的 label 和 description；
+    %   tagPrefix 作为前缀和 name 一起确定 Button 组件的 tag；
+    %   inputIcon 用于指定组件的图标，可接受的参数类型如下：
+    %       （1）未传入 inputIcon 参数，建立不带图标的 Button 组件；
+    %       （2）字符数组，调用 CSS 类构建自定义图标；
+    %       （3）Icon 中提供的标准图标，如 Icon.PLAY_24； 
+    
     %   开发者：高俊
     %   版权 2024 合肥瀚海量子科技有限公司
 
+arguments
+    type
+    name
+    tagPrefix
+    inputIcon = ""
+end
+
 import matlab.ui.internal.toolstrip.*
 import kssolv.ui.util.Localizer.message
+
 label = message(['KSSOLV:toolbox:' name 'ButtonLabel']);
-if class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
+if inputIcon == ""
+    icon = '';
+elseif class(inputIcon) == "matlab.ui.internal.toolstrip.Icon"
     icon = inputIcon;
-elseif ischar(inputIcon) || isstring(inputIcon)
+elseif ischar(inputIcon)
     icon = Icon(inputIcon);
 else
     error('KSSOLV:CreateButton:inputIcon', 'Incorrect parameter data type.')
@@ -31,3 +51,4 @@ switch type
 end
 button.Tag = tag;
 button.Description = description; 
+

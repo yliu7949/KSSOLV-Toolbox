@@ -84,9 +84,9 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            FileProjectButton = CreateButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
-            FileSaveButton = CreateButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
-            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
+            FileProjectButton = CreateButton('split', 'FileProject', section.Tag, 'openFolder');
+            FileSaveButton = CreateButton('split', 'FileSave', section.Tag, 'unsaved');
+            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, 'close');
 
             % 创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
