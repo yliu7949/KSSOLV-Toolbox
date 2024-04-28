@@ -90,7 +90,7 @@ classdef HomeTab < handle
 
             % 创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
-            OpenFile = CreateListItem('OpenFile', section.Tag, Icon.ADD_16);
+            OpenFile = CreateListItem('OpenFile', section.Tag, 'new');
             FileProjectButtonPopup.add(OpenFile);
             FileProjectButton.Popup = FileProjectButtonPopup;
             FileSaveButtonPopup = PopupList();

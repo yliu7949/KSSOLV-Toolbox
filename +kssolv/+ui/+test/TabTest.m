@@ -48,9 +48,9 @@ classdef TabTest < handle
             column2 = Column();
             column3 = Column();
             % 测试不同种类的 Button
-            ProjectOpenButton = CreateButton('push', 'FileProject', section.Tag, 'unsaved');
+            ProjectOpenButton = CreateButton('push', 'FileProject', section.Tag, 'properties');
             ProjectModelButton = CreateButton('dropdown', 'FileProject', section.Tag, 'export_fis');
-            ProjectSaveButton = CreateButton('split', 'FileProject', section.Tag, Icon.SAVE_24);
+            ProjectSaveButton = CreateButton('split', 'FileProject', section.Tag, Icon.ADD_24);
             % 创建 ListItem 实例化对象
             % 创建 item1
             label1 = 'test111111111111111';
