@@ -48,11 +48,12 @@
         <entry key="RunningStopButtonLabel">停止</entry>
         <entry key="RunningStopButtonTooltip">结束程序</entry>
         <entry key="RunAndTimeListItemLabel">运行并计时</entry>
+        <entry key="RunAndTimeListItemTooltip">运行代码并探查以提高性能</entry>
         
         <entry key="EnvironmentSectionTitle">环境</entry>
         <entry key="EnvironmentSettingsButtonLabel">设置</entry>
         <entry key="EnvironmentSettingsButtonTooltip">调整设置</entry>
-        <entry key="EnvironmentRemoteButtonLabel">远程计算</entry>
+        <entry key="EnvironmentRemoteButtonLabel">远程</entry>
         <entry key="EnvironmentRemoteButtonTooltip">连接远程服务器</entry>
         <entry key="EnvironmentParallelButtonLabel">并行</entry>
         <entry key="EnvironmentParallelButtonTooltip">设置并行计算</entry>

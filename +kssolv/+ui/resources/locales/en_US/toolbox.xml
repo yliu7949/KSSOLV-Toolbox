@@ -48,15 +48,16 @@
         <entry key="RunningStopButtonLabel">Stop</entry>
         <entry key="RunningStopButtonTooltip">End program</entry>
         <entry key="RunAndTimeListItemLabel">Run and time</entry>
+        <entry key="RunAndTimeListItemTooltip">Run the code and probe to improve performance</entry>
         
         <entry key="EnvironmentSectionTitle">Environment</entry>
         <entry key="EnvironmentSettingsButtonLabel">Settings</entry>
         <entry key="EnvironmentSettingsButtonTooltip">Adjust settings</entry>
-        <entry key="EnvironmentRemoteButtonLabel">Remote computing</entry>
+        <entry key="EnvironmentRemoteButtonLabel">Remote</entry>
         <entry key="EnvironmentRemoteButtonTooltip">Connect to remote server</entry>
         <entry key="EnvironmentParallelButtonLabel">Parallel</entry>
         <entry key="EnvironmentParallelButtonTooltip">Set up parallel computing</entry>
-        <entry key="EnvironmentExtraButtonLabel">Additional Features</entry>
+        <entry key="EnvironmentExtraButtonLabel">Add-Ons</entry>
         <entry key="EnvironmentExtraButtonTooltip">Add additional features</entry>
         <entry key="ConnectToClusterListItemLabel">Connect to computing cluster...</entry>
         <entry key="GetExtraFeatureListItemLabel">Get additional features...</entry>
