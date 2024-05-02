@@ -1,5 +1,6 @@
 classdef FooterBar < handle
     %FOOTERBAR 自定义的底部状态栏组件
+    
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     properties (Access = private)

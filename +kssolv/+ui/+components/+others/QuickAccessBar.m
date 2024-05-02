@@ -1,5 +1,6 @@
 classdef QuickAccessBar < handle
     %QUICKACCESSBAR 设置右上角快捷访问栏
+    
     %   开发者：林海饶
     %   版权 2024 合肥瀚海量子科技有限公司
 

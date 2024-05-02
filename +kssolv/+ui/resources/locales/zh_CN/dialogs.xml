@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<rsccat version="1.0" locale="zh_CN" product="KSSOLV" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../schema/msgcat.xsd">
+    <!-- 该文件存储了与对话框组件有关的本地化内容. -->
+    <message>
+        <!-- HomeTab: callbackImportStructureFromFile -->
+        <entry key="ImportStructureFromFile">选择要导入的结构文件</entry>
+
+        <!-- KSSOLVToolbox: canClose -->
+        <entry key="AppCanCloseTitle">保存项目文件</entry>
+        <entry key="AppCanCloseMessage">
+            在关闭 KSSOLV Toolbox 前，你想要保存当前的
+            项目文件吗？
+
+
+            •	项目文件会使用 .ks 作为扩展名
+            •	已存在的同名项目文件会被覆盖
+            •	文件名中不合法的字符会被删除
+        </entry>
+        <entry key="AppCanCloseSave">保存</entry>
+        <entry key="AppCanCloseDoNotSave">不保存</entry>
+        <entry key="AppCanCloseCancel">取消</entry>
+    </message>
+</rsccat>
