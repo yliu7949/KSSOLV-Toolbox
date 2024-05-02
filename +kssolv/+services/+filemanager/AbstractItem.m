@@ -5,15 +5,15 @@ classdef AbstractItem < handle
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
-        name        % 代码自动生成的唯一的节点名，不允许修改
-        label       % 向用户展示的节点名，允许用户设置和修改
-        description % 节点描述
-        type        % 节点类型  
-        children    % 子节点
+        name               % 代码自动生成的唯一的节点名，不允许修改
+        label              % 向用户展示的节点名，允许用户设置和修改
+        description        % 节点描述
+        type               % 节点类型  
+        children           % 子节点
     end
 
     properties (Dependent, Hidden)
-        childrenItemSize        % 子节点数量
+        childrenItemSize   % 子节点数量
     end
 
     properties (Hidden)
@@ -46,7 +46,7 @@ classdef AbstractItem < handle
                 this
                 childrenItem kssolv.services.filemanager.AbstractItem
             end
-            this.children{end+1} = childrenItem;
+            this.children{end+1, 1} = childrenItem;
         end
 
         function output = get.childrenItemSize(this)
