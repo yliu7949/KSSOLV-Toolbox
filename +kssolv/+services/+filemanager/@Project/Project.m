@@ -8,7 +8,6 @@ classdef Project < kssolv.services.filemanager.AbstractItem
         function this = Project()
             %PROJECT 构造函数
             this = this@kssolv.services.filemanager.AbstractItem("Project", "Project");
-            this.name = "Project";
         end
 
         function saveToKsFile(this, filename)

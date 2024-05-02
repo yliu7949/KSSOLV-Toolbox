@@ -22,7 +22,7 @@ function output = processStruct(input)
     % 递归遍历结构体，并处理 size 属性
 
     % 如果当前结构体包含 children 字段
-    if isfield(input, 'children') && ~isempty(input.children)        
+    if isprop(input, 'children') && ~isempty(input.children)        
         % 对每个 child 进行递归处理
         for i = 1:length(input.children)
             input.children(i) = processStruct(input.children(i));

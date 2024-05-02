@@ -6,3 +6,7 @@
 
 # KSSOLV Toolbox Project files
 **/*.ks
+
+# Test Data Directory
+data/
+
