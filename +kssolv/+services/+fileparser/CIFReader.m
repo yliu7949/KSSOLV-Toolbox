@@ -209,10 +209,10 @@ classdef CIFReader < handle
             this.KSSOLVSetupObject.C = C;
         
             % 读取原子信息
-            nAtoms = length(this.CIFObject.atomTypeSymbol);
+            nAtoms = length(this.CIFObject.atomLabel);
             atomList = strings(1, nAtoms);
             for i = 1:nAtoms
-                atomList(i) = this.CIFObject.atomTypeSymbol{i};
+                atomList(i) = regexprep(this.CIFObject.atomLabel{i}, '\d', '');
             end
             this.KSSOLVSetupObject.atomList = atomList;
         
