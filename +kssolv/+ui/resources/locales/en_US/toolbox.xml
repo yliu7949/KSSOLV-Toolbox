@@ -87,7 +87,7 @@
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">Workflow</entry>
         <entry key="SaveSectionTitle">Save</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as Workflow Template</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
 
         <entry key="NodeSectionTitle">Nodes</entry>

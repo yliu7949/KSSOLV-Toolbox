@@ -87,7 +87,7 @@
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>
         <entry key="SaveSectionTitle">保存</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为工作流模板</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
 
         <entry key="NodeSectionTitle">节点</entry>

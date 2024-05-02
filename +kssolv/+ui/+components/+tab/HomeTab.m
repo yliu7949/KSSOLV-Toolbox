@@ -134,7 +134,7 @@ classdef HomeTab < handle
 
             % 创建 Button
             ProjectStructureButton = CreateButton('split', 'ProjectStructure', section.Tag, 'import_data');
-            ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'databaseFolderArchitecture');
+            ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'artifactGraph');
             ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, 'legend');
             
             % 创建并组装 PopupList(下拉菜单)
@@ -145,9 +145,9 @@ classdef HomeTab < handle
             ImportStructureFromMatlabListItem = CreateListItem('default', 'ImportStructureFromMatlab', section.Tag, 0, 'matlabWorkspaceFile');
 
             ProjectWorkflowButtonPopup = PopupList();
-            NewWorkflowListItem = CreateListItem('default', 'NewWorkflow', section.Tag);
-            ImportTemplateWorkflowListItem = CreateListItem('default', 'ImportTemplateWorkflow', section.Tag);
-            ExportTemplateWorkflowListItem = CreateListItem('default', 'ExportTemplateWorkflow', section.Tag);
+            NewWorkflowListItem = CreateListItem('default', 'NewWorkflow', section.Tag, 0, 'add_class');
+            ImportTemplateWorkflowListItem = CreateListItem('default', 'ImportTemplateWorkflow', section.Tag, 0, 'add_artifactGraph');
+            ExportTemplateWorkflowListItem = CreateListItem('default', 'ExportTemplateWorkflow', section.Tag, 0, 'save_sourceControlChanges');
 
             ProjectVariableButtonPopup = PopupList();
             NewVariableListItem = CreateListItem('default', 'NewVariable', section.Tag, 0, 'new_sectionHighlighted');
@@ -198,7 +198,7 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            RunningRunButton = CreateButton('split', 'RunningRun', section.Tag, 'modifiedStatus_run');
+            RunningRunButton = CreateButton('split', 'RunningRun', section.Tag, 'playControl');
             RunningStepButton = CreateButton('push', 'RunningStep', section.Tag, 'stepForward');
             RunningStopButton = CreateButton('push', 'RunningStop', section.Tag, 'stop');
 
