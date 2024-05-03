@@ -13,7 +13,7 @@ classdef AbstractItem < handle
     end
 
     properties (Dependent, Hidden)
-        childrenItemSize   % 子节点数量
+        childrenCount   % 子节点数量
     end
 
     properties (Hidden)
@@ -49,7 +49,7 @@ classdef AbstractItem < handle
             this.children{end+1, 1} = childrenItem;
         end
 
-        function output = get.childrenItemSize(this)
+        function output = get.childrenCount(this)
             output = sprintf('%dx%d', size(this.children, 1), size(this.children, 2));
         end
     end

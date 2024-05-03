@@ -4,7 +4,7 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
 
-    properties
+    properties (Hidden)
         layout struct
         layoutJSON string
         editedNode
