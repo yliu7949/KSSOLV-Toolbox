@@ -5,11 +5,11 @@ classdef AbstractItem < handle
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
-        name               % 代码自动生成的唯一的节点名，不允许修改
-        label              % 向用户展示的节点名，允许用户设置和修改
-        description        % 节点描述
-        type               % 节点类型  
-        children           % 子节点
+        name            % 代码自动生成的唯一的节点名，不允许修改
+        label           % 向用户展示的节点名，允许用户设置和修改
+        description     % 节点描述
+        type            % 节点类型  
+        children        % 子节点
     end
 
     properties (Dependent, Hidden)
@@ -18,9 +18,9 @@ classdef AbstractItem < handle
 
     properties (Hidden)
         % 当类的实例被编码为 JSON 时，设置为 Hidden 属性的成员可以避免被编码
-        data        % 节点数据
-        createdAt   % 创建时间
-        updatedAt   % 更新时间
+        data            % 节点数据
+        createdAt       % 创建时间
+        updatedAt       % 更新时间
     end
     
     methods
