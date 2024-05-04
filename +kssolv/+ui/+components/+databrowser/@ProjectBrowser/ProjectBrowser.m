@@ -4,10 +4,6 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
-    properties
-        Property1
-    end
-    
     methods
         function this = ProjectBrowser()
             %PROJECTBROWSER 构造此类的实例
@@ -31,7 +27,11 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             g.ColumnWidth = {'1x'};
             
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'TreeTable', 'TreeTable.html');
-            uihtml(g, "HTMLSource", htmlFile);
+            h = uihtml(g, "HTMLSource", htmlFile);
+
+            % 将当前加载的 project 文件编码为 JSON，发送给 HTML 组件
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            h.Data = project.encodeToJSON();
         end
     end
 

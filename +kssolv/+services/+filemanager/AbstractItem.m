@@ -12,7 +12,7 @@ classdef AbstractItem < handle
         children        % 子节点
     end
 
-    properties (Dependent, Hidden)
+    properties (Dependent)
         childrenCount   % 子节点数量
     end
 

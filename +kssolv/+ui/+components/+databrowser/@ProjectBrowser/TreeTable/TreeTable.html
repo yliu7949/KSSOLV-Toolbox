@@ -37,6 +37,9 @@
       user-select: none;
       background-color: white;
     }
+    tr.hidden {
+      display: none;
+    }
     .selected {
       background-color: #e2f1fb; /* 被选中行的背景色 */
     }
@@ -78,110 +81,129 @@
     }
   </style>
   <script>
-    // Data in JSON format
-    const tableData = [
+    // JSON data for test purpose
+    let tableData = `
       {
-        "name": "Project",
+        "name": "Project(3510f463-8122-4afc-8716-c64363395bfc)",
         "label": "Project",
-        "size": "",
-        "type": "project",
+        "description": "",
+        "type": "Project",
         "children": [
           {
-            "name": "Structures",
-            "label": "Structures",
-            "size": "1x1",
-            "type": "",
-            "children": []
-          },
-          {
-            "name": "Workflow1",
-            "label": "Workflow1",
-            "size": "",
-            "type": "simulation",
+            "name": "Workflow(6d7fb652-d63b-41cd-9f1d-b37d0a68a100)",
+            "label": "Workflow",
+            "description": "",
+            "type": "Workflow",
             "children": [
               {
-                "name": "LastRun",
-                "label": "LastRun",
-                "size": "",
-                "type": "",
-                "children": []
+                "name": "Workflow1(35c9b62d-0792-446b-8646-bb6d8fb2ae11)",
+                "label": "Workflow1",
+                "description": "",
+                "type": "Workflow",
+                "children": [],
+                "childrenCount": "0x0"
               },
               {
-                "name": "results",
-                "label": "results",
-                "size": "1x1",
-                "type": "SimData",
-                "children": [
-                  {
-                    "name": "time",
-                    "label": "time",
-                    "size": "2x1",
-                    "type": "double",
-                    "children": []
-                  },
-                  {
-                    "name": "Energy",
-                    "label": "Energy",
-                    "size": "2x1",
-                    "type": "double",
-                    "children": []
-                  },
-                  {
-                    "name": "Plot1",
-                    "label": "Plot1",
-                    "size": "1x1",
-                    "type": "percentile",
-                    "children": []
-                  }
-                ]
+                "name": "Workflow2(2af93a99-d2f0-4fc2-88bd-2f3fd6499d5e)",
+                "label": "Workflow2",
+                "description": "",
+                "type": "Workflow",
+                "children": [],
+                "childrenCount": "0x0"
               }
-            ]
+            ],
+            "childrenCount": "2x1"
+          },
+          {
+            "name": "Structure(410104e7-744d-44fb-aac6-8ea5363e555a)",
+            "label": "Structure",
+            "description": "",
+            "type": "Structure",
+            "children": [
+              {
+                "name": "Structure1(26876c86-2375-4887-b8b7-f63543149d2f)",
+                "label": "Structure1",
+                "description": "",
+                "type": "Structure",
+                "children": [],
+                "childrenCount": "0x0"
+              },
+              {
+                "name": "Structure2(cdf4938a-3639-49e9-968c-6647be8120b7)",
+                "label": "Structure2",
+                "description": "",
+                "type": "Structure",
+                "children": [],
+                "childrenCount": "0x0"
+              }
+            ],
+            "childrenCount": "2x1"
           }
-        ]
-      }
-    ];
+        ],
+        "childrenCount": "2x1"
+      }`
 
-    // Function to find all child node names of a given node name
-    function findAllChildNames(nodeName, treeData) {
-      let names = [];
+    // 找到给定节点的所有直接和递归子节点
+    function findAllChildNodes(treeData, nodeName) {
+      let allChildren = [];
 
-      // Helper function to recursively search for child names
-      function searchChildren(node, searchedName) {
-        if (node.name === searchedName) {
-          // Found the node, now get all its child names
+      // 递归搜索子节点的辅助函数
+      function searchChildren(node, isParentNode) {
+        if (node.name === nodeName || isParentNode) {
           if (node.children) {
             node.children.forEach(child => {
-              names.push(child.name);
-              searchChildren(child, child.name); // Recurse to get sub-children
+              allChildren.push(child.name);
+              searchChildren(child, true);
             });
           }
         } else if (node.children) {
-          // Keep searching in children
-          node.children.forEach(child => searchChildren(child, searchedName));
+          node.children.forEach(child => searchChildren(child, false));
         }
       }
 
-      // Start the recursive search
-      treeData.forEach(child => searchChildren(child, nodeName));
+      // 从树的根节点开始递归搜索
+      searchChildren(treeData[0], false);
 
-      return names;
+      return allChildren;
     }
 
-    // Function to toggle child rows
+    // 根据指定行的点击事件切换子节点的显示状态
     function toggleChildren(event) {
       const parentRowElement = event.target.parentElement.parentElement;
-      const childNames = findAllChildNames(parentRowElement.getAttribute('data-name'), tableData);
+      const parentName = parentRowElement.getAttribute('data-name');
+      const parentLevel = parentRowElement.getAttribute('data-level');
 
-      // 选择所有子节点
-      const allRows = document.querySelectorAll(`tr[data-name]`);
-      // 遍历所有行，判断是否为目标子节点或子节点的子节点
-      allRows.forEach(row => {
-        const rowDataName = row.getAttribute('data-name');
+      // 获取所有直接和递归子节点名称
+      const allChildren = findAllChildNodes(tableData, parentName);
 
-        // 检查当前行是否是目标行的子行或子行的子行
-        if (childNames.includes(rowDataName)) {
-          // 切换显示状态：如果当前是隐藏（'none'），则显示（''）；否则隐藏（'none'）
-          row.style.display = row.style.display === 'none' ? '' : 'none';
+      // 获取所有表格行
+      const allRows = document.querySelectorAll('tr[data-name]');
+
+      // 切换父节点的显示状态
+      const isCurrentlyExpanded = parentRowElement.classList.contains('expanded');
+
+      // 更新父节点的状态
+      if (isCurrentlyExpanded) {
+        parentRowElement.classList.remove('expanded');
+      } else {
+        parentRowElement.classList.add('expanded');
+      }
+
+      // 检查是否应该将 expanded 类添加到所有子节点
+      const shouldExpandChildren = !isCurrentlyExpanded && parentLevel === '0';
+
+      // 遍历所有子节点并设置显示或隐藏状态
+      allChildren.forEach(childName => {
+        const row = [...allRows].find(row => row.getAttribute('data-name') === childName);
+        if (row) {
+          const shouldHide = isCurrentlyExpanded; // 如果当前已经展开，则折叠，否则展开
+          row.classList.toggle('hidden', shouldHide);
+          row.style.display = shouldHide ? 'none' : '';
+
+          // 如果父节点级别为 0 且要展开子节点，将 expanded 类添加到每个子节点
+          if (shouldExpandChildren) {
+            row.classList.add('expanded');
+          }
         }
       });
     }
@@ -204,6 +226,13 @@
       row.setAttribute('data-name', data.name);
       row.setAttribute('data-parent', parentId);
       row.addEventListener('click', toggleRowSelection);
+      row.addEventListener('contextmenu', function(event) {
+        // 阻止默认的上下文菜单显示
+        event.preventDefault();
+
+        // 执行toggleRowSelection函数
+        toggleRowSelection(event);
+      });
 
       const nameCell = document.createElement('td');
       nameCell.style.paddingLeft = `${20 * level + 10}px`;
@@ -224,10 +253,11 @@
       }
 
       nameCell.append(` ${data.label}`);
+      row.classList.add('expanded');
       row.appendChild(nameCell);
 
       const sizeCell = document.createElement('td');
-      sizeCell.innerText = data.size;
+      sizeCell.innerText = data.childrenCount || ''; // Added fallback for 'size' property
       row.appendChild(sizeCell);
 
       const typeCell = document.createElement('td');
@@ -306,11 +336,27 @@
     }
 
     // Building the table on window load
+    /*
     window.onload = function() {
       const table = document.getElementById('tree-table');
-      buildTable(tableData, table);
+      tableData = [JSON.parse(tableData)];
+      buildTable(tableData, table.children[1]);
       addResizableColumns();
     };
+     */
+
+    // MATLAB execute this setup function
+    function setup(htmlComponent) {
+      htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
+
+      function dataFromMATLABToHTML(event) {
+        const table = document.getElementById('tree-table');
+        let text = htmlComponent.Data;
+        tableData = [JSON.parse(text)];
+        buildTable(tableData, table.children[1]);
+        addResizableColumns();
+      }
+    }
   </script>
 </head>
 <body>

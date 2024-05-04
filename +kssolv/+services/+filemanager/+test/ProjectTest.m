@@ -24,8 +24,8 @@ classdef ProjectTest < matlab.unittest.TestCase
             
             structureParent = Structure();
             project.addChildrenItem(structureParent);
-            structure1 = Structure('structure1');
-            structure2 = Structure('structure2');
+            structure1 = Structure('Structure1');
+            structure2 = Structure('Structure2');
             structureParent.addChildrenItem(structure1);
             structureParent.addChildrenItem(structure2);
             
