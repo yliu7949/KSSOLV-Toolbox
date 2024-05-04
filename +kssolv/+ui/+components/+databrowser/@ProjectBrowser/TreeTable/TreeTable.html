@@ -142,6 +142,7 @@
         ],
         "childrenCount": "2x1"
       }`
+    let MATLAB;
 
     // 找到给定节点的所有直接和递归子节点
     function findAllChildNodes(treeData, nodeName) {
@@ -217,6 +218,8 @@
 
       const rowElement = event.target.closest('tr');
       rowElement.classList.add('selected'); // Add the 'selected' class to the clicked row
+
+      MATLAB.sendEventToMATLAB("RowClicked", rowElement.getAttribute('data-name'));
     }
 
     // Function to create the table rows
@@ -347,6 +350,7 @@
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
+      MATLAB = htmlComponent;
       htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
 
       function dataFromMATLABToHTML(event) {

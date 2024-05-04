@@ -39,6 +39,10 @@ classdef AbstractItem < handle
             this.updatedAt = datetime;
             this.children = {};
         end
+
+        function output = get.childrenCount(this)
+            output = sprintf('%dx%d', size(this.children, 1), size(this.children, 2));
+        end
         
         function addChildrenItem(this, childrenItem)
             %ADDCHILDRENITEM 将 childrenItem 类追加到 data 数组中
@@ -49,8 +53,29 @@ classdef AbstractItem < handle
             this.children{end+1, 1} = childrenItem;
         end
 
-        function output = get.childrenCount(this)
-            output = sprintf('%dx%d', size(this.children, 1), size(this.children, 2));
+        function foundItem = findChildrenItem(this, name)
+            %FINDCHILDRENITEM 在当前节点及其子节点中查找具有特定名称的项
+            arguments
+                this
+                name string
+            end
+
+            % 检查当前节点是否匹配
+            if this.name == name
+                foundItem = this;
+                return;
+            end
+
+            % 在子节点中递归查找
+            for i = 1:length(this.children)
+                foundItem = this.children{i}.findChildrenItem(name);
+                if ~isempty(foundItem)
+                    return;
+                end
+            end
+
+            % 如果没有找到则返回空数组
+            foundItem = [];
         end
     end
 end

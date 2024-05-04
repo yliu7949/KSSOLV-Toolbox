@@ -32,6 +32,26 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 将当前加载的 project 文件编码为 JSON，发送给 HTML 组件
             project = kssolv.ui.util.DataStorage.getData('Project');
             h.Data = project.encodeToJSON();
+
+            % 接收从 HTML 组件触发的事件
+            h.HTMLEventReceivedFcn = @this.eventReceiver;
+        end
+    end
+
+    methods (Static, Access = private)
+        function eventReceiver(src, event)
+            import kssolv.ui.components.databrowser.ProjectBrowser
+            switch event.HTMLEventName
+                case 'RowClicked'
+                    ProjectBrowser.callbackRowClicked(src, event);
+            end
+        end
+
+        function callbackRowClicked(~, event)
+            name = event.HTMLEventData;
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            item = project.findChildrenItem(name);
+            disp(item);
         end
     end
 
