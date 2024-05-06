@@ -1,11 +1,11 @@
 classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %INFOBROWSER 自定义的 Data Browser 组件，显示 Project Browser 里对应项的具体信息
     
-    %   开发者：杨柳 张致远
+    %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
-        Property1
+        Widgets
     end
     
     methods
@@ -18,6 +18,10 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             buildUI(this);
             % 设定 FigurePanel 的 Tag
             this.Panel.Tag = 'InfoBrowser';
+            % 添加 ProjectBrowser 的监听器
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            addlistener(projectBrowser, 'currentSelectedItem', 'PostSet', ...
+                    @this.handleCurrentSelectedItem);
         end
     end
 
@@ -32,6 +36,16 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'html', 'index.html');
             h = uihtml(g, "HTMLSource", htmlFile);
+            this.Widgets.html = h;
+        end
+    end
+
+    methods (Access = private)
+        function handleCurrentSelectedItem(this, ~, event)
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            name = event.AffectedObject.currentSelectedItem;
+            item = project.findChildrenItem(name);
+            this.Widgets.html.Data = item.encode();
         end
     end
 

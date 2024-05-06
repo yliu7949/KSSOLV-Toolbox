@@ -33,7 +33,7 @@ classdef AbstractItem < handle
 
             this.name = sprintf('%s(%s)', label, char(matlab.lang.internal.uuid));
             this.label = label;
-            this.description = "";
+            this.description = "None";
             this.type = type;
             this.createdAt = datetime;
             this.updatedAt = datetime;
@@ -76,6 +76,24 @@ classdef AbstractItem < handle
 
             % 如果没有找到则返回空数组
             foundItem = [];
+        end
+
+        function encodedJSON = encode(this, prettyPrint)
+            % 将少数字段和 data 字段编码为 JSON，用于 Info Browser
+            arguments
+                this 
+                prettyPrint logical = false
+            end
+
+            objectStruct = struct('name', this.name, 'label', this.label, ...
+                'createdAt', this.createdAt, 'updatedAt', this.updatedAt, ...
+                'description', this.description, 'data', this.data);
+            try
+                encodedJSON = jsonencode(objectStruct, "PrettyPrint", prettyPrint);
+            catch ME
+                error('KSSOLV:FileManager:AbstractItem:JSONEncodeError', ...
+                  'Error encoding this item to JSON: %s', ME.message);
+            end
         end
     end
 end

@@ -3,6 +3,10 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
+
+    properties (SetObservable, AbortSet)
+        currentSelectedItem   % 当前选中的节点
+    end
     
     methods
         function this = ProjectBrowser()
@@ -14,6 +18,8 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             buildUI(this);
             % 设定 FigurePanel 的 Tag
             this.Panel.Tag = 'ProjectBrowser';
+            % 保存至 DataStorage
+            kssolv.ui.util.DataStorage.setData('ProjectBrowser', this);
         end
     end
 
@@ -38,20 +44,16 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
         end
     end
 
-    methods (Static, Access = private)
-        function eventReceiver(src, event)
-            import kssolv.ui.components.databrowser.ProjectBrowser
+    methods (Access = private)
+        function eventReceiver(this, src, event)
             switch event.HTMLEventName
                 case 'RowClicked'
-                    ProjectBrowser.callbackRowClicked(src, event);
+                    this.callbackRowClicked(src, event);
             end
         end
 
-        function callbackRowClicked(~, event)
-            name = event.HTMLEventData;
-            project = kssolv.ui.util.DataStorage.getData('Project');
-            item = project.findChildrenItem(name);
-            disp(item);
+        function callbackRowClicked(this, ~, event)
+            this.currentSelectedItem = event.HTMLEventData;
         end
     end
 
