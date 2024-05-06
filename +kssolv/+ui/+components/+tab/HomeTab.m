@@ -241,7 +241,7 @@ classdef HomeTab < handle
             % 创建 Button
             EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, 'settings');
             EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'cloud');
-            EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallelLinkDesignerApp');
+            EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
             EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
             
             % 创建并组装 PopupList(下拉菜单)
@@ -394,7 +394,7 @@ classdef HomeTab < handle
             % kssolv.ui.components.tab.HomeTab.qeShow();
 
             % 创建 AppContainer          
-            appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
+            appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
             app = matlab.ui.container.internal.AppContainer(appOptions);
