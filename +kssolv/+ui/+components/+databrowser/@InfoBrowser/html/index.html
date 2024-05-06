@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project Info UI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 14px;
+            padding: 3px 10px 6px 10px;
+            color: #565656
+        }
+        .tabs {
+            display: flex;
+            cursor: pointer;
+            padding-bottom: 5px;
+        }
+        .tab {
+            padding: 3px 3px;
+            font-weight: bold;
+            border-bottom: 3px solid transparent;
+        }
+        .tab.active {
+            color: #3367d6;
+            border-bottom: 3px solid #3367d6;
+        }
+        .content {
+            display: none;
+        }
+        .content.active {
+            display: block;
+        }
+        .field-label {
+            font-weight: bold;
+            font-size: 12px;
+            margin-top: 10px;
+        }
+        .field-content {
+            margin-top: 5px;
+            margin-left: 10px;
+            padding: 5px;
+        }
+        .field-content-editable {
+            border: 1px solid #ccc;
+        }
+        .field-content-not-editable {
+            border: 1px solid transparent;
+        }
+        textarea {
+            width: 100%; /* Adjust width to fit within the parent element */
+            padding: 5px;
+            outline: none;
+            resize: none; /* Prevent manual resizing */
+            overflow: hidden; /* Prevent scrollbars */
+            font-family: inherit; /* Maintain the same font */
+            font-size: inherit; /* Maintain the same font size */
+            box-sizing: border-box; /* Account for padding */
+            min-height: 2em; /* Minimum height */
+            border: 1px solid #ccc; /* Border to differentiate */
+        }
+        textarea:focus {
+            border-color: #3367d6; /* Blue border on focus */
+            box-shadow: 0 0 3px rgba(51, 103, 214, 0.5); /* Subtle shadow */
+        }
+    </style>
+</head>
+<body>
+<div>
+    <div class="tabs">
+        <div id="tab-project" class="tab active" onclick="switchTab('project')">Info</div>
+        <div class="tab"> | </div>
+        <div id="tab-model" class="tab" onclick="switchTab('model')">Data</div>
+    </div>
+
+    <div id="project-content" class="content active">
+        <div class="field-label">DESCRIPTION</div>
+        <div id="description" class="field-content field-content-editable" onclick="makeEditable(this)">This is Description</div>
+
+        <div class="field-label">LAST SAVED</div>
+        <div id="last-saved" class="field-content field-content-not-editable">The project needs to be saved</div>
+
+        <div class="field-label">FILE CONTENT</div>
+        <div id="file-content" class="field-content field-content-not-editable">The project must be saved before its content is viewed.</div>
+    </div>
+
+    <div id="model-content" class="content">
+        <div class="field-label">MODEL CONTENT</div>
+        <div class="field-content field-content-not-editable">This section is for the model content.</div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+        document.querySelectorAll('.content').forEach(el => el.classList.remove('active'));
+
+        document.getElementById('tab-' + tab).classList.add('active');
+        document.getElementById(tab + '-content').classList.add('active');
+    }
+
+    function adjustTextareaHeight(textarea) {
+        textarea.style.height = 'auto'; // Reset height
+        textarea.offsetHeight;
+        textarea.style.height = textarea.scrollHeight + 'px'; // Adjust to content
+    }
+
+    function makeEditable(element) {
+        const value = element.innerText;
+        const textarea = document.createElement('textarea');
+        textarea.value = value;
+        adjustTextareaHeight(textarea); // Adjust initial height based on content
+        requestAnimationFrame(() => adjustTextareaHeight(textarea));
+        textarea.onblur = function() {
+            element.innerText = textarea.value;
+            element.style.display = 'block';
+        };
+        textarea.oninput = function() {
+            adjustTextareaHeight(this); // Adjust height while typing
+        };
+        textarea.onkeydown = function(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                textarea.blur();
+            }
+        };
+        element.innerText = '';
+        element.style.display = 'block';
+        element.appendChild(textarea);
+        textarea.focus();
+    }
+</script>
+</body>
+</html>
