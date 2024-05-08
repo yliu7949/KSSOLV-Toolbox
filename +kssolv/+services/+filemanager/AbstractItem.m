@@ -21,6 +21,7 @@ classdef AbstractItem < handle
         data            % 节点数据
         createdAt       % 创建时间
         updatedAt       % 更新时间
+        parent          % 父节点的 name
     end
     
     methods
@@ -37,6 +38,7 @@ classdef AbstractItem < handle
             this.type = type;
             this.createdAt = datetime;
             this.updatedAt = datetime;
+            this.parent = '';
             this.children = {};
         end
 
@@ -50,6 +52,7 @@ classdef AbstractItem < handle
                 this
                 childrenItem kssolv.services.filemanager.AbstractItem
             end
+            childrenItem.parent = this.name;
             this.children{end+1, 1} = childrenItem;
         end
 

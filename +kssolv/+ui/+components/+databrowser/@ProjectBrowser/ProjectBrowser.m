@@ -49,10 +49,16 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             switch event.HTMLEventName
                 case 'RowClicked'
                     this.callbackRowClicked(src, event);
+                case 'RowDoubleClicked'
+                    this.callbackRowDoubleClicked(src, event);
             end
         end
 
         function callbackRowClicked(this, ~, event)
+            this.currentSelectedItem = event.HTMLEventData;
+        end
+
+        function callbackRowDoubleClicked(this, ~, event)
             this.currentSelectedItem = event.HTMLEventData;
         end
     end

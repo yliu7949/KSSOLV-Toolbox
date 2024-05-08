@@ -218,8 +218,6 @@
 
       const rowElement = event.target.closest('tr');
       rowElement.classList.add('selected'); // Add the 'selected' class to the clicked row
-
-      MATLAB.sendEventToMATLAB("RowClicked", rowElement.getAttribute('data-name'));
     }
 
     // Function to create the table rows
@@ -228,8 +226,17 @@
       row.setAttribute('data-level', level);
       row.setAttribute('data-name', data.name);
       row.setAttribute('data-parent', parentId);
-      row.addEventListener('click', toggleRowSelection);
-      row.addEventListener('contextmenu', function(event) {
+      row.addEventListener('click', function (event) {
+        toggleRowSelection(event);
+        const rowElement = event.target.closest('tr');
+        MATLAB.sendEventToMATLAB("RowClicked", rowElement.getAttribute('data-name'));
+      });
+      row.addEventListener('dblclick', function (event) {
+        toggleRowSelection(event);
+        const rowElement = event.target.closest('tr');
+        MATLAB.sendEventToMATLAB("RowDoubleClicked", rowElement.getAttribute('data-name'));
+      });
+      row.addEventListener('contextmenu', function (event) {
         // 阻止默认的上下文菜单显示
         event.preventDefault();
 
@@ -346,7 +353,7 @@
       buildTable(tableData, table.children[1]);
       addResizableColumns();
     };
-     */
+    */
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
