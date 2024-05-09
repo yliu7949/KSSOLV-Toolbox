@@ -86,7 +86,7 @@ classdef HomeTab < handle
             % 创建 Button
             FileProjectButton = CreateButton('split', 'FileProject', section.Tag, 'openFolder');
             FileSaveButton = CreateButton('split', 'FileSave', section.Tag, 'unsaved');
-            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, 'close_project');
+            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, 'close');
 
             % 创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
@@ -228,6 +228,7 @@ classdef HomeTab < handle
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
+            import kssolv.ui.util.GetIcon
 
             % 创建 Environment Section
             section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));
@@ -240,7 +241,7 @@ classdef HomeTab < handle
 
             % 创建 Button
             EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, 'settings');
-            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'cloud');
+            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, GetIcon('remote'));
             EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
             EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
             
