@@ -233,25 +233,79 @@
         const dataContent = document.getElementById('data-content');
         dataContent.innerHTML = '';
 
-        const fieldLabel = document.createElement('div');
-        fieldLabel.className = 'field-label';
-        fieldLabel.textContent = 'DATA';
+        const rawData = testData.data;
 
-        const fieldContent = document.createElement('div');
-        fieldContent.className = 'field-content field-content-not-editable';
-        fieldContent.textContent = JSON.stringify(testData.data);
+        function addFieldContent(labelText, valueText, isEditable = false) {
+            const fieldLabel = document.createElement('div');
+            fieldLabel.className = 'field-label';
+            fieldLabel.textContent = labelText.toUpperCase();
 
-        dataContent.appendChild(fieldLabel);
-        dataContent.appendChild(fieldContent);
+            const fieldContent = document.createElement('div');
+            fieldContent.className = isEditable ? 'field-content field-content-editable' : 'field-content field-content-not-editable';
+            fieldContent.textContent = valueText;
+
+            dataContent.appendChild(fieldLabel);
+            dataContent.appendChild(fieldContent);
+        }
+
+        function formatNumber(value) {
+            return parseFloat(value).toFixed(3);
+        }
+
+        function addMatrixTable(matrix, label) {
+            addFieldContent(label, '');
+            const table = document.createElement('table');
+            table.style.width = '100%';
+            table.style.borderCollapse = 'collapse';
+            dataContent.appendChild(table);
+
+            matrix.forEach(row => {
+                const tr = document.createElement('tr');
+                table.appendChild(tr);
+                row.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = formatNumber(cell);
+                    td.style.border = '1px solid #ccc';
+                    td.style.padding = '8px';
+                    td.style.textAlign = 'center';  // Center align numbers
+                    td.style.fontSize = '12px';    // Slightly smaller font size
+                    tr.appendChild(td);
+                });
+            });
+        }
+
+        // Name
+        addFieldContent('Name', rawData.KSSOLVSetupObject.name);
+
+        // Matrix C
+        addMatrixTable(rawData.KSSOLVSetupObject.C, 'C');
+
+        // Atom List
+        addFieldContent('Atom List', rawData.KSSOLVSetupObject.atomList.join(', '));
+
+        // XYZ List
+        addMatrixTable(rawData.KSSOLVSetupObject.xyzList, 'XYZ List');
+
+        // Raw File Content
+        const rawContentLabel = document.createElement('div');
+        rawContentLabel.className = 'field-label';
+        rawContentLabel.textContent = 'RAW FILE CONTENT';
+        dataContent.appendChild(rawContentLabel);
+
+        const rawContentDiv = document.createElement('div');
+        rawContentDiv.className = 'field-content field-content-not-editable';
+        rawContentDiv.textContent = rawData.rawFileContent;
+        rawContentDiv.style.whiteSpace = 'pre-wrap'; // Ensure that whitespace and newlines are respected
+        rawContentDiv.style.fontFamily = 'monospace'; // Use monospaced font
+        rawContentDiv.style.fontSize = '12px'; // Slightly smaller font size
+        dataContent.appendChild(rawContentDiv);
     }
-
 
     window.onload = function() {
         testData = JSON.parse(testData);
         loadInfoContent();
         loadDataContent();
     };
-
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {

@@ -39,7 +39,7 @@ classdef POSCARReader < handle
             fileRawContent = textscan(fid, '%s', 'Delimiter', '\n', 'Whitespace', '');
             fclose(fid);
             this.fileContent = fileRawContent{1};
-            this.rawFileContent = strjoin(this.fileContent, '\n');
+            this.rawFileContent = fileread(this.filePath);
         end
 
         function parseFile(this)
