@@ -170,42 +170,17 @@
 
     // 根据指定行的点击事件切换子节点的显示状态
     function toggleChildren(event) {
-      const parentRowElement = event.target.parentElement.parentElement;
+      const parentRowElement = event.target.closest('tr');
       const parentName = parentRowElement.getAttribute('data-name');
-      const parentLevel = parentRowElement.getAttribute('data-level');
 
-      // 获取所有直接和递归子节点名称
-      const allChildren = findAllChildNodes(tableData, parentName);
+      const allRows = document.querySelectorAll(`tr[data-parent="${parentName}"]`);
 
-      // 获取所有表格行
-      const allRows = document.querySelectorAll('tr[data-name]');
-
-      // 切换父节点的显示状态
       const isCurrentlyExpanded = parentRowElement.classList.contains('expanded');
+      parentRowElement.classList.toggle('expanded', !isCurrentlyExpanded);
 
-      // 更新父节点的状态
-      if (isCurrentlyExpanded) {
-        parentRowElement.classList.remove('expanded');
-      } else {
-        parentRowElement.classList.add('expanded');
-      }
-
-      // 检查是否应该将 expanded 类添加到所有子节点
-      const shouldExpandChildren = !isCurrentlyExpanded && parentLevel === '0';
-
-      // 遍历所有子节点并设置显示或隐藏状态
-      allChildren.forEach(childName => {
-        const row = [...allRows].find(row => row.getAttribute('data-name') === childName);
-        if (row) {
-          const shouldHide = isCurrentlyExpanded; // 如果当前已经展开，则折叠，否则展开
-          row.classList.toggle('hidden', shouldHide);
-          row.style.display = shouldHide ? 'none' : '';
-
-          // 如果父节点级别为 0 且要展开子节点，将 expanded 类添加到每个子节点
-          if (shouldExpandChildren) {
-            row.classList.add('expanded');
-          }
-        }
+      allRows.forEach(row => {
+        row.classList.toggle('hidden', isCurrentlyExpanded);
+        row.style.display = isCurrentlyExpanded ? 'none' : '';
       });
     }
 
@@ -411,26 +386,22 @@
         const table = document.getElementById('tree-table');
         const tbody = table.querySelector('tbody');
 
-        // 查找父元素的行
         const parentRow = tbody.querySelector(`tr[data-name="${itemName}"]`);
         if (!parentRow) {
           console.error('Parent item not found');
           return;
         }
 
-        // 判断父元素是否已展开
         const isExpanded = parentRow.classList.contains('expanded');
 
-        // 创建新的行并添加到表格中
         const newRow = createRow(itemObject, parseInt(parentRow.getAttribute('data-level')) + 1, itemName);
+        newRow.classList.toggle('hidden', !isExpanded); // 隐藏或显示新行，取决于父节点是否展开
         parentRow.after(newRow); // 将新行插入到父元素之后
 
-        // 如果父元素未展开，则展开它
         if (!isExpanded) {
           toggleChildren({target: parentRow.querySelector('.toggle-icon')});
         }
 
-        // 选中新添加的行
         toggleRowSelection({target: newRow});
         MATLAB.sendEventToMATLAB("RowClicked", itemObject.name);
       }
@@ -453,11 +424,23 @@
         const sizeCell = rowToPatch.querySelector('td:nth-child(2)');
         const typeCell = rowToPatch.querySelector('td:nth-child(3)');
 
-        nameCell.textContent = `${itemObject.label}`;
+        // 清除并重新创建名字单元格的内容，以便保留图标
+        nameCell.innerHTML = ''; // 清空现有内容
+        const iconContainer = document.createElement('div');
+        iconContainer.className = itemObject.children && itemObject.children.length > 0 ? 'icon-container toggle-icon folder-icon' : 'icon-container file-icon';
+        nameCell.appendChild(iconContainer);
+        nameCell.append(` ${itemObject.label}`); // 添加新的标签文本
+
         sizeCell.textContent = itemObject.childrenCount || '';
         typeCell.textContent = itemObject.type;
 
         rowToPatch.setAttribute('data-name', itemObject.name);
+
+        // 添加图标的事件处理，如果有子节点的话
+        if (itemObject.children && itemObject.children.length > 0) {
+          iconContainer.setAttribute('data-target', itemObject.name);
+          iconContainer.onclick = toggleChildren;
+        }
       }
 
     }
