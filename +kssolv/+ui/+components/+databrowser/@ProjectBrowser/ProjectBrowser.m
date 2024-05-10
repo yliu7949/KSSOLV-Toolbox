@@ -4,6 +4,10 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
 
+    properties
+        Widgets
+    end
+
     properties (SetObservable, AbortSet)
         currentSelectedItem   % 当前选中的节点
     end
@@ -21,6 +25,19 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 保存至 DataStorage
             kssolv.ui.util.DataStorage.setData('ProjectBrowser', this);
         end
+        
+        function updateTreetable(this, action, itemName, itemJSON)
+            arguments
+                this 
+                action {mustBeMember(action, {'ADD', 'PATCH', 'DELETE'})}
+                itemName {mustBeNonempty}
+                itemJSON string = ''
+            end
+            eventName = strcat(lower(action), 'Item');
+            eventData = struct('itemName', itemName, 'itemJSON', itemJSON);
+            this.Widgets.html.sendEventToHTMLSource(eventName, ...
+                jsonencode(eventData, "PrettyPrint", true));
+        end
     end
 
     methods (Access = protected)
@@ -34,6 +51,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'TreeTable', 'TreeTable.html');
             h = uihtml(g, "HTMLSource", htmlFile);
+            this.Widgets.html = h;
 
             % 将当前加载的 project 文件编码为 JSON，发送给 HTML 组件
             project = kssolv.ui.util.DataStorage.getData('Project');
@@ -60,6 +78,27 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
         function callbackRowDoubleClicked(this, ~, event)
             this.currentSelectedItem = event.HTMLEventData;
+            
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            item = project.findChildrenItem(this.currentSelectedItem);
+            switch class(item)
+                case 'kssolv.services.filemanager.Structure'
+                    if startsWith(item.parent, 'Project')
+                        % 打开导入结构文件对话框，导入和解析结构文件，并显示渲染的结构
+                        importedFileCount = item.importStructureFromFile();
+                        if importedFileCount > 0
+                            startIndex = numel(item.children) - importedFileCount + 1;
+                            for index = startIndex : numel(item.children)
+                                % 更新 TreeTable
+                                this.updateTreetable('ADD', item.name, item.children{index}.encodeToJSON(1));
+                            end
+                            this.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+                        end
+                    else
+                        % 直接显示渲染的结构
+                        item.showMoleculerDisplay();
+                    end
+            end
         end
     end
 

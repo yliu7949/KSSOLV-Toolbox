@@ -33,8 +33,6 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                       'Error saving the Project file: %s', ME.message);
             end
         end
-        
-        encodedJSON = encodeToJSON(this, prettyPrint)
     end
 
     methods (Static)

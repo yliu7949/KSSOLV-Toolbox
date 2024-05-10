@@ -6,10 +6,13 @@ classdef CIFReader < handle
 
     properties
         filePath                   % CIF 文件路径
-        fileContent                % CIF 文件内容
+        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据
         rawFileContent    string   % CIF 文件原始内容
+    end
+
+    properties (Hidden)
+        fileContent                % CIF 文件内容
         CIFObject         struct   % 从 CIF 文件中解析出的数据结构
-        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据 
     end
 
     properties (Access = private)

@@ -15,14 +15,14 @@ classdef ProjectTest < matlab.unittest.TestCase
             
             project = Project();
             
-            workflowParent = Workflow();
+            workflowParent = Workflow('Workflow', 'Folder');
             project.addChildrenItem(workflowParent);
             workflow1 = Workflow('Workflow1');
             workflow2 = Workflow('Workflow2');
             workflowParent.addChildrenItem(workflow1);
             workflowParent.addChildrenItem(workflow2);
             
-            structureParent = Structure();
+            structureParent = Structure('Structure', 'Folder');
             project.addChildrenItem(structureParent);
             structure1 = Structure('Structure1');
             structure2 = Structure('Structure2');

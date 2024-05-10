@@ -331,18 +331,21 @@ classdef HomeTab < handle
         end
 
         function callbackImportStructureFromFile(~, ~, ~)
-            import kssolv.ui.util.Localizer.message
-            [files, path] = uigetfile({'*.cif';'*.vasp';'*.*'}, ...
-                message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
-            if ~isequal(files, 0)
-                % 如果用户没有点击取消按钮，并且选择了文件
-                for i = 1:length(files)
-                    % 拼接完整的文件路径
-                    fullPath = fullfile(path, files{i});
-
-                    % 渲染结构文件中的结构
-                    displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(fullPath);
-                    displayObj.Display();
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            for i = 1:length(project.children)
+                if startsWith(project.children{i, 1}.name, 'Structure')
+                    item = project.children{i, 1};
+                end
+            end
+            if ~isempty(item)
+                importedFileCount = item.importStructureFromFile();
+                if importedFileCount > 0
+                    projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+                    startIndex = numel(item.children) - importedFileCount + 1;
+                    for index = startIndex : numel(item.children)
+                        projectBrowser.updateTreetable('ADD', item.name, item.children{index}.encodeToJSON(1));
+                    end
+                    projectBrowser.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
                 end
             end
         end

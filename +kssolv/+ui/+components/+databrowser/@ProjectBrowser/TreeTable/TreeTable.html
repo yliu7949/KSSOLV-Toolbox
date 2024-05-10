@@ -84,64 +84,64 @@
     // JSON data for test purpose
     let tableData = `
       {
-        "name": "Project(3510f463-8122-4afc-8716-c64363395bfc)",
-        "label": "Project",
-        "description": "",
-        "type": "Project",
-        "children": [
-          {
-            "name": "Workflow(6d7fb652-d63b-41cd-9f1d-b37d0a68a100)",
-            "label": "Workflow",
-            "description": "",
-            "type": "Workflow",
-            "children": [
-              {
-                "name": "Workflow1(35c9b62d-0792-446b-8646-bb6d8fb2ae11)",
-                "label": "Workflow1",
-                "description": "",
-                "type": "Workflow",
-                "children": [],
-                "childrenCount": "0x0"
-              },
-              {
-                "name": "Workflow2(2af93a99-d2f0-4fc2-88bd-2f3fd6499d5e)",
-                "label": "Workflow2",
-                "description": "",
-                "type": "Workflow",
-                "children": [],
-                "childrenCount": "0x0"
-              }
-            ],
-            "childrenCount": "2x1"
-          },
-          {
-            "name": "Structure(410104e7-744d-44fb-aac6-8ea5363e555a)",
-            "label": "Structure",
-            "description": "",
-            "type": "Structure",
-            "children": [
-              {
-                "name": "Structure1(26876c86-2375-4887-b8b7-f63543149d2f)",
-                "label": "Structure1",
-                "description": "",
-                "type": "Structure",
-                "children": [],
-                "childrenCount": "0x0"
-              },
-              {
-                "name": "Structure2(cdf4938a-3639-49e9-968c-6647be8120b7)",
-                "label": "Structure2",
-                "description": "",
-                "type": "Structure",
-                "children": [],
-                "childrenCount": "0x0"
-              }
-            ],
-            "childrenCount": "2x1"
-          }
-        ],
-        "childrenCount": "2x1"
-      }`
+       "name": "Project(459fd9f4-4de9-4526-9063-cc6a77b13df6)",
+       "label": "Project",
+       "description": "None",
+       "type": "Project",
+       "children": [
+         {
+           "name": "Workflow(daf54931-2fd9-4030-9497-19e58da2d084)",
+           "label": "Workflow",
+           "description": "None",
+           "type": "Folder",
+           "children": [
+             {
+               "name": "Workflow1(0ab204c5-a502-43d3-830d-20b30949c448)",
+               "label": "Workflow1",
+               "description": "None",
+               "type": "Workflow",
+               "children": [],
+               "childrenCount": "0x0"
+             },
+             {
+               "name": "Workflow2(25d5350c-5ca1-4b6c-ac61-a6cb67c63c34)",
+               "label": "Workflow2",
+               "description": "None",
+               "type": "Workflow",
+               "children": [],
+               "childrenCount": "0x0"
+             }
+           ],
+           "childrenCount": "2x1"
+         },
+         {
+           "name": "Structure(746d2d80-116a-4cbc-b1a1-157abcccb386)",
+           "label": "Structure",
+           "description": "None",
+           "type": "Folder",
+           "children": [
+             {
+               "name": "Structure1(b1840013-26d9-49c5-bcdd-e38e16d843ef)",
+               "label": "Structure1",
+               "description": "None",
+               "type": "Structure",
+               "children": [],
+               "childrenCount": "0x0"
+             },
+             {
+               "name": "Structure2(25f9dc9d-157d-41a6-89ca-0a08aacc7afc)",
+               "label": "Structure2",
+               "description": "None",
+               "type": "Structure",
+               "children": [],
+               "childrenCount": "0x0"
+             }
+           ],
+           "childrenCount": "2x1"
+         }
+       ],
+       "childrenCount": "2x1"
+     }`
     let MATLAB;
 
     // 找到给定节点的所有直接和递归子节点
@@ -353,12 +353,48 @@
       buildTable(tableData, table.children[1]);
       addResizableColumns();
     };
-    */
+     */
+
+    function testAddItem() {
+      let eventData = `{
+       "itemName": "Structure(746d2d80-116a-4cbc-b1a1-157abcccb386)",
+       "itemJSON": "{\\n  \\"name\\": \\"new(e9eebc15-a0a8-4408-abb3-218cb29ce01a)\\",\\n  \\"label\\": \\"new\\",\\n  \\"description\\": \\"None\\",\\n  \\"type\\": \\"Structure\\",\\n  \\"children\\": [],\\n  \\"childrenCount\\": \\"0x0\\"\\n}"
+     }`;
+      eventData = JSON.parse(eventData);
+      const itemName = eventData.itemName;
+      const itemObject = JSON.parse(eventData.itemJSON);
+      const table = document.getElementById('tree-table');
+      const tbody = table.querySelector('tbody');
+
+      // 查找父元素的行
+      const parentRow = tbody.querySelector(`tr[data-name="${itemName}"]`);
+      if (!parentRow) {
+        console.error('Parent item not found');
+        return;
+      }
+
+      // 判断父元素是否已展开
+      const isExpanded = parentRow.classList.contains('expanded');
+
+      // 创建新的行并添加到表格中
+      const newRow = createRow(itemObject, parseInt(parentRow.getAttribute('data-level')) + 1, itemName);
+      parentRow.after(newRow); // 将新行插入到父元素之后
+
+      // 如果父元素未展开，则展开它
+      if (!isExpanded) {
+        toggleChildren({target: parentRow.querySelector('.toggle-icon')});
+      }
+
+      // 选中新添加的行
+      toggleRowSelection({target: newRow});
+    }
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
       MATLAB = htmlComponent;
       htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
+      htmlComponent.addEventListener("addItem", addItem);
+      htmlComponent.addEventListener("patchItem", patchItem);
 
       function dataFromMATLABToHTML(event) {
         const table = document.getElementById('tree-table');
@@ -367,6 +403,63 @@
         buildTable(tableData, table.children[1]);
         addResizableColumns();
       }
+
+      function addItem(event) {
+        const eventData = JSON.parse(event.Data);
+        const itemName = eventData.itemName;
+        const itemObject = JSON.parse(eventData.itemJSON);
+        const table = document.getElementById('tree-table');
+        const tbody = table.querySelector('tbody');
+
+        // 查找父元素的行
+        const parentRow = tbody.querySelector(`tr[data-name="${itemName}"]`);
+        if (!parentRow) {
+          console.error('Parent item not found');
+          return;
+        }
+
+        // 判断父元素是否已展开
+        const isExpanded = parentRow.classList.contains('expanded');
+
+        // 创建新的行并添加到表格中
+        const newRow = createRow(itemObject, parseInt(parentRow.getAttribute('data-level')) + 1, itemName);
+        parentRow.after(newRow); // 将新行插入到父元素之后
+
+        // 如果父元素未展开，则展开它
+        if (!isExpanded) {
+          toggleChildren({target: parentRow.querySelector('.toggle-icon')});
+        }
+
+        // 选中新添加的行
+        toggleRowSelection({target: newRow});
+        MATLAB.sendEventToMATLAB("RowClicked", itemObject.name);
+      }
+
+      function patchItem(event) {
+        const eventData = JSON.parse(event.Data);
+        const itemName = eventData.itemName;
+        const itemObject = JSON.parse(eventData.itemJSON);
+        const table = document.getElementById('tree-table');
+        const tbody = table.querySelector('tbody');
+
+        const rowToPatch = tbody.querySelector(`tr[data-name="${itemName}"]`);
+
+        if (!rowToPatch) {
+          console.error('Item not found in the table');
+          return;
+        }
+
+        const nameCell = rowToPatch.querySelector('td:nth-child(1)');
+        const sizeCell = rowToPatch.querySelector('td:nth-child(2)');
+        const typeCell = rowToPatch.querySelector('td:nth-child(3)');
+
+        nameCell.textContent = `${itemObject.label}`;
+        sizeCell.textContent = itemObject.childrenCount || '';
+        typeCell.textContent = itemObject.type;
+
+        rowToPatch.setAttribute('data-name', itemObject.name);
+      }
+
     }
   </script>
 </head>

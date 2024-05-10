@@ -98,6 +98,23 @@ classdef AbstractItem < handle
                   'Error encoding this item to JSON: %s', ME.message);
             end
         end
+
+        function encodedJSON = encodeToJSON(this, prettyPrint)
+            %ENCODETOJSON 递归地处理 size 字段，并编码为 JSON
+            % 用于 Project Browser
+            
+            arguments
+                this 
+                prettyPrint logical = false
+            end
+            
+            try
+                encodedJSON = jsonencode(this, "PrettyPrint", prettyPrint);
+            catch ME
+                error('KSSOLV:FileManager:AbstractItem:JSONEncodeError', ...
+                  'Error encoding the item to JSON: %s', ME.message);
+            end
+        end
     end
 end
 

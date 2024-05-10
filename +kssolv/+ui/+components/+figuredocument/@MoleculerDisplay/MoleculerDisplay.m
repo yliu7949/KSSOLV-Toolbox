@@ -6,20 +6,21 @@ classdef MoleculerDisplay < handle
     
     properties
         DocumentGroupTag
-        cifFilePath
+        cifFileContent
     end
     
     methods
-        function this = MoleculerDisplay(cifFilePath)
+        function this = MoleculerDisplay(cifFileContent)
             %MOLECULERDISPLAY 构造此类的实例
             arguments
-                cifFilePath string = ""
+                cifFileContent string = ""
             end
-            if cifFilePath == ""
-                this.cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
+            if cifFileContent == ""
+                cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
                 'test', 'MoS2_mp-2815_conventional_standard.cif');
+                this.cifFileContent = fileread(cifFilePath);
             else
-                this.cifFilePath = cifFilePath;
+                this.cifFileContent = cifFileContent;
             end
             this.DocumentGroupTag = 'DocumentGroup';
         end
@@ -38,9 +39,8 @@ classdef MoleculerDisplay < handle
             htmlFile = fullfile(fileparts(mfilename('fullpath')), '3Dmol', '3Dmol.html');
             h = uihtml(g, "HTMLSource", htmlFile);
 
-            % 读取 CIF 格式文件并保存在 html 组件中
-            cifFileContent = fileread(this.cifFilePath);
-            h.Data = cifFileContent;
+            % 将 CIF 格式文件的内容保存在 html 组件中
+            h.Data = this.cifFileContent;
 
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');

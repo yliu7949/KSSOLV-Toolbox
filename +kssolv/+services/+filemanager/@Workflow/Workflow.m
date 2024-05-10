@@ -11,12 +11,13 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
     end
     
     methods
-        function this = Workflow(label)
+        function this = Workflow(label, type)
             %WORKFLOW 构造函数
             arguments
                 label string = "Workflow"
+                type string = "Workflow"
             end
-            this = this@kssolv.services.filemanager.AbstractItem(label, "Workflow");
+            this = this@kssolv.services.filemanager.AbstractItem(label, type);
             % nodes 列表存储 UI 层的 node 类，每个 node 类包含 panel 和 code
             % workflowTree 是一个 n*2 的元胞数组，存储 node 名以表示工作流的执行顺序
             this.data = struct("nodes", [], "workflowTree", cell(0,2));

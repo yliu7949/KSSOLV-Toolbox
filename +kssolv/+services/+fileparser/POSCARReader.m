@@ -7,10 +7,13 @@ classdef POSCARReader < handle
 
     properties
         filePath                   % POSCAR 文件路径
-        fileContent                % POSCAR 文件内容
+        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据
         rawFileContent    string   % POSCAR 文件原始内容
+    end
+
+    properties (Hidden)
+        fileContent                % POSCAR 文件内容
         POSCARObject      struct   % 从 POSCAR 文件中解析出的数据结构
-        KSSOLVSetupObject struct   % 包含 KSSOLV 构建分子/晶体结构所需要的数据 
     end
 
     properties (Access = private)
