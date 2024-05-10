@@ -162,6 +162,16 @@
   }
 }
     `;
+    let testData2 = `
+    {
+        "name": "Structure(746d2d80-116a-4cbc-b1a1-157abcccb386)",
+        "label": "Structure",
+        "createdAt": "2024-05-09 17:53:11",
+        "updatedAt": "2024-05-09 17:53:11",
+        "description": "None",
+        "data": []
+    }
+    `
     let MATLAB;
 
     function switchTab(tab) {
@@ -234,6 +244,9 @@
         dataContent.innerHTML = '';
 
         const rawData = testData.data;
+        if (Array.isArray(rawData) && rawData.length === 0) {
+            return
+        }
 
         function addFieldContent(labelText, valueText, isEditable = false) {
             const fieldLabel = document.createElement('div');
@@ -301,11 +314,13 @@
         dataContent.appendChild(rawContentDiv);
     }
 
+    /*
     window.onload = function() {
         testData = JSON.parse(testData);
         loadInfoContent();
         loadDataContent();
     };
+     */
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
