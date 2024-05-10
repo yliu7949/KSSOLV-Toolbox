@@ -13,32 +13,32 @@
         <entry key="FileSectionTitle">文件</entry>
         <entry key="FileProjectButtonLabel">项目</entry>
         <entry key="FileProjectButtonTooltip">调整项目文件</entry>
-        <entry key="OpenFileItemText">打开...</entry>
+        <entry key="OpenFileListItemLabel">打开...</entry>
         <entry key="FileSaveButtonLabel">保存</entry>
         <entry key="FileSaveButtonTooltip">保存项目或结构</entry>
-        <entry key="SaveProjectItemText">保存当前项目</entry>
-        <entry key="SaveProjectAsItemText">项目另存为...</entry>
-        <entry key="SaveStructureAsItemText">结构另存为...</entry>
+        <entry key="SaveProjectListItemLabel">保存当前项目</entry>
+        <entry key="SaveProjectAsListItemLabel">项目另存为...</entry>
+        <entry key="SaveStructureAsListItemLabel">结构另存为...</entry>
         <entry key="FileCloseButtonLabel">关闭</entry>
         <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
 
         <entry key="ProjectSectionTitle">项目</entry>
         <entry key="ProjectStructureButtonLabel">结构</entry>
         <entry key="ProjectStructureButtonTooltip">导入/导出结构</entry>
-        <entry key="ImportStructureFromFileItemText">从文件导入结构...</entry>
-        <entry key="ImportStructureFromLinkItemText">从链接导入结构...</entry>
-        <entry key="ImportStructureFromLibraryItemText">从材料库导入结构...</entry>
-        <entry key="ImportStructureFromMatlabItemText">从 MATLAB 工作区导入结构...</entry>
+        <entry key="ImportStructureFromFileListItemLabel">从文件导入结构...</entry>
+        <entry key="ImportStructureFromLinkListItemLabel">从链接导入结构...</entry>
+        <entry key="ImportStructureFromLibraryListItemLabel">从材料库导入结构...</entry>
+        <entry key="ImportStructureFromMatlabListItemLabel">从 MATLAB 工作区导入结构...</entry>
         <entry key="ProjectWorkflowButtonLabel">工作流</entry>
         <entry key="ProjectWorkflowButtonTooltip">编辑工作流</entry>
-        <entry key="NewWorkflowItemText">新建空白工作流</entry>
-        <entry key="ImportTemplateWorkflowItemText">从模板建立工作流...</entry>
-        <entry key="ExportTemplateWorkflowItemText">将工作流保存为模板...</entry>
+        <entry key="NewWorkflowListItemLabel">新建空白工作流</entry>
+        <entry key="ImportTemplateWorkflowListItemLabel">从模板建立工作流...</entry>
+        <entry key="ExportTemplateWorkflowListItemLabel">将工作流保存为模板...</entry>
         <entry key="ProjectVariableButtonLabel">变量</entry>
         <entry key="ProjectVariableButtonTooltip">编辑变量</entry>
-        <entry key="NewVariableItemText">新建变量...</entry>
-        <entry key="ImportVariableFromFileItemText">从文件导入变量...</entry>
-        <entry key="ImportVariableFromMATLABItemText">从 MATLAB 工作区导入变量...</entry>
+        <entry key="NewVariableListItemLabel">新建变量...</entry>
+        <entry key="ImportVariableFromFileListItemLabel">从文件导入变量...</entry>
+        <entry key="ImportVariableFromMATLABListItemLabel">从 MATLAB 工作区导入变量...</entry>
         
         <entry key="RunningSectionTitle">运行</entry>
         <entry key="RunningRunButtonLabel">运行</entry>
@@ -47,19 +47,20 @@
         <entry key="RunningStepButtonTooltip">逐步运行程序</entry>   
         <entry key="RunningStopButtonLabel">停止</entry>
         <entry key="RunningStopButtonTooltip">结束程序</entry>
-        <entry key="RunAndTimeItemText">运行并计时</entry>
+        <entry key="RunAndTimeListItemLabel">运行并计时</entry>
+        <entry key="RunAndTimeListItemTooltip">运行代码并探查以提高性能</entry>
         
         <entry key="EnvironmentSectionTitle">环境</entry>
         <entry key="EnvironmentSettingsButtonLabel">设置</entry>
         <entry key="EnvironmentSettingsButtonTooltip">调整设置</entry>
-        <entry key="EnvironmentRemoteButtonLabel">远程计算</entry>
+        <entry key="EnvironmentRemoteButtonLabel">远程</entry>
         <entry key="EnvironmentRemoteButtonTooltip">连接远程服务器</entry>
         <entry key="EnvironmentParallelButtonLabel">并行</entry>
         <entry key="EnvironmentParallelButtonTooltip">设置并行计算</entry>
         <entry key="EnvironmentExtraButtonLabel">附加功能</entry>
         <entry key="EnvironmentExtraButtonTooltip">添加附加功能</entry>
-        <entry key="ConnectToClusterItemText">连接到计算集群...</entry>
-        <entry key="GetExtraFeatureItemText">获取附加功能...</entry>
+        <entry key="ConnectToClusterListItemLabel">连接到计算集群...</entry>
+        <entry key="GetExtraFeatureListItemLabel">获取附加功能...</entry>
 
         <entry key="ResourceSectionTitle">资源</entry>
         <entry key="ResourceLibraryButtonLabel">图书馆</entry>
@@ -70,12 +71,12 @@
         <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
         <entry key="ResourceSupportButtonLabel">请求支持</entry>
         <entry key="ResourceSupportButtonTooltip">请求技术支持</entry>
-        <entry key="OpenDocumentItemText">文档</entry>
-        <entry key="OfficialSiteItemText">官方网站</entry>
-        <entry key="CheckUpdateItemText">检查更新</entry>
-        <entry key="CheckLicenseItemText">许可</entry>
-        <entry key="TermsOfUseItemText">使用条款</entry>
-        <entry key="AboutUsItemText">关于 KSSOLV</entry>
+        <entry key="OpenDocumentListItemLabel">文档</entry>
+        <entry key="OfficialSiteListItemLabel">官方网站</entry>
+        <entry key="CheckUpdateListItemLabel">检查更新</entry>
+        <entry key="CheckLicenseListItemLabel">许可</entry>
+        <entry key="TermsOfUseListItemLabel">使用条款</entry>
+        <entry key="AboutUsListItemLabel">关于 KSSOLV</entry>
         
         <entry key="OperationSectionTitle">操作</entry>
         <entry key="OperationUndoButtonLabel">撤销</entry>
@@ -86,7 +87,7 @@
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>
         <entry key="SaveSectionTitle">保存</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为工作流模板</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
 
         <entry key="NodeSectionTitle">节点</entry>
@@ -94,17 +95,17 @@
         <entry key="AddNoteButtonTooltip">增加一个新节点</entry>
         <entry key="EditNoteButtonLabel">编辑节点</entry>
         <entry key="EditNoteButtonTooltip">调整选中节点</entry>
-        <entry key="node00ItemText">0-0 节点</entry>
-        <entry key="node01ItemText">0-1 节点</entry>
-        <entry key="node10ItemText">1-0 节点</entry>
-        <entry key="node11ItemText">1-1 节点</entry>
-        <entry key="node12ItemText">1-2 节点</entry>
-        <entry key="node21ItemText">2-1 节点</entry>
-        <entry key="nodexyItemText">x-y 节点</entry>
-        <entry key="AddTopSlotItemText">增加上连接桩</entry>
-        <entry key="DelTopSlotItemText">减少上连接桩</entry>
-        <entry key="AddBottomSlotItemText">增加下连接桩</entry>
-        <entry key="DelBottomSlotItemText">减少下连接桩</entry>
+        <entry key="node00ListItemLabel">0-0 节点</entry>
+        <entry key="node01ListItemLabel">0-1 节点</entry>
+        <entry key="node10ListItemLabel">1-0 节点</entry>
+        <entry key="node11ListItemLabel">1-1 节点</entry>
+        <entry key="node12ListItemLabel">1-2 节点</entry>
+        <entry key="node21ListItemLabel">2-1 节点</entry>
+        <entry key="nodexyListItemLabel">x-y 节点</entry>
+        <entry key="AddTopSlotListItemLabel">增加上连接桩</entry>
+        <entry key="DelTopSlotListItemLabel">减少上连接桩</entry>
+        <entry key="AddBottomSlotListItemLabel">增加下连接桩</entry>
+        <entry key="DelBottomSlotListItemLabel">减少下连接桩</entry>
         
         <entry key="ZoomSectionTitle">缩放</entry>
         <entry key="ZoomInButtonLabel">放大</entry>

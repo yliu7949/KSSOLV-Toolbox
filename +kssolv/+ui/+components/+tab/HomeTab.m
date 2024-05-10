@@ -72,7 +72,7 @@ classdef HomeTab < handle
             %CREATEFILESECTION 创建"文件"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 File Section
@@ -84,22 +84,23 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            FileProjectButton = CreatButton('split', 'FileProject', section.Tag, Icon.OPEN_24);
-            FileSaveButton = CreatButton('split', 'FileSave', section.Tag, Icon.SAVE_24);
-            FileCloseButton = CreatButton('push', 'FileClose', section.Tag, Icon.CLOSE_24);
+            FileProjectButton = CreateButton('split', 'FileProject', section.Tag, 'openFolder');
+            FileSaveButton = CreateButton('split', 'FileSave', section.Tag, 'unsaved');
+            FileCloseButton = CreateButton('push', 'FileClose', section.Tag, 'close');
 
             % 创建并组装 PopupList(下拉菜单)
             FileProjectButtonPopup = PopupList();
-            OpenFile = CreateListItem('OpenFile', section.Tag, Icon.ADD_16);
-            FileProjectButtonPopup.add(OpenFile);
+            OpenFileListItem = CreateListItem('default', 'OpenFile', section.Tag, 0, 'new');
+            FileProjectButtonPopup.add(OpenFileListItem);
             FileProjectButton.Popup = FileProjectButtonPopup;
+
             FileSaveButtonPopup = PopupList();
-            SaveProject = CreateListItem('SaveProject', section.Tag, 'none');
-            SaveProjectAs = CreateListItem('SaveProjectAs', section.Tag, 'none');
-            SaveStructureAs = CreateListItem('SaveStructureAs', section.Tag, 'none');
-            FileSaveButtonPopup.add(SaveProject);
-            FileSaveButtonPopup.add(SaveProjectAs);
-            FileSaveButtonPopup.add(SaveStructureAs);
+            SaveProjectListItem = CreateListItem('default', 'SaveProject', section.Tag, 0, 'saved');
+            SaveProjectAsListItem = CreateListItem('default', 'SaveProjectAs', section.Tag, 0, 'saveAs');
+            SaveStructureAsListItem = CreateListItem('default', 'SaveStructureAs', section.Tag, 0, 'save_renderedVolume');
+            FileSaveButtonPopup.add(SaveProjectListItem);
+            FileSaveButtonPopup.add(SaveProjectAsListItem);
+            FileSaveButtonPopup.add(SaveStructureAsListItem);
             FileSaveButton.Popup = FileSaveButtonPopup;
 
             % 组装 Column 和 Button
@@ -120,7 +121,7 @@ classdef HomeTab < handle
             %CREATEPROJECTSECTION 创建"项目"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Project Section
@@ -132,37 +133,37 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            ProjectStructureButton = CreatButton('split', 'ProjectStructure', section.Tag, Icon.FIND_FILES_24);
-            ProjectWorkflowButton = CreatButton('split', 'ProjectWorkflow', section.Tag, Icon.PLAY_24);
-            ProjectVariableButton = CreatButton('split', 'ProjectVariable', section.Tag, Icon.LEGEND_24);
+            ProjectStructureButton = CreateButton('split', 'ProjectStructure', section.Tag, 'import_data');
+            ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'artifactGraph');
+            ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, 'legend');
             
             % 创建并组装 PopupList(下拉菜单)
             ProjectStructureButtonPopup = PopupList();
-            ImportStructureFromFile = CreateListItem('ImportStructureFromFile', section.Tag, 'none');
-            ImportStructureFromLink = CreateListItem('ImportStructureFromLink', section.Tag, 'none');
-            ImportStructureFromLibrary = CreateListItem('ImportStructureFromLibrary', section.Tag, 'none');
-            ImportStructureFromMatlab = CreateListItem('ImportStructureFromMatlab', section.Tag, 'none');
+            ImportStructureFromFileListItem = CreateListItem('default', 'ImportStructureFromFile', section.Tag, 0, 'importDiagram');
+            ImportStructureFromLinkListItem = CreateListItem('default', 'ImportStructureFromLink', section.Tag, 0, 'link_project');
+            ImportStructureFromLibraryListItem = CreateListItem('default', 'ImportStructureFromLibrary', section.Tag, 0, 'database_projectYellow');
+            ImportStructureFromMatlabListItem = CreateListItem('default', 'ImportStructureFromMatlab', section.Tag, 0, 'matlabWorkspaceFile');
 
             ProjectWorkflowButtonPopup = PopupList();
-            NewWorkflow = CreateListItem('NewWorkflow', section.Tag, 'none');
-            ImportTemplateWorkflow = CreateListItem('ImportTemplateWorkflow', section.Tag, 'none');
-            ExportTemplateWorkflow = CreateListItem('ExportTemplateWorkflow', section.Tag, 'none');
+            NewWorkflowListItem = CreateListItem('default', 'NewWorkflow', section.Tag, 0, 'add_class');
+            ImportTemplateWorkflowListItem = CreateListItem('default', 'ImportTemplateWorkflow', section.Tag, 0, 'add_artifactGraph');
+            ExportTemplateWorkflowListItem = CreateListItem('default', 'ExportTemplateWorkflow', section.Tag, 0, 'save_sourceControlChanges');
 
             ProjectVariableButtonPopup = PopupList();
-            NewVariable = CreateListItem('NewVariable', section.Tag, 'none');
-            ImportVariableFromFile = CreateListItem('ImportVariableFromFile', section.Tag, 'none');
-            ImportVariableFromMATLAB = CreateListItem('ImportVariableFromMATLAB', section.Tag, 'none');
+            NewVariableListItem = CreateListItem('default', 'NewVariable', section.Tag, 0, 'new_sectionHighlighted');
+            ImportVariableFromFileListItem = CreateListItem('default', 'ImportVariableFromFile', section.Tag, 0, 'importDiagram');
+            ImportVariableFromMATLABListItem = CreateListItem('default', 'ImportVariableFromMATLAB', section.Tag, 0, 'matlabWorkspaceFile');
            
-            ProjectStructureButtonPopup.add(ImportStructureFromFile)
-            ProjectStructureButtonPopup.add(ImportStructureFromLink);
-            ProjectStructureButtonPopup.add(ImportStructureFromLibrary);
-            ProjectStructureButtonPopup.add(ImportStructureFromMatlab);
-            ProjectWorkflowButtonPopup.add(NewWorkflow);
-            ProjectWorkflowButtonPopup.add(ImportTemplateWorkflow);
-            ProjectWorkflowButtonPopup.add(ExportTemplateWorkflow);
-            ProjectVariableButtonPopup.add(NewVariable);
-            ProjectVariableButtonPopup.add(ImportVariableFromFile);
-            ProjectVariableButtonPopup.add(ImportVariableFromMATLAB);
+            ProjectStructureButtonPopup.add(ImportStructureFromFileListItem)
+            ProjectStructureButtonPopup.add(ImportStructureFromLinkListItem);
+            ProjectStructureButtonPopup.add(ImportStructureFromLibraryListItem);
+            ProjectStructureButtonPopup.add(ImportStructureFromMatlabListItem);
+            ProjectWorkflowButtonPopup.add(NewWorkflowListItem);
+            ProjectWorkflowButtonPopup.add(ImportTemplateWorkflowListItem);
+            ProjectWorkflowButtonPopup.add(ExportTemplateWorkflowListItem);
+            ProjectVariableButtonPopup.add(NewVariableListItem);
+            ProjectVariableButtonPopup.add(ImportVariableFromFileListItem);
+            ProjectVariableButtonPopup.add(ImportVariableFromMATLABListItem);
             ProjectStructureButton.Popup = ProjectStructureButtonPopup;
             ProjectWorkflowButton.Popup = ProjectWorkflowButtonPopup;
             ProjectVariableButton.Popup = ProjectVariableButtonPopup;
@@ -185,7 +186,7 @@ classdef HomeTab < handle
             %CREATERUNNINGSECTION 创建"运行"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 File Section
@@ -197,14 +198,14 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            RunningRunButton = CreatButton('split', 'RunningRun', section.Tag, Icon.RUN_24);
-            RunningStepButton = CreatButton('push', 'RunningStep', section.Tag, Icon.FORWARD_24);
-            RunningStopButton = CreatButton('push', 'RunningStop', section.Tag, Icon.END_24);
+            RunningRunButton = CreateButton('split', 'RunningRun', section.Tag, 'playControl');
+            RunningStepButton = CreateButton('push', 'RunningStep', section.Tag, 'stepForward');
+            RunningStopButton = CreateButton('push', 'RunningStop', section.Tag, 'stop');
 
             % 创建并组装 PopupList(下拉菜单)
             RunPopup = PopupList();
-            RunAndTime = CreateListItem('RunAndTime', section.Tag, 'none');
-            RunPopup.add(RunAndTime);
+            RunAndTimeListItem = CreateListItem('default', 'RunAndTime', section.Tag, 1, 'runAndTime');
+            RunPopup.add(RunAndTimeListItem);
             RunningRunButton.Popup = RunPopup;
 
             % 组装 Column 和 Button
@@ -225,8 +226,9 @@ classdef HomeTab < handle
             %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
+            import kssolv.ui.util.GetIcon
 
             % 创建 Environment Section
             section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));
@@ -238,18 +240,18 @@ classdef HomeTab < handle
             column4 = Column();
 
             % 创建 Button
-            EnvironmentSettingsButton = CreatButton('push', 'EnvironmentSettings', section.Tag, Icon.SETTINGS_24);
-            EnvironmentRemoteButton = CreatButton('split', 'EnvironmentRemote', section.Tag, Icon.PROPERTIES_24);
-            EnvironmentParallelButton = CreatButton('push', 'EnvironmentParallel', section.Tag, Icon.PARALLEL_24);
-            EnvironmentExtraButton = CreatButton('split', 'EnvironmentExtra', section.Tag, Icon.TOOLS_24);
+            EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, 'settings');
+            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'matlabCloud');
+            EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
+            EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
             
             % 创建并组装 PopupList(下拉菜单)
             RemotePopup = PopupList();
             ExtraPopup = PopupList();
-            ConnectToCluster = CreateListItem('ConnectToCluster', section.Tag, 'none');
-            GetExtraFeature = CreateListItem('GetExtraFeature', section.Tag, 'none');
-            RemotePopup.add(ConnectToCluster);
-            ExtraPopup.add(GetExtraFeature);
+            ConnectToClusterListItem = CreateListItem('default', 'ConnectToCluster', section.Tag, 0, 'new_cloud');
+            GetExtraFeatureListItem = CreateListItem('default', 'GetExtraFeature', section.Tag, 0, 'addOnsSB');
+            RemotePopup.add(ConnectToClusterListItem);
+            ExtraPopup.add(GetExtraFeatureListItem);
             EnvironmentRemoteButton.Popup = RemotePopup;
             EnvironmentExtraButton.Popup = ExtraPopup;
         
@@ -274,7 +276,7 @@ classdef HomeTab < handle
             %CREATERESOURCESECTION 创建"资源"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Resource Section
@@ -287,25 +289,26 @@ classdef HomeTab < handle
             column4 = Column();
 
             % 创建 Button
-            ResourceLibraryButton = CreatButton('push', 'ResourceLibrary', section.Tag, Icon.COMPARE_24);
-            ResourceCommunityButton = CreatButton('push', 'ResourceCommunity', section.Tag, Icon.PUBLISH_24);
-            ResourceHelpButton = CreatButton('split', 'ResourceHelp', section.Tag, Icon.HELP_24);
-            ResourceSupportButton = CreatButton('push', 'ResourceSupport', section.Tag, Icon.HELP_24);
+            ResourceLibraryButton = CreateButton('push', 'ResourceLibrary', section.Tag, 'documentation');
+            ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, 'community');
+            ResourceHelpButton = CreateButton('split', 'ResourceHelp', section.Tag, 'help');
+            ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'helpRecolorUI');
             
             % 创建并组装 PopupList(下拉菜单)
             HelpPopup = PopupList();
-            OpenDocument = CreateListItem('OpenDocument', section.Tag, 'none');
-            OfficialSite = CreateListItem('OfficialSite', section.Tag, 'none');
-            CheckUpdate = CreateListItem('CheckUpdate', section.Tag, 'none');
-            CheckLicense = CreateListItem('CheckLicense', section.Tag, 'none');
-            TermsOfUse = CreateListItem('TermsOfUse', section.Tag, 'none');
-            AboutUs = CreateListItem('AboutUs', section.Tag, 'none');
-            HelpPopup.add(OpenDocument);
-            HelpPopup.add(OfficialSite);
-            HelpPopup.add(CheckUpdate);
-            HelpPopup.add(CheckLicense);
-            HelpPopup.add(TermsOfUse);
-            HelpPopup.add(AboutUs);
+            OpenDocumentListItem = CreateListItem('default', 'OpenDocument', section.Tag, 0, 'documentList');
+            OfficialSiteListItem = CreateListItem('default', 'OfficialSite', section.Tag, 0, 'link');
+            CheckUpdateListItem = CreateListItem('default', 'CheckUpdate', section.Tag);
+            CheckLicenseListItem = CreateListItem('default', 'CheckLicense', section.Tag);
+            TermsOfUseListItem = CreateListItem('default', 'TermsOfUse', section.Tag);
+            AboutUsListItem = CreateListItem('default', 'AboutUs', section.Tag);
+            HelpPopup.add(OpenDocumentListItem);
+            HelpPopup.add(OfficialSiteListItem);
+            HelpPopup.add(PopupListHeader(''));
+            HelpPopup.add(CheckUpdateListItem);
+            HelpPopup.add(CheckLicenseListItem);
+            HelpPopup.add(TermsOfUseListItem);
+            HelpPopup.add(AboutUsListItem);
             ResourceHelpButton.Popup = HelpPopup;
 
             % 组装 Column 和 Button

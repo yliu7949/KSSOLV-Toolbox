@@ -39,7 +39,7 @@ classdef TabTest < handle
             %CREATETESTSECTION 创建"测试"小节，并添加到 TestTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             % 创建 Test Section
             section = Section(message("KSSOLV:toolbox:ProjectSectionTitle"));
             section.Tag = 'ProjectSection';
@@ -48,9 +48,9 @@ classdef TabTest < handle
             column2 = Column();
             column3 = Column();
             % 测试不同种类的 Button
-            ProjectOpenButton = CreatButton('push', 'ProjectOpen', section.Tag, Icon.OPEN_24);
-            ProjectModelButton = CreatButton('dropdown', 'ProjectModel', section.Tag, Icon.IMPORT_24);
-            ProjectSaveButton = CreatButton('split', 'ProjectSave', section.Tag, Icon.SAVE_24);
+            ProjectOpenButton = CreateButton('push', 'FileProject', section.Tag, 'saved');
+            ProjectModelButton = CreateButton('dropdown', 'FileProject', section.Tag, 'add_file_16');
+            ProjectSaveButton = CreateButton('split', 'FileProject', section.Tag, Icon.NEW_24);
             % 创建 ListItem 实例化对象
             % 创建 item1
             label1 = 'test111111111111111';

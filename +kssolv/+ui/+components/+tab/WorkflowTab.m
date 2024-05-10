@@ -36,6 +36,7 @@ classdef WorkflowTab < handle
             createNodeSection(this);
             createZoomSection(this);
             createSettingsSection(this);
+            % createTestGallerySection(this);
         end
 
         function connectTab(~)
@@ -53,7 +54,7 @@ classdef WorkflowTab < handle
             %CREATERUNNINGSECTION 创建"缩放"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Zoom Section
             section = Section(message("KSSOLV:toolbox:ZoomSectionTitle"));
@@ -64,9 +65,9 @@ classdef WorkflowTab < handle
             column3 = Column();
 
             % 创建 Button
-            ZoomInButton = CreatButton('push', 'ZoomIn', section.Tag, Icon.ZOOM_IN_24);
-            ZoomOutButton = CreatButton('push', 'ZoomOut', section.Tag, Icon.ZOOM_OUT_24);
-            ZoomResetButton = CreatButton('push', 'ZoomReset', section.Tag, Icon.REFRESH_24);
+            ZoomInButton = CreateButton('push', 'ZoomIn', section.Tag, 'zoomIn');
+            ZoomOutButton = CreateButton('push', 'ZoomOut', section.Tag, 'zoomOut');
+            ZoomResetButton = CreateButton('push', 'ZoomReset', section.Tag, 'refresh');
 
             % 组装 Column 和 Button
             column1.add(ZoomInButton);
@@ -86,7 +87,7 @@ classdef WorkflowTab < handle
             %CREATERUNNINGSECTION 创建"节点"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
 
             % 创建 Node Section
@@ -97,51 +98,37 @@ classdef WorkflowTab < handle
             column2 = Column();
 
             % 创建 Button
-            AddNoteButton = CreatButton('split', 'AddNote', section.Tag, Icon.ADD_24);
-            EditNoteButton = CreatButton('split', 'EditNote', section.Tag, Icon.LEGEND_24);
+            AddNoteButton = CreateButton('split', 'AddNote', section.Tag, 'addPointUI');
+            EditNoteButton = CreateButton('split', 'EditNote', section.Tag, 'edit_merge');
 
             % 创建并组装 PopupList(下拉菜单)
             AddNotePopup = PopupList();
             EditNotePopup = PopupList();
-            % Zeroslot = CreateListItem('OpenDocument', section.Tag, 'none');
-            % OneSlot = CreateListItem('OfficialSite', section.Tag, 'none');
-            % TwoSlot = CreateListItem('CheckUpdate', section.Tag, 'none');
-            % node00 = CreateListItem('CheckLicense', section.Tag, 'none');
-            % node01 = CreateListItem('TermsOfUse', section.Tag, 'none');
-            % node10 = CreateListItem('AboutUs', section.Tag, 'none');
-            % node11 = CreateListItem('CheckLicense', section.Tag, 'none');
-            % node12 = CreateListItem('TermsOfUse', section.Tag, 'none');
-            % node21 = CreateListItem('AboutUs', section.Tag, 'none');
-            % nodexy = CreateListItem('AboutUs', section.Tag, 'none');
-            % AddTopSlot = CreateListItem('AboutUs', section.Tag, 'none');
-            % DelTopSlot = CreateListItem('AboutUs', section.Tag, 'none');
-            % AddBottomSlot = CreateListItem('AboutUs', section.Tag, 'none');
-            % DelBottomSlot = CreateListItem('AboutUs', section.Tag, 'none');
-            node00 = CreateListItem('node00', section.Tag, 'none');
-            node01 = CreateListItem('node01', section.Tag, 'none');
-            node10 = CreateListItem('node10', section.Tag, 'none');
-            node11 = CreateListItem('node11', section.Tag, 'none');
-            node12 = CreateListItem('node12', section.Tag, 'none');
-            node21 = CreateListItem('node21', section.Tag, 'none');
-            nodexy = CreateListItem('nodexy', section.Tag, 'none');
-            AddTopSlot = CreateListItem('AddTopSlot', section.Tag, 'none');
-            DelTopSlot = CreateListItem('DelTopSlot', section.Tag, 'none');
-            AddBottomSlot = CreateListItem('AddBottomSlot', section.Tag, 'none');
-            DelBottomSlot = CreateListItem('DelBottomSlot', section.Tag, 'none');
-            AddNotePopup.add(node00);
+            node00ListItem = CreateListItem('default', 'node00', section.Tag, 0);
+            node01ListItem = CreateListItem('default', 'node01', section.Tag, 0);
+            node10ListItem = CreateListItem('default', 'node10', section.Tag, 0);
+            node11ListItem = CreateListItem('default', 'node11', section.Tag, 0);
+            node12ListItem = CreateListItem('default', 'node12', section.Tag, 0);
+            node21ListItem = CreateListItem('default', 'node21', section.Tag, 0);
+            nodexyListItem = CreateListItem('default', 'nodexy', section.Tag, 0);
+            AddTopSlotListItem = CreateListItem('default', 'AddTopSlot', section.Tag, 0);
+            DelTopSlotListItem = CreateListItem('default', 'DelTopSlot', section.Tag, 0);
+            AddBottomSlotListItem = CreateListItem('default', 'AddBottomSlot', section.Tag, 0);
+            DelBottomSlotListItem = CreateListItem('default', 'DelBottomSlot', section.Tag, 0);
+            AddNotePopup.add(node00ListItem);
             AddNotePopup.addSeparator;
-            AddNotePopup.add(node01);
-            AddNotePopup.add(node10);
+            AddNotePopup.add(node01ListItem);
+            AddNotePopup.add(node10ListItem);
             AddNotePopup.addSeparator;
-            AddNotePopup.add(node11);
-            AddNotePopup.add(node12);
-            AddNotePopup.add(node21);
+            AddNotePopup.add(node11ListItem);
+            AddNotePopup.add(node12ListItem);
+            AddNotePopup.add(node21ListItem);
             AddNotePopup.addSeparator;
-            AddNotePopup.add(nodexy);
-            EditNotePopup.add(AddTopSlot);
-            EditNotePopup.add(DelTopSlot);
-            EditNotePopup.add(AddBottomSlot);
-            EditNotePopup.add(DelBottomSlot);
+            AddNotePopup.add(nodexyListItem);
+            EditNotePopup.add(AddTopSlotListItem);
+            EditNotePopup.add(DelTopSlotListItem);
+            EditNotePopup.add(AddBottomSlotListItem);
+            EditNotePopup.add(DelBottomSlotListItem);
             AddNoteButton.Popup = AddNotePopup;
             EditNoteButton.Popup = EditNotePopup;
 
@@ -161,7 +148,7 @@ classdef WorkflowTab < handle
             %CREATESAVESECTION 创建"保存"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Save Section
             section = Section(message("KSSOLV:toolbox:SaveSectionTitle"));
@@ -170,7 +157,7 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            SaveWorkflowAsTemplateButton = CreatButton('push', 'SaveWorkflowAsTemplate', section.Tag, Icon.SAVE_24);
+            SaveWorkflowAsTemplateButton = CreateButton('push', 'SaveWorkflowAsTemplate', section.Tag, 'save_sourceControlChanges');
 
             % 组装 Column 和 Button
             column1.add(SaveWorkflowAsTemplateButton);
@@ -185,7 +172,7 @@ classdef WorkflowTab < handle
             %CREATEOPERATIONSECTION 创建"操作"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Operation Section
             section = Section(message("KSSOLV:toolbox:OperationSectionTitle"));
@@ -194,8 +181,8 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            OperationUndoButton = CreatButton('push', 'OperationUndo', section.Tag, Icon.UNDO_16);
-            OperationRedoButton = CreatButton('push', 'OperationRedo', section.Tag, Icon.REDO_16);
+            OperationUndoButton = CreateButton('push', 'OperationUndo', section.Tag, 'undo');
+            OperationRedoButton = CreateButton('push', 'OperationRedo', section.Tag, 'redo');
 
             % 组装 Column 和 Button
             column1.add(OperationUndoButton);
@@ -209,10 +196,10 @@ classdef WorkflowTab < handle
         end
 
         function createSettingsSection(this) 
-            %CREATESAVESECTION 创建"设置"小节，并添加到 WorkflowTab 中
+            %CREATESETTINGSSECTION 创建"设置"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Settings Section
             section = Section(message("KSSOLV:toolbox:SettingsSectionTitle"));
@@ -221,7 +208,7 @@ classdef WorkflowTab < handle
             column1 = Column();
 
             % 创建 Button
-            SetNodeButton = CreatButton('push', 'SetNode', section.Tag, Icon.SETTINGS_24);
+            SetNodeButton = CreateButton('push', 'SetNode', section.Tag, 'settings_decisionTreeMultiple');
 
             % 组装 Column 和 Button
             column1.add(SetNodeButton);
@@ -236,10 +223,11 @@ classdef WorkflowTab < handle
             %CREATEPLOTSECTION 创建"绘图"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreatButton
+            import kssolv.ui.util.CreateButton
 
             % 创建 Project Section
-            section = Section(message("KSSOLV:toolbox:PlotSectionTitle"));
+            % section = Section(message("KSSOLV:toolbox:PlotSectionTitle"));
+            section = Section('PLOTS');
             section.Tag = 'PlotSection';
             % 创建 Column
             column1 = Column();

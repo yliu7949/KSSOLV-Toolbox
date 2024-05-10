@@ -13,32 +13,32 @@
         <entry key="FileSectionTitle">File</entry>
         <entry key="FileProjectButtonLabel">Project</entry>
         <entry key="FileProjectButtonTooltip">Adjust project file</entry>
-        <entry key="OpenFileItemText">Open...</entry>
+        <entry key="OpenFileListItemLabel">Open...</entry>
         <entry key="FileSaveButtonLabel">Save</entry>
         <entry key="FileSaveButtonTooltip">Save project or structure</entry>
-        <entry key="SaveProjectItemText">Save current project</entry>
-        <entry key="SaveProjectAsItemText">Save project as...</entry>
-        <entry key="SaveStructureAsItemText">Save structure as...</entry>
+        <entry key="SaveProjectListItemLabel">Save current project</entry>
+        <entry key="SaveProjectAsListItemLabel">Save project as...</entry>
+        <entry key="SaveStructureAsListItemLabel">Save structure as...</entry>
         <entry key="FileCloseButtonLabel">Close</entry>
         <entry key="FileCloseButtonTooltip">Close current project</entry>
 
         <entry key="ProjectSectionTitle">Project</entry>
         <entry key="ProjectStructureButtonLabel">Structure</entry>
         <entry key="ProjectStructureButtonTooltip">Import/export structure</entry>
-        <entry key="ImportStructureFromFileItemText">Import structure from file...</entry>
-        <entry key="ImportStructureFromLinkItemText">Import structure from link...</entry>
-        <entry key="ImportStructureFromLibraryItemText">Import structure from material library...</entry>
-        <entry key="ImportStructureFromMatlabItemText">Import structure from MATLAB workspace...</entry>
+        <entry key="ImportStructureFromFileListItemLabel">Import structure from file...</entry>
+        <entry key="ImportStructureFromLinkListItemLabel">Import structure from link...</entry>
+        <entry key="ImportStructureFromLibraryListItemLabel">Import structure from material library...</entry>
+        <entry key="ImportStructureFromMatlabListItemLabel">Import structure from MATLAB workspace...</entry>
         <entry key="ProjectWorkflowButtonLabel">Workflow</entry>
         <entry key="ProjectWorkflowButtonTooltip">Edit workflow</entry>
-        <entry key="NewWorkflowItemText">New blank workflow</entry>
-        <entry key="ImportTemplateWorkflowItemText">Import workflow from template...</entry>
-        <entry key="ExportTemplateWorkflowItemText">Save workflow as template...</entry>
+        <entry key="NewWorkflowListItemLabel">New blank workflow</entry>
+        <entry key="ImportTemplateWorkflowListItemLabel">Import workflow from template...</entry>
+        <entry key="ExportTemplateWorkflowListItemLabel">Save workflow as template...</entry>
         <entry key="ProjectVariableButtonLabel">Variable</entry>
         <entry key="ProjectVariableButtonTooltip">Edit variable</entry>
-        <entry key="NewVariableItemText">Create new variable...</entry>
-        <entry key="ImportVariableFromFileItemText">Import variable from file...</entry>
-        <entry key="ImportVariableFromMATLABItemText">Import variable from MATLAB workspace...</entry>
+        <entry key="NewVariableListItemLabel">Create new variable...</entry>
+        <entry key="ImportVariableFromFileListItemLabel">Import variable from file...</entry>
+        <entry key="ImportVariableFromMATLABListItemLabel">Import variable from MATLAB workspace...</entry>
         
         <entry key="RunningSectionTitle">Running</entry>
         <entry key="RunningRunButtonLabel">Run</entry>
@@ -47,19 +47,20 @@
         <entry key="RunningStepButtonTooltip">Step through program</entry>   
         <entry key="RunningStopButtonLabel">Stop</entry>
         <entry key="RunningStopButtonTooltip">End program</entry>
-        <entry key="RunAndTimeItemText">Run and time</entry>
+        <entry key="RunAndTimeListItemLabel">Run and time</entry>
+        <entry key="RunAndTimeListItemTooltip">Run the code and probe to improve performance</entry>
         
         <entry key="EnvironmentSectionTitle">Environment</entry>
         <entry key="EnvironmentSettingsButtonLabel">Settings</entry>
         <entry key="EnvironmentSettingsButtonTooltip">Adjust settings</entry>
-        <entry key="EnvironmentRemoteButtonLabel">Remote computing</entry>
+        <entry key="EnvironmentRemoteButtonLabel">Remote</entry>
         <entry key="EnvironmentRemoteButtonTooltip">Connect to remote server</entry>
         <entry key="EnvironmentParallelButtonLabel">Parallel</entry>
         <entry key="EnvironmentParallelButtonTooltip">Set up parallel computing</entry>
-        <entry key="EnvironmentExtraButtonLabel">Additional Features</entry>
+        <entry key="EnvironmentExtraButtonLabel">Add-Ons</entry>
         <entry key="EnvironmentExtraButtonTooltip">Add additional features</entry>
-        <entry key="ConnectToClusterItemText">Connect to computing cluster...</entry>
-        <entry key="GetExtraFeatureItemText">Get additional features...</entry>
+        <entry key="ConnectToClusterListItemLabel">Connect to computing cluster...</entry>
+        <entry key="GetExtraFeatureListItemLabel">Get additional features...</entry>
 
         <entry key="ResourceSectionTitle">Resources</entry>
         <entry key="ResourceLibraryButtonLabel">Library</entry>
@@ -70,12 +71,12 @@
         <entry key="ResourceHelpButtonTooltip">Get help</entry>
         <entry key="ResourceSupportButtonLabel">Request Support</entry>
         <entry key="ResourceSupportButtonTooltip">Request technical support</entry>
-        <entry key="OpenDocumentItemText">Documents</entry>
-        <entry key="OfficialSiteItemText">Official Website</entry>
-        <entry key="CheckUpdateItemText">Check for updates</entry>
-        <entry key="CheckLicenseItemText">License</entry>
-        <entry key="TermsOfUseItemText">Terms of use</entry>
-        <entry key="AboutUsItemText">About KSSOLV</entry>
+        <entry key="OpenDocumentListItemLabel">Documents</entry>
+        <entry key="OfficialSiteListItemLabel">Official Website</entry>
+        <entry key="CheckUpdateListItemLabel">Check for updates</entry>
+        <entry key="CheckLicenseListItemLabel">License</entry>
+        <entry key="TermsOfUseListItemLabel">Terms of use</entry>
+        <entry key="AboutUsListItemLabel">About KSSOLV</entry>
         
         <entry key="OperationSectionTitle">Operation</entry>
         <entry key="OperationUndoButtonLabel">Undo</entry>
@@ -86,7 +87,7 @@
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">Workflow</entry>
         <entry key="SaveSectionTitle">Save</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as Workflow Template</entry>
+        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as</entry>
         <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
 
         <entry key="NodeSectionTitle">Nodes</entry>
@@ -94,17 +95,17 @@
         <entry key="AddNoteButtonTooltip">Add a new node</entry>
         <entry key="EditNoteButtonLabel">Edit Node</entry>
         <entry key="EditNoteButtonTooltip">Adjust selected node</entry>
-        <entry key="node00ItemText">Node 0-0</entry>
-        <entry key="node01ItemText">Node 0-1</entry>
-        <entry key="node10ItemText">Node 1-0</entry>
-        <entry key="node11ItemText">Node 1-1</entry>
-        <entry key="node12ItemText">Node 1-2</entry>
-        <entry key="node21ItemText">Node 2-1</entry>
-        <entry key="nodexyItemText">Node x-y</entry>
-        <entry key="AddTopSlotItemText">Add top connector</entry>
-        <entry key="DelTopSlotItemText">Remove top connector</entry>
-        <entry key="AddBottomSlotItemText">Add bottom connector</entry>
-        <entry key="DelBottomSlotItemText">Remove bottom connector</entry>
+        <entry key="node00ListItemLabel">Node 0-0</entry>
+        <entry key="node01ListItemLabel">Node 0-1</entry>
+        <entry key="node10ListItemLabel">Node 1-0</entry>
+        <entry key="node11ListItemLabel">Node 1-1</entry>
+        <entry key="node12ListItemLabel">Node 1-2</entry>
+        <entry key="node21ListItemLabel">Node 2-1</entry>
+        <entry key="nodexyListItemLabel">Node x-y</entry>
+        <entry key="AddTopSlotListItemLabel">Add top connector</entry>
+        <entry key="DelTopSlotListItemLabel">Remove top connector</entry>
+        <entry key="AddBottomSlotListItemLabel">Add bottom connector</entry>
+        <entry key="DelBottomSlotListItemLabel">Remove bottom connector</entry>
         
         <entry key="ZoomSectionTitle">Zoom</entry>
         <entry key="ZoomInButtonLabel">Zoom In</entry>

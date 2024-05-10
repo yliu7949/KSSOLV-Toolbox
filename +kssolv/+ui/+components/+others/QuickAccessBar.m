@@ -6,6 +6,8 @@ classdef QuickAccessBar < handle
 
     properties (Access = private)
         HelpButton
+        RedoButton
+        UndoButton
     end
 
     methods %(Access = protected)
@@ -21,10 +23,18 @@ classdef QuickAccessBar < handle
             this.HelpButton = matlab.ui.internal.toolstrip.qab.QABHelpButton();
             this.HelpButton.ButtonPushedFcn = @(varargin) doc('kssolv');
 
+            this.RedoButton = matlab.ui.internal.toolstrip.qab.QABRedoButton();
+            this.RedoButton.ButtonPushedFcn = @(varargin) disp('Redo called!');
+
+            this.UndoButton = matlab.ui.internal.toolstrip.qab.QABUndoButton();
+            this.UndoButton.ButtonPushedFcn = @(varargin) disp('Undo called!');
+
         end
 
         function addToAppContainer(this, appContainer)
             appContainer.add(this.HelpButton);
+            appContainer.add(this.RedoButton);
+            appContainer.add(this.UndoButton);
 
         end
     end
