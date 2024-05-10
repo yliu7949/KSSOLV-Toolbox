@@ -241,7 +241,7 @@ classdef HomeTab < handle
 
             % 创建 Button
             EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, 'settings');
-            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, GetIcon('remote'));
+            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'matlabCloud');
             EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
             EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
             

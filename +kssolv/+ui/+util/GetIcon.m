@@ -13,7 +13,7 @@ function iconPath = GetIcon(iconName, iconExt)
     %   版权 2024 合肥瀚海量子科技有限公司
 
 arguments
-    iconName
+    iconName {mustBeNonempty}
     iconExt = 'png'
 end
 
