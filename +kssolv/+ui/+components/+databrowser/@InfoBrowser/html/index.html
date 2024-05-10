@@ -78,14 +78,89 @@
 
 <script>
     let testData = `
-        {
-            "name": "Structure1(26876c86-2375-4887-b8b7-f63543149d2f)",
-            "label": "Structure1",
-            "createdAt": "2024-05-03 21:25:26",
-            "updatedAt": "2024-05-03 21:25:26",
-            "description": "None",
-            "data": []
-        }
+    {
+  "name": "BN(922ce463-a3e7-4bf3-963f-d96f23e774b0)",
+  "label": "BN",
+  "createdAt": "2024-05-10 21:48:31",
+  "updatedAt": "2024-05-10 21:48:31",
+  "description": "None",
+  "data": {
+    "filePath": "/Users/liu/Documents/kssolv-gui/+kssolv/+services/+fileparser/+test/CIF/BN.cif",
+    "KSSOLVSetupObject": {
+      "name": "BN",
+      "C": [
+        [
+          2.5032642,
+          0,
+          0
+        ],
+        [
+          0,
+          4.33218248,
+          0
+        ],
+        [
+          0,
+          0,
+          6.99063166
+        ]
+      ],
+      "atomList": [
+        "B",
+        "B",
+        "B",
+        "B",
+        "N",
+        "N",
+        "N",
+        "N"
+      ],
+      "xyzList": [
+        [
+          0,
+          0.000210760677652,
+          0
+        ],
+        [
+          0,
+          2.1663020006776521,
+          3.49531583
+        ],
+        [
+          1.2516321,
+          2.1663020006776521,
+          0
+        ],
+        [
+          1.2516321,
+          0.000210760677652,
+          3.49531583
+        ],
+        [
+          0,
+          2.8880552554165235,
+          0
+        ],
+        [
+          0,
+          0.72196401541652322,
+          3.49531583
+        ],
+        [
+          1.2516321,
+          0.72196401541652322,
+          0
+        ],
+        [
+          1.2516321,
+          2.8880552554165235,
+          3.49531583
+        ]
+      ]
+    },
+    "rawFileContent": "# generated using pymatgen\\ndata_BN\\n_symmetry_space_group_name_H-M   'P 1'\\n_cell_length_a   2.50326420\\n_cell_length_b   4.33218248\\n_cell_length_c   6.99063166\\n_cell_angle_alpha   90.00000000\\n_cell_angle_beta   90.00000000\\n_cell_angle_gamma   90.00000000\\n_symmetry_Int_Tables_number   1\\n_chemical_formula_structural   BN\\n_chemical_formula_sum   'B4 N4'\\n_cell_volume   75.81058530\\n_cell_formula_units_Z   4\\nloop_\\n _symmetry_equiv_pos_site_id\\n _symmetry_equiv_pos_as_xyz\\n  1  'x, y, z'\\nloop_\\n _atom_type_symbol\\n _atom_type_oxidation_number\\n  B3+  3.0\\n  N3-  -3.0\\nloop_\\n _atom_site_type_symbol\\n _atom_site_label\\n _atom_site_symmetry_multiplicity\\n _atom_site_fract_x\\n _atom_site_fract_y\\n _atom_site_fract_z\\n _atom_site_occupancy\\n  B3+  B0  1  0.00000000  0.00004865  0.00000000  1\\n  B3+  B1  1  0.00000000  0.50004865  0.50000000  1\\n  B3+  B2  1  0.50000000  0.50004865  0.00000000  1\\n  B3+  B3  1  0.50000000  0.00004865  0.50000000  1\\n  N3-  N4  1  0.00000000  0.66665134  0.00000000  1\\n  N3-  N5  1  0.00000000  0.16665134  0.50000000  1\\n  N3-  N6  1  0.50000000  0.16665134  0.00000000  1\\n  N3-  N7  1  0.50000000  0.66665134  0.50000000  1"
+  }
+}
     `;
     let MATLAB;
 
@@ -170,13 +245,13 @@
         dataContent.appendChild(fieldContent);
     }
 
-    /*
+
     window.onload = function() {
         testData = JSON.parse(testData);
         loadInfoContent();
         loadDataContent();
     };
-     */
+
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
