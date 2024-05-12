@@ -266,23 +266,36 @@ classdef WorkflowTab < handle
 
         %% 回调函数
         function callbackOperationUndoButton(~)
-            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
-            tag = appContainer.LastSelectedDocument.tag;
-            document = appContainer.getDocument('DocumentGroup', tag);
-            h = document.Figure.Children.Children;
-            h.sendEventToHTMLSource('workflowUndo', ...
-                jsonencode('', "PrettyPrint", true));
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowUndo');
         end
 
         function callbackOperationRedoButton(~)
-            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
-            tag = appContainer.LastSelectedDocument.tag;
-            document = appContainer.getDocument('DocumentGroup', tag);
-            if class(document) == "kssolv.ui.components.figuredocument.Workflow"
-                document.sendEventToHtml('workflowRedo');
-            end
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRedo');
         end
 
+    end
+
+    %% 静态私有函数
+    methods (Static, Access = private)
+        function sendEventToWorkflowUI(eventName, eventData)
+            arguments
+                eventName string {mustBeNonempty} 
+                eventData = ''
+            end
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            documentGroup = appContainer.getDocumentGroup('DocumentGroup');
+            
+            if isempty(documentGroup.LastSelected.tag)
+                % 说明该 documentGroup 下没有 document 被选中
+                return
+            end
+
+            tag = documentGroup.LastSelected.tag;
+            document = appContainer.getDocument('DocumentGroup', tag);
+            h = document.Figure.Children.Children;
+            h.sendEventToHTMLSource(eventName, ...
+                jsonencode(eventData, "PrettyPrint", true));
+        end
     end
 
     methods (Static, Hidden)
