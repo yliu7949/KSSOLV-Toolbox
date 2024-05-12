@@ -91,10 +91,10 @@
         <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
 
         <entry key="NodeSectionTitle">Nodes</entry>
-        <entry key="AddNoteButtonLabel">Add Node</entry>
-        <entry key="AddNoteButtonTooltip">Add a new node</entry>
-        <entry key="EditNoteButtonLabel">Edit Node</entry>
-        <entry key="EditNoteButtonTooltip">Adjust selected node</entry>
+        <entry key="AddNodeButtonLabel">Add Node</entry>
+        <entry key="AddNodeButtonTooltip">Add a new node</entry>
+        <entry key="EditNodeButtonLabel">Edit Node</entry>
+        <entry key="EditNodeButtonTooltip">Adjust selected node</entry>
         <entry key="node00ListItemLabel">Node 0-0</entry>
         <entry key="node01ListItemLabel">Node 0-1</entry>
         <entry key="node10ListItemLabel">Node 1-0</entry>
@@ -102,10 +102,10 @@
         <entry key="node12ListItemLabel">Node 1-2</entry>
         <entry key="node21ListItemLabel">Node 2-1</entry>
         <entry key="nodexyListItemLabel">Node x-y</entry>
-        <entry key="AddTopSlotListItemLabel">Add top connector</entry>
-        <entry key="DelTopSlotListItemLabel">Remove top connector</entry>
-        <entry key="AddBottomSlotListItemLabel">Add bottom connector</entry>
-        <entry key="DelBottomSlotListItemLabel">Remove bottom connector</entry>
+        <entry key="AddTopPortListItemLabel">Add top port</entry>
+        <entry key="RemoveTopPortListItemLabel">Remove top port</entry>
+        <entry key="AddBottomPortListItemLabel">Add bottom port</entry>
+        <entry key="RemoveBottomPortListItemLabel">Remove bottom port</entry>
         
         <entry key="ZoomSectionTitle">Zoom</entry>
         <entry key="ZoomInButtonLabel">Zoom In</entry>

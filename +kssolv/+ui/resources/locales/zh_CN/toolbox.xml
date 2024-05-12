@@ -91,10 +91,10 @@
         <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
 
         <entry key="NodeSectionTitle">节点</entry>
-        <entry key="AddNoteButtonLabel">新增节点</entry>
-        <entry key="AddNoteButtonTooltip">增加一个新节点</entry>
-        <entry key="EditNoteButtonLabel">编辑节点</entry>
-        <entry key="EditNoteButtonTooltip">调整选中节点</entry>
+        <entry key="AddNodeButtonLabel">新增节点</entry>
+        <entry key="AddNodeButtonTooltip">增加一个新节点</entry>
+        <entry key="EditNodeButtonLabel">编辑节点</entry>
+        <entry key="EditNodeButtonTooltip">调整选中节点</entry>
         <entry key="node00ListItemLabel">0-0 节点</entry>
         <entry key="node01ListItemLabel">0-1 节点</entry>
         <entry key="node10ListItemLabel">1-0 节点</entry>
@@ -102,10 +102,10 @@
         <entry key="node12ListItemLabel">1-2 节点</entry>
         <entry key="node21ListItemLabel">2-1 节点</entry>
         <entry key="nodexyListItemLabel">x-y 节点</entry>
-        <entry key="AddTopSlotListItemLabel">增加上连接桩</entry>
-        <entry key="DelTopSlotListItemLabel">减少上连接桩</entry>
-        <entry key="AddBottomSlotListItemLabel">增加下连接桩</entry>
-        <entry key="DelBottomSlotListItemLabel">减少下连接桩</entry>
+        <entry key="AddTopPortListItemLabel">增加上连接桩</entry>
+        <entry key="RemoveTopPortListItemLabel">减少上连接桩</entry>
+        <entry key="AddBottomPortListItemLabel">增加下连接桩</entry>
+        <entry key="RemoveBottomPortListItemLabel">减少下连接桩</entry>
         
         <entry key="ZoomSectionTitle">缩放</entry>
         <entry key="ZoomInButtonLabel">放大</entry>

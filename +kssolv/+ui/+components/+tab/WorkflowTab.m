@@ -46,6 +46,24 @@ classdef WorkflowTab < handle
                 'ButtonPushed', @(src, data) callbackOperationUndoButton(this));
             addlistener(this.Widgets.OperationSection.OperationRedoButton, ...
                 'ButtonPushed', @(src, data) callbackOperationRedoButton(this));
+            % Node Section
+            addlistener(this.Widgets.NodeSection.AddNodeButton, ...
+                'ButtonPushed', @(src, data) callbackAddNodeButton(this));
+            addlistener(this.Widgets.NodeSection.EditNodeButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackAddTopPortListItem(this));
+            addlistener(this.Widgets.NodeSection.EditNodeButton.Popup.getChildByIndex(2), ...
+                'ItemPushed', @(src, data) callbackRemoveTopPortListItem(this));
+            addlistener(this.Widgets.NodeSection.EditNodeButton.Popup.getChildByIndex(3), ...
+                'ItemPushed', @(src, data) callbackAddBottomPortListItem(this));
+            addlistener(this.Widgets.NodeSection.EditNodeButton.Popup.getChildByIndex(4), ...
+                'ItemPushed', @(src, data) callbackRemoveBottomPortListItem(this));
+            % Zoom Section
+            addlistener(this.Widgets.ZoomSection.ZoomInButton, ...
+                'ButtonPushed', @(src, data) callbackZoomInButton(this));
+            addlistener(this.Widgets.ZoomSection.ZoomOutButton, ...
+                'ButtonPushed', @(src, data) callbackZoomOutButton(this));
+            addlistener(this.Widgets.ZoomSection.ZoomResetButton, ...
+                'ButtonPushed', @(src, data) callbackZoomResetButton(this));
         end
 
         function setTabActivated(~)
@@ -55,100 +73,6 @@ classdef WorkflowTab < handle
 
     methods (Access = private)
         %% 创建 Sections
-        function createZoomSection(this) 
-            %CREATERUNNINGSECTION 创建"缩放"小节，并添加到 WorkflowTab 中
-            import matlab.ui.internal.toolstrip.*
-            import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreateButton
-
-            % 创建 Zoom Section
-            section = Section(message("KSSOLV:toolbox:ZoomSectionTitle"));
-            section.Tag = 'ZoomSection';
-            % 创建 Column
-            column1 = Column();
-            column2 = Column();
-            column3 = Column();
-
-            % 创建 Button
-            ZoomInButton = CreateButton('push', 'ZoomIn', section.Tag, 'zoomIn');
-            ZoomOutButton = CreateButton('push', 'ZoomOut', section.Tag, 'zoomOut');
-            ZoomResetButton = CreateButton('push', 'ZoomReset', section.Tag, 'refresh');
-
-            % 组装 Column 和 Button
-            column1.add(ZoomInButton);
-            column2.add(ZoomOutButton);
-            column3.add(ZoomResetButton);
-            section.add(column1);
-            section.add(column2);
-            section.add(column3);
-            this.Tab.add(section);
-
-            % 添加到 Widgets
-            this.Widgets.ZoomSection = struct('ZoomInButton', ZoomInButton, ...
-                'ZoomOutButton', ZoomOutButton, 'ZoomResetButton', ZoomResetButton);
-        end
-
-        function createNodeSection(this) 
-            %CREATERUNNINGSECTION 创建"节点"小节，并添加到 WorkflowTab 中
-            import matlab.ui.internal.toolstrip.*
-            import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.CreateButton
-            import kssolv.ui.util.CreateListItem
-
-            % 创建 Node Section
-            section = Section(message("KSSOLV:toolbox:NodeSectionTitle"));
-            section.Tag = 'NodeSection';
-            % 创建 Column
-            column1 = Column();
-            column2 = Column();
-
-            % 创建 Button
-            AddNoteButton = CreateButton('split', 'AddNote', section.Tag, 'addPointUI');
-            EditNoteButton = CreateButton('split', 'EditNote', section.Tag, 'edit_merge');
-
-            % 创建并组装 PopupList(下拉菜单)
-            AddNotePopup = PopupList();
-            EditNotePopup = PopupList();
-            node00ListItem = CreateListItem('default', 'node00', section.Tag, 0);
-            node01ListItem = CreateListItem('default', 'node01', section.Tag, 0);
-            node10ListItem = CreateListItem('default', 'node10', section.Tag, 0);
-            node11ListItem = CreateListItem('default', 'node11', section.Tag, 0);
-            node12ListItem = CreateListItem('default', 'node12', section.Tag, 0);
-            node21ListItem = CreateListItem('default', 'node21', section.Tag, 0);
-            nodexyListItem = CreateListItem('default', 'nodexy', section.Tag, 0);
-            AddTopSlotListItem = CreateListItem('default', 'AddTopSlot', section.Tag, 0);
-            DelTopSlotListItem = CreateListItem('default', 'DelTopSlot', section.Tag, 0);
-            AddBottomSlotListItem = CreateListItem('default', 'AddBottomSlot', section.Tag, 0);
-            DelBottomSlotListItem = CreateListItem('default', 'DelBottomSlot', section.Tag, 0);
-            AddNotePopup.add(node00ListItem);
-            AddNotePopup.addSeparator;
-            AddNotePopup.add(node01ListItem);
-            AddNotePopup.add(node10ListItem);
-            AddNotePopup.addSeparator;
-            AddNotePopup.add(node11ListItem);
-            AddNotePopup.add(node12ListItem);
-            AddNotePopup.add(node21ListItem);
-            AddNotePopup.addSeparator;
-            AddNotePopup.add(nodexyListItem);
-            EditNotePopup.add(AddTopSlotListItem);
-            EditNotePopup.add(DelTopSlotListItem);
-            EditNotePopup.add(AddBottomSlotListItem);
-            EditNotePopup.add(DelBottomSlotListItem);
-            AddNoteButton.Popup = AddNotePopup;
-            EditNoteButton.Popup = EditNotePopup;
-
-            % 组装 Column 和 Button
-            column1.add(AddNoteButton);
-            column2.add(EditNoteButton);
-            section.add(column1);
-            section.add(column2);
-            this.Tab.add(section);
-
-            % 添加到 Widgets
-            this.Widgets.NodeSection = struct('AddNoteButton', AddNoteButton, ...
-                'EditNoteButton', EditNoteButton);
-        end
-
         function createSaveSection(this) 
             %CREATESAVESECTION 创建"保存"小节，并添加到 WorkflowTab 中
             import matlab.ui.internal.toolstrip.*
@@ -198,6 +122,100 @@ classdef WorkflowTab < handle
             % 添加到 Widgets
             this.Widgets.OperationSection = struct('OperationUndoButton', OperationUndoButton, ...
                 'OperationRedoButton', OperationRedoButton);
+        end
+
+        function createNodeSection(this) 
+            %CREATERUNNINGSECTION 创建"节点"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreateButton
+            import kssolv.ui.util.CreateListItem
+
+            % 创建 Node Section
+            section = Section(message("KSSOLV:toolbox:NodeSectionTitle"));
+            section.Tag = 'NodeSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+
+            % 创建 Button
+            AddNodeButton = CreateButton('split', 'AddNode', section.Tag, 'addPointUI');
+            EditNodeButton = CreateButton('split', 'EditNode', section.Tag, 'edit_merge');
+
+            % 创建并组装 PopupList(下拉菜单)
+            AddNodePopup = PopupList();
+            EditNodePopup = PopupList();
+            node00ListItem = CreateListItem('default', 'node00', section.Tag, 0);
+            node01ListItem = CreateListItem('default', 'node01', section.Tag, 0);
+            node10ListItem = CreateListItem('default', 'node10', section.Tag, 0);
+            node11ListItem = CreateListItem('default', 'node11', section.Tag, 0);
+            node12ListItem = CreateListItem('default', 'node12', section.Tag, 0);
+            node21ListItem = CreateListItem('default', 'node21', section.Tag, 0);
+            nodexyListItem = CreateListItem('default', 'nodexy', section.Tag, 0);
+            AddTopPortListItem = CreateListItem('default', 'AddTopPort', section.Tag, 0);
+            RemoveTopPortListItem = CreateListItem('default', 'RemoveTopPort', section.Tag, 0);
+            AddBottomPortListItem = CreateListItem('default', 'AddBottomPort', section.Tag, 0);
+            RemoveBottomPortListItem = CreateListItem('default', 'RemoveBottomPort', section.Tag, 0);
+            AddNodePopup.add(node00ListItem);
+            AddNodePopup.addSeparator;
+            AddNodePopup.add(node01ListItem);
+            AddNodePopup.add(node10ListItem);
+            AddNodePopup.addSeparator;
+            AddNodePopup.add(node11ListItem);
+            AddNodePopup.add(node12ListItem);
+            AddNodePopup.add(node21ListItem);
+            AddNodePopup.addSeparator;
+            AddNodePopup.add(nodexyListItem);
+            EditNodePopup.add(AddTopPortListItem);
+            EditNodePopup.add(RemoveTopPortListItem);
+            EditNodePopup.add(AddBottomPortListItem);
+            EditNodePopup.add(RemoveBottomPortListItem);
+            AddNodeButton.Popup = AddNodePopup;
+            EditNodeButton.Popup = EditNodePopup;
+
+            % 组装 Column 和 Button
+            column1.add(AddNodeButton);
+            column2.add(EditNodeButton);
+            section.add(column1);
+            section.add(column2);
+            this.Tab.add(section);
+
+            % 添加到 Widgets
+            this.Widgets.NodeSection = struct('AddNodeButton', AddNodeButton, ...
+                'EditNodeButton', EditNodeButton);
+        end
+
+        function createZoomSection(this) 
+            %CREATERUNNINGSECTION 创建"缩放"小节，并添加到 WorkflowTab 中
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.CreateButton
+
+            % 创建 Zoom Section
+            section = Section(message("KSSOLV:toolbox:ZoomSectionTitle"));
+            section.Tag = 'ZoomSection';
+            % 创建 Column
+            column1 = Column();
+            column2 = Column();
+            column3 = Column();
+
+            % 创建 Button
+            ZoomInButton = CreateButton('push', 'ZoomIn', section.Tag, 'zoomIn');
+            ZoomOutButton = CreateButton('push', 'ZoomOut', section.Tag, 'zoomOut');
+            ZoomResetButton = CreateButton('push', 'ZoomReset', section.Tag, 'refresh');
+
+            % 组装 Column 和 Button
+            column1.add(ZoomInButton);
+            column2.add(ZoomOutButton);
+            column3.add(ZoomResetButton);
+            section.add(column1);
+            section.add(column2);
+            section.add(column3);
+            this.Tab.add(section);
+
+            % 添加到 Widgets
+            this.Widgets.ZoomSection = struct('ZoomInButton', ZoomInButton, ...
+                'ZoomOutButton', ZoomOutButton, 'ZoomResetButton', ZoomResetButton);
         end
 
         function createSettingsSection(this) 
@@ -273,6 +291,37 @@ classdef WorkflowTab < handle
             kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRedo');
         end
 
+        function callbackAddNodeButton(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddNode');
+        end
+
+        function callbackAddTopPortListItem(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddTopPort');
+        end
+
+        function callbackRemoveTopPortListItem(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRemoveTopPort');
+        end
+
+        function callbackAddBottomPortListItem(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddBottomPort');
+        end
+
+        function callbackRemoveBottomPortListItem(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRemoveBottomPort');
+        end
+
+        function callbackZoomInButton(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomIn');
+        end
+
+        function callbackZoomOutButton(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomOut');
+        end
+
+        function callbackZoomResetButton(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomToFit');
+        end
     end
 
     %% 静态私有函数
