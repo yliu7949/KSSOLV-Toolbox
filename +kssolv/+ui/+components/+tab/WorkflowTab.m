@@ -39,8 +39,13 @@ classdef WorkflowTab < handle
             % createTestGallerySection(this);
         end
 
-        function connectTab(~)
+        function connectTab(this)
             %CONNECTTAB 为按钮等组件添加监听器和回调函数
+            % Operation Section
+            addlistener(this.Widgets.OperationSection.OperationUndoButton, ...
+                'ButtonPushed', @(src, data) callbackOperationUndoButton(this));
+            addlistener(this.Widgets.OperationSection.OperationRedoButton, ...
+                'ButtonPushed', @(src, data) callbackOperationRedoButton(this));
         end
 
         function setTabActivated(~)
@@ -258,6 +263,26 @@ classdef WorkflowTab < handle
             % 添加到 Widgets
             this.Widgets.TestGallerySection = struct('Gallery', gallery);
         end
+
+        %% 回调函数
+        function callbackOperationUndoButton(~)
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            tag = appContainer.LastSelectedDocument.tag;
+            document = appContainer.getDocument('DocumentGroup', tag);
+            h = document.Figure.Children.Children;
+            h.sendEventToHTMLSource('workflowUndo', ...
+                jsonencode('', "PrettyPrint", true));
+        end
+
+        function callbackOperationRedoButton(~)
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            tag = appContainer.LastSelectedDocument.tag;
+            document = appContainer.getDocument('DocumentGroup', tag);
+            if class(document) == "kssolv.ui.components.figuredocument.Workflow"
+                document.sendEventToHtml('workflowRedo');
+            end
+        end
+
     end
 
     methods (Static, Hidden)

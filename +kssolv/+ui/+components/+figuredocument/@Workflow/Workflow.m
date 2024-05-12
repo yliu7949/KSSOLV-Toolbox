@@ -28,11 +28,20 @@ classdef Workflow
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'index.html');
-            uihtml(g, "HTMLSource", htmlFile);
+            h = uihtml(g, "HTMLSource", htmlFile);
+
+            % 接收从 HTML 组件触发的事件
+            h.HTMLEventReceivedFcn = @this.eventReceiver;
 
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             appContainer.add(document);
+        end
+    end
+
+    methods (Access = private)
+        function eventReceiver(~, ~, event)
+            disp(event.HTMLEventName);
         end
     end
 
