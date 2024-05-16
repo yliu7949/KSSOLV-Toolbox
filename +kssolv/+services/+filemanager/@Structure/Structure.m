@@ -16,10 +16,11 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
         
         function showMoleculerDisplay(this)
             % 使用 Data 数据中的文件路径以打开对应结构的渲染界面
-            kssolv.ui.components.figuredocument.MoleculerDisplay(this.data.rawFileContent).Display();
+            kssolv.ui.components.figuredocument.MoleculerDisplay(this.data.rawFileContent, this.name).Display();
         end
 
         function importedFileCount = importStructureFromFile(this)
+            % 打开导入结构文件对话框，创建并添加 Structure 节点，渲染结构
             import kssolv.ui.util.Localizer.message
             [files, path] = uigetfile({'*.cif';'*.vasp';'*.*'}, ...
                 message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
@@ -52,7 +53,7 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
         
                     % 渲染结构文件中的结构
                     cifFileContent = fileread(fullPath);
-                    displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(cifFileContent);
+                    displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(cifFileContent, structure.name);
                     displayObj.Display();
                 end
             end

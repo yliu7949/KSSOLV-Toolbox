@@ -5,8 +5,7 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties (Hidden)
-        layout struct
-        layoutJSON string
+        graphJSON string
         editedNode
     end
     
@@ -18,20 +17,20 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
                 type string = "Workflow"
             end
             this = this@kssolv.services.filemanager.AbstractItem(label, type);
-            % nodes 列表存储 UI 层的 node 类，每个 node 类包含 panel 和 code
-            % workflowTree 是一个 n*2 的元胞数组，存储 node 名以表示工作流的执行顺序
-            this.data = struct("nodes", [], "workflowTree", cell(0,2));
         end
 
-        function updateLayoutJSON(this, newJSON)
-            % 更新
-            this.layoutJSON = newJSON;
-            try
-                this.layout = jsondecode(newJSON);
-            catch ME
-                error('KSSOLV:FileManager:Workflow:LayoutJSONDecodeError', ...
-                      'Error decoding the JSON from Workflow component: %s', ME.message);
-            end
+        function showWorkflowDisplay(this)
+            % 使用 graphJSON 以打开对应工作流的 document
+            kssolv.ui.components.figuredocument.Workflow(this.graphJSON, this.name).Display();
+        end
+
+        function createWorkflowItem(this)
+            % 创建并添加工作流节点
+            workflow = kssolv.services.filemanager.Workflow();
+            workflow.graphJSON = '';
+            this.addChildrenItem(workflow);
+            displayObj = kssolv.ui.components.figuredocument.Workflow(workflow.graphJSON, workflow.name);
+            displayObj.Display();
         end
     end
 end

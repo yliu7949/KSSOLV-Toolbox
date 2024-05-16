@@ -98,6 +98,17 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                         % 直接显示渲染的结构
                         item.showMoleculerDisplay();
                     end
+                case 'kssolv.services.filemanager.Workflow'
+                    if startsWith(item.parent, 'Project')
+                        % 新增 workflow 项，并打开相应的 document
+                        item.createWorkflowItem();
+                        % 更新 TreeTable
+                        this.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
+                        this.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+                    else
+                        % 直接显示工作流画布
+                        item.showWorkflowDisplay();
+                    end
             end
         end
     end

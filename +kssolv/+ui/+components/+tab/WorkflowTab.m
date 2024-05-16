@@ -41,6 +41,9 @@ classdef WorkflowTab < handle
 
         function connectTab(this)
             %CONNECTTAB 为按钮等组件添加监听器和回调函数
+            % Save Section
+            addlistener(this.Widgets.SaveSection.SaveWorkflowAsTemplateButton, ...
+                'ButtonPushed', @(src, data) callbackSaveWorkflowAsTemplateButton(this));
             % Operation Section
             addlistener(this.Widgets.OperationSection.OperationUndoButton, ...
                 'ButtonPushed', @(src, data) callbackOperationUndoButton(this));
@@ -283,6 +286,10 @@ classdef WorkflowTab < handle
         end
 
         %% 回调函数
+        function callbackSaveWorkflowAsTemplateButton(~)
+            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowExportToJSON');
+        end
+
         function callbackOperationUndoButton(~)
             kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowUndo');
         end
@@ -332,15 +339,15 @@ classdef WorkflowTab < handle
                 eventData = ''
             end
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
-            documentGroup = appContainer.getDocumentGroup('DocumentGroup');
+            documentGroup = appContainer.getDocumentGroup('Workflow');
             
-            if isempty(documentGroup.LastSelected.tag)
+            if isempty(documentGroup) || isempty(documentGroup.LastSelected.tag)
                 % 说明该 documentGroup 下没有 document 被选中
                 return
             end
 
             tag = documentGroup.LastSelected.tag;
-            document = appContainer.getDocument('DocumentGroup', tag);
+            document = appContainer.getDocument('Workflow', tag);
             h = document.Figure.Children.Children;
             h.sendEventToHTMLSource(eventName, ...
                 jsonencode(eventData, "PrettyPrint", true));

@@ -6,14 +6,16 @@ classdef MoleculerDisplay < handle
     
     properties
         DocumentGroupTag
-        cifFileContent
+        cifFileContent string
+        tag string
     end
     
     methods
-        function this = MoleculerDisplay(cifFileContent)
+        function this = MoleculerDisplay(cifFileContent, tag)
             %MOLECULERDISPLAY 构造此类的实例
             arguments
                 cifFileContent string = ""
+                tag string = ""
             end
             if cifFileContent == ""
                 cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
@@ -22,13 +24,37 @@ classdef MoleculerDisplay < handle
             else
                 this.cifFileContent = cifFileContent;
             end
-            this.DocumentGroupTag = 'DocumentGroup';
+            this.tag = tag;
+            this.DocumentGroupTag = 'Structure';
+
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            group = appContainer.getDocumentGroup(this.DocumentGroupTag);
+            if isempty(group)
+                % 若 appContainer 没有 Tag 为 'Structure' 的 DocumentGroup，
+                % 则创建 DocumentGroup 并添加到 appContainer 中
+                group = matlab.ui.internal.FigureDocumentGroup();
+                group.Tag = this.DocumentGroupTag;
+                group.Title = this.DocumentGroupTag;
+                group.DefaultRegion = 'left';
+                appContainer.add(group);
+            end
         end
         
         function Display(this)
             %DISPLAY 在 Document Group 中展示渲染的分子/晶体结构
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            document = appContainer.getDocument(this.DocumentGroupTag, this.tag);
+            if ~isempty(document)
+                % 如果具有相同 tag 的 document 存在，则选中它
+                document.Selected = true;
+                return
+            end
+            
             figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentStructureTitle'); 
-            figOptions.DocumentGroupTag = this.DocumentGroupTag; 
+            figOptions.DocumentGroupTag = this.DocumentGroupTag;
+            if this.tag ~= ""
+                figOptions.Tag = this.tag;
+            end
             document = matlab.ui.internal.FigureDocument(figOptions);
 
             % 添加 html 组件
@@ -43,7 +69,6 @@ classdef MoleculerDisplay < handle
             h.Data = this.cifFileContent;
 
             % 添加到 App Container
-            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             appContainer.add(document);
         end
     end

@@ -42,8 +42,6 @@ classdef HomeTab < handle
             %CONNECTTAB 为按钮等组件添加监听器和回调函数
             % File Section
             % Project Section
-            addlistener(this.Widgets.ProjectSection.ProjectStructureButton, ...
-                'ButtonPushed', @(src, data) callbackProjectStructureButton(this));
             addlistener(this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(1), ...
                 'ItemPushed', @(src, data) callbackImportStructureFromFile(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton, ...
@@ -133,7 +131,7 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            ProjectStructureButton = CreateButton('split', 'ProjectStructure', section.Tag, 'import_data');
+            ProjectStructureButton = CreateButton('dropdown', 'ProjectStructure', section.Tag, 'import_data');
             ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'artifactGraph');
             ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, 'legend');
             
@@ -329,13 +327,10 @@ classdef HomeTab < handle
         end
 
         %% 回调函数
-        function callbackProjectStructureButton(~, ~, ~)
-            kssolv.ui.components.figuredocument.MoleculerDisplay().Display();
-        end
-
         function callbackImportStructureFromFile(~, ~, ~)
             project = kssolv.ui.util.DataStorage.getData('Project');
             for i = 1:length(project.children)
+                % 从当前 Project 的第二级节点中查找 Structure 节点
                 if startsWith(project.children{i, 1}.name, 'Structure')
                     item = project.children{i, 1};
                 end
@@ -354,7 +349,19 @@ classdef HomeTab < handle
         end
 
         function callbackProjectWorkflowButton(~, ~, ~)
-            kssolv.ui.components.figuredocument.Workflow().Display();
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            for i = 1:length(project.children)
+                % 从当前 Project 的第二级节点中查找 Workflow 节点
+                if startsWith(project.children{i, 1}.name, 'Workflow')
+                    item = project.children{i, 1};
+                end
+            end
+            if ~isempty(item)
+                item.createWorkflowItem();
+                projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+                projectBrowser.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
+                projectBrowser.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+            end
         end
 
         function callbackImportTemplateWorkflow(~, ~, ~)

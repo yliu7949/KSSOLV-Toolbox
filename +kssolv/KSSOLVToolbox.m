@@ -32,12 +32,6 @@ classdef KSSOLVToolbox < handle
             this.AppContainer.DocumentPlaceHolderText = msg;
             % 监听 App Container 的状态改变，例如关闭 App 时会触发 StateChanged 事件
             addlistener(this.AppContainer, 'StateChanged', @(src,data) callbackAppStateChanged(this));
-            % 添加 Document Group
-            group = matlab.ui.internal.FigureDocumentGroup();
-            group.Tag = 'DocumentGroup';
-            group.Title = 'DocumentGroup';
-            group.DefaultRegion = 'left';
-            this.AppContainer.add(group);
             % 添加多个 Data Browser 组件
             projectBrowser = kssolv.ui.components.databrowser.ProjectBrowser();
             projectBrowser.addToAppContainer(this.AppContainer);
@@ -67,7 +61,7 @@ classdef KSSOLVToolbox < handle
             show(this);
 
             % 注册关闭时的提示对话框
-            this.AppContainer.CanCloseFcn = @(varargin) canClose(this,varargin{:});
+            this.AppContainer.CanCloseFcn = @(varargin) canClose(this, varargin{:});
         end
         
         function delete(this)

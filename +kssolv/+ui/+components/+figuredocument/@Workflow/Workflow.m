@@ -1,4 +1,4 @@
-classdef Workflow
+classdef Workflow < handle
     %WORKFLOW 工作流组件
     
     %   开发者：杨柳
@@ -6,20 +6,51 @@ classdef Workflow
     
     properties
         DocumentGroupTag
+        graphJSON string
+        tag string
     end
     
     methods
-        function this = Workflow()
+        function this = Workflow(graphJSON, tag)
             %WORKFLOW 构造此类的实例
-            this.DocumentGroupTag = 'DocumentGroup';
+            arguments
+                graphJSON string = ""
+                tag string = ""
+            end
+            this.graphJSON = graphJSON;
+            this.tag = tag;
+            this.DocumentGroupTag = 'Workflow';
+
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            group = appContainer.getDocumentGroup(this.DocumentGroupTag);
+            if isempty(group)
+                % 若 appContainer 没有 Tag 为 'Workflow' 的 DocumentGroup，
+                % 则创建 DocumentGroup 并添加到 appContainer 中
+                group = matlab.ui.internal.FigureDocumentGroup();
+                group.Tag = this.DocumentGroupTag;
+                group.Title = this.DocumentGroupTag;
+                group.DefaultRegion = 'left';
+                appContainer.add(group);
+            end
         end
     end
 
     methods
         function Display(this)
             %DISPLAY 在 Document Group 中展示工作流画布
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            document = appContainer.getDocument(this.DocumentGroupTag, this.tag);
+            if ~isempty(document)
+                % 如果具有相同 tag 的 document 存在，则选中它
+                document.Selected = true;
+                return
+            end
+
             figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentWorkflowTitle'); 
-            figOptions.DocumentGroupTag = this.DocumentGroupTag; 
+            figOptions.DocumentGroupTag = this.DocumentGroupTag;
+            if this.tag ~= ""
+                figOptions.Tag = this.tag;
+            end
             document = matlab.ui.internal.FigureDocument(figOptions);
 
             % 添加 html 组件
@@ -30,18 +61,35 @@ classdef Workflow
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'index.html');
             h = uihtml(g, "HTMLSource", htmlFile);
 
+            % 将画布数据保存在 html 组件中
+            h.Data = this.graphJSON;
+
             % 接收从 HTML 组件触发的事件
             h.HTMLEventReceivedFcn = @this.eventReceiver;
 
             % 添加到 App Container
-            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             appContainer.add(document);
         end
     end
 
     methods (Access = private)
-        function eventReceiver(~, ~, event)
-            disp(event.HTMLEventName);
+        function eventReceiver(this, src, event)
+            switch event.HTMLEventName
+                case 'OpenSettingsWindow'
+                    disp(event.HTMLEventName);
+                case 'GraphExportToJSON'
+                    this.callbackGraphExportToJSON(src, event);
+            end
+        end
+
+        function callbackGraphExportToJSON(this, ~, event)
+            this.graphJSON = event.HTMLEventData;
+
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            item = project.findChildrenItem(this.tag);
+            if ~isempty(item)
+                item.graphJSON = this.graphJSON;
+            end
         end
     end
 
