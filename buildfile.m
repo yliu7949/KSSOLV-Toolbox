@@ -12,8 +12,10 @@ plan("pcode").Inputs = "+kssolv/**/*.m";
 plan("pcode").Outputs = plan("pcode").Inputs.replace(".m",".p");
 plan("pcode").Dependencies = "check";
 
+plan("stats").Inputs = "**/*.m";
+
 plan.DefaultTasks = "package";
-plan("package").Dependencies = "pcode";
+plan("package").Dependencies = ["pcode", "stats"];
 
 plan("cleanPcode").Inputs = plan("pcode").Outputs;
 plan("cleanPcode").Dependencies = "pcode";
@@ -80,4 +82,28 @@ for i = 1:length(filePaths)
         delete(filePaths{i});
     end
 end
+end
+
+function statsTask(context)
+% 统计所有 .m 文件的数量和总代码行数（非空行和非注释行）
+filePaths = context.Task.Inputs.paths;
+numFiles = numel(filePaths);
+totalLines = 0;
+codeLines = 0;
+
+for i = 1:numFiles
+    fileContent = fileread(filePaths{i});
+    lines = strsplit(fileContent, '\n');
+    totalLines = totalLines + numel(lines);
+    for j = 1:numel(lines)
+        line = strtrim(lines{j});
+        if ~isempty(line) && ~startsWith(line, '%')
+            codeLines = codeLines + 1;
+        end
+    end
+end
+
+fprintf('Total number of .m files: %d\n', numFiles);
+fprintf('Total lines of code: %d\n', totalLines);
+fprintf('Total non-empty, non-comment lines of code: %d\n', codeLines);
 end
