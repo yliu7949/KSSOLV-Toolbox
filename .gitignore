@@ -10,3 +10,11 @@
 # Test Data Directory
 data/
 
+# P-Code files
+**/*.p
+
+# MATLAB Toolbox file
+*.mltbx
+
+# MATLAB Buildtool
+.buildtool/
