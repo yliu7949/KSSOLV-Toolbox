@@ -14,6 +14,9 @@ plan("pcode").Dependencies = "check";
 
 plan.DefaultTasks = "package";
 plan("package").Dependencies = "pcode";
+
+plan("cleanPcode").Inputs = plan("pcode").Outputs;
+plan("cleanPcode").Dependencies = "pcode";
 end
 
 function initTask(~)
@@ -67,4 +70,14 @@ filteredConditions = ~contains(options.ToolboxFiles, 'ks.ks') & ...
 options.ToolboxFiles = options.ToolboxFiles(filteredConditions);
 
 matlab.addons.toolbox.packageToolbox(options);
+end
+
+function cleanPcodeTask(context)
+% 删除生成的 .p 文件
+filePaths = context.Task.Inputs.paths;
+for i = 1:length(filePaths)
+    if isfile(filePaths{i})
+        delete(filePaths{i});
+    end
+end
 end
