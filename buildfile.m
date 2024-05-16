@@ -40,6 +40,7 @@ options.AuthorName = "Liu Yang";
 options.AuthorEmail = "and@mail.ustc.edu.cn";
 options.AuthorCompany = "University of Science and Technology of China";
 options.Description = "A MATLAB-Based Plane Wave Basis Set First-Principles Calculation Toolbox.";
+options.Summary = "Plane Wave Basis, First-Principles Calculation";
 
 options.OutputFile = fullfile(toolboxFolder, "KSSOLV_Toolbox.mltbx");
 options.ToolboxName = "KSSOLV Toolbox";
