@@ -209,7 +209,7 @@ classdef CIFReader < handle
             tmpSin = sqrt(1 - tmpCos^2);
             a3 = [c * cosd(beta), c * sind(beta) * tmpCos, c * sind(beta) * tmpSin];
             C = [a1; a2; a3];
-            this.KSSOLVSetupObject.C = C;
+            this.KSSOLVSetupObject.C = C ./ 0.5291772083;
         
             % 读取原子信息
             nAtoms = length(this.CIFObject.atomLabel);
