@@ -26,7 +26,8 @@
                 let viewer = $3Dmol.createViewer(element, config);
                 let m = viewer.addModel(text, "cif");
                 viewer.addUnitCell(m);
-                viewer.setStyle({'sphere':{'colorscheme':'Jmol','scale':.3},'stick':{'colorscheme':'Jmol', 'radius': 0.2}})
+                viewer.setStyle({'sphere':{'colorscheme':'Jmol', 'scale':.2},'stick':{'colorscheme':'Jmol', 'radius': 0.2}})
+                viewer.replicateUnitCell(1);
                 viewer.zoomTo();
                 viewer.render();
                 viewer.zoom(1.5, 1500);
