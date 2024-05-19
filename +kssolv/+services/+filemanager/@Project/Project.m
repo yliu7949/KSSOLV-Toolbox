@@ -37,7 +37,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                 error('KSSOLV:FileManager:Project:FileSaveError', ...
                       'Error saving the Project file: %s', ME.message);
             end
-        end
+        end  
     end
 
     methods (Static)

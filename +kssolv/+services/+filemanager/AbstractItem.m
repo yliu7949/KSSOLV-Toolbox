@@ -21,7 +21,7 @@ classdef AbstractItem < handle
         data            % 节点数据
         createdAt       % 创建时间
         updatedAt       % 更新时间
-        parent          % 父节点的 name
+        parent          % 父节点
     end
     
     methods
@@ -38,7 +38,7 @@ classdef AbstractItem < handle
             this.type = type;
             this.createdAt = datetime;
             this.updatedAt = datetime;
-            this.parent = '';
+            this.parent = [];
             this.children = {};
         end
 
@@ -52,7 +52,7 @@ classdef AbstractItem < handle
                 this
                 childrenItem kssolv.services.filemanager.AbstractItem
             end
-            childrenItem.parent = this.name;
+            childrenItem.parent = this;
             this.children{end+1, 1} = childrenItem;
         end
 
@@ -71,7 +71,7 @@ classdef AbstractItem < handle
 
             % 在子节点中递归查找
             for i = 1:length(this.children)
-                foundItem = this.children{i}.findChildrenItem(name);
+                foundItem = this.children{i, 1}.findChildrenItem(name);
                 if ~isempty(foundItem)
                     return;
                 end
@@ -79,6 +79,31 @@ classdef AbstractItem < handle
 
             % 如果没有找到则返回空数组
             foundItem = [];
+        end
+
+        function removeChildrenItem(this, name)
+            %REMOVECHILDRENITEM 遍历查找并移除指定 name 的节点
+            arguments
+                this
+                name string
+            end
+            
+            childrenLength = length(this.children);
+            for i = 1:length(this.children)
+                % 如果找到子节点的名称与 itemName 相同，移除并返回
+                if strcmp(this.children{i, 1}.name, name)
+                    % 从 children 中移除这个子节点
+                    this.children = {this.children{1:i-1, 1}, this.children{i+1:end, 1}};
+                    return;
+                else
+                    % 若子节点存在 children 则继续遍历
+                    this.children{i, 1}.removeChildrenItem(name);
+                    if length(this.children) < childrenLength
+                        % 如果子节点数量减少了，说明已移除，直接返回
+                        return;
+                    end
+                end
+            end
         end
 
         function encodedJSON = encode(this, prettyPrint)

@@ -222,7 +222,7 @@
       const nameCell = document.createElement('td');
       nameCell.style.paddingLeft = `${20 * level + 10}px`;
 
-      if (data.children && data.children.length > 0) {
+      if (data.type === "Folder" || data.type === "Project") {
         // Create a container for the SVG to enable CSS styling and events
         const folderIconContainer = document.createElement('div');
         folderIconContainer.className = 'icon-container toggle-icon folder-icon';
@@ -320,6 +320,24 @@
       });
     }
 
+    // 使用退格键删除选中的行
+    function handleBackspaceKey() {
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Backspace') {
+          const selectedRow = document.querySelector('tr.selected');
+          if (selectedRow) {
+            const itemType = selectedRow.querySelector('td:nth-child(3)').textContent;
+            if (itemType !== 'Project' && itemType !== 'Folder') {
+              const itemName = selectedRow.getAttribute('data-name');
+              selectedRow.remove();
+              MATLAB.sendEventToMATLAB("RowRemoved", itemName);
+              event.preventDefault(); // 防止页面导航等默认行为
+            }
+          }
+        }
+      });
+    }
+
     // Building the table on window load
     /*
     window.onload = function() {
@@ -327,6 +345,7 @@
       tableData = [JSON.parse(tableData)];
       buildTable(tableData, table.children[1]);
       addResizableColumns();
+      handleBackspaceKey();
     };
      */
 
@@ -370,6 +389,7 @@
       htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
       htmlComponent.addEventListener("addItem", addItem);
       htmlComponent.addEventListener("patchItem", patchItem);
+      handleBackspaceKey();
 
       function dataFromMATLABToHTML(event) {
         const table = document.getElementById('tree-table');
@@ -427,7 +447,8 @@
         // 清除并重新创建名字单元格的内容，以便保留图标
         nameCell.innerHTML = ''; // 清空现有内容
         const iconContainer = document.createElement('div');
-        iconContainer.className = itemObject.children && itemObject.children.length > 0 ? 'icon-container toggle-icon folder-icon' : 'icon-container file-icon';
+        iconContainer.className = (itemObject.type === "Folder" || itemObject.type === "Project") ?
+                'icon-container toggle-icon folder-icon' : 'icon-container file-icon';
         nameCell.appendChild(iconContainer);
         nameCell.append(` ${itemObject.label}`); // 添加新的标签文本
 

@@ -69,6 +69,8 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                     this.callbackRowClicked(src, event);
                 case 'RowDoubleClicked'
                     this.callbackRowDoubleClicked(src, event);
+                case 'RowRemoved'
+                    this.callbackRowRemoved(src, event);
             end
         end
 
@@ -83,7 +85,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             item = project.findChildrenItem(this.currentSelectedItem);
             switch class(item)
                 case 'kssolv.services.filemanager.Structure'
-                    if startsWith(item.parent, 'Project')
+                    if startsWith(item.parent.name, 'Project')
                         % 打开导入结构文件对话框，导入和解析结构文件，并显示渲染的结构
                         importedFileCount = item.importStructureFromFile();
                         if importedFileCount > 0
@@ -99,7 +101,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                         item.showMoleculerDisplay();
                     end
                 case 'kssolv.services.filemanager.Workflow'
-                    if startsWith(item.parent, 'Project')
+                    if startsWith(item.parent.name, 'Project')
                         % 新增 workflow 项，并打开相应的 document
                         item.createWorkflowItem();
                         % 更新 TreeTable
@@ -110,6 +112,14 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                         item.showWorkflowDisplay();
                     end
             end
+        end
+    
+        function callbackRowRemoved(this, ~, event)
+            removedItemName = event.HTMLEventData;
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            parentItem = project.findChildrenItem(removedItemName).parent;
+            parentItem.removeChildrenItem(removedItemName);
+            this.updateTreetable('PATCH', parentItem.name, parentItem.encodeToJSON(1));
         end
     end
 
