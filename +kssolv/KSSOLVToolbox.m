@@ -16,8 +16,14 @@ classdef KSSOLVToolbox < handle
             %KSSOLVTOOLBOX 构造此类的实例
             import kssolv.ui.util.Localizer.*
             % setLocale('zh_CN');
+
             % App 标题
-            title = message('KSSOLV:toolbox:AppTitle');
+            projectFilename = kssolv.ui.util.DataStorage.getData('ProjectFilename');
+            if projectFilename == ""
+                title = message('KSSOLV:toolbox:AppTitle');
+            else
+                title = strcat(message('KSSOLV:toolbox:AppTitle'), " - ", projectFilename);
+            end
             % 创建 App Container
             appOptions.Title = title;
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
@@ -62,6 +68,10 @@ classdef KSSOLVToolbox < handle
 
             % 注册关闭时的提示对话框
             this.AppContainer.CanCloseFcn = @(varargin) canClose(this, varargin{:});
+
+            % 添加 Project 项目根节点的监听器
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            addlistener(project, 'isDirty', 'PostSet', @this.callbackProjectDirtyChanged);
         end
         
         function delete(this)
@@ -100,21 +110,6 @@ classdef KSSOLVToolbox < handle
             RunBrowserPanel.Collapsed = true;
         end
 
-        function callbackAppStateChanged(this)
-            % 当 AppContainer 状态改变时，执行相关的操作
-            import matlab.ui.container.internal.appcontainer.*
-            switch this.AppContainer.State
-                case AppState.RUNNING
-                    % 在 App 打开后进行一些操作，如折叠右侧面板
-                    this.AppContainer.RightCollapsed = true;
-                case AppState.TERMINATED
-                    % 清除本地化管理器的类的实例
-                    kssolv.ui.util.Localizer.clearInstance();
-                    % 清除 App Container 相关的实例
-                    delete(this);
-            end
-        end
-
         function status = canClose(this, ~)
             status = false;
 
@@ -135,6 +130,38 @@ classdef KSSOLVToolbox < handle
                 case NoLabel
                     status = true;
                 otherwise
+            end
+        end
+
+        %% 回调函数
+        function callbackAppStateChanged(this)
+            % 当 AppContainer 状态改变时，执行相关的操作
+            import matlab.ui.container.internal.appcontainer.*
+            switch this.AppContainer.State
+                case AppState.RUNNING
+                    % 在 App 打开后进行一些操作，如折叠右侧面板
+                    this.AppContainer.RightCollapsed = true;
+                case AppState.TERMINATED
+                    % 清除本地化管理器的类的实例
+                    kssolv.ui.util.Localizer.clearInstance();
+                    % 清除 App Container 相关的实例
+                    delete(this);
+            end
+        end
+
+        function callbackProjectDirtyChanged(this, ~, event)
+            isDirty = event.AffectedObject.isDirty;
+            if isDirty
+                % 如果对 Project 进行了更新，提示用户需要保存当前所有更改，
+                % 则在窗口标题末尾添加 * 作为提示
+                if ~endsWith(this.AppContainer.Title, '*')
+                    this.AppContainer.Title = this.AppContainer.Title + "*";
+                end
+            else
+                % 如果已保存更改，则移除窗口标题末尾的 *
+                if endsWith(this.AppContainer.Title, '*')
+                    this.AppContainer.Title = extractBefore(this.AppContainer.Title, "*");
+                end
             end
         end
     end

@@ -3,6 +3,10 @@ classdef Project < kssolv.services.filemanager.AbstractItem
 
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
+
+    properties (Hidden, SetObservable)
+        isDirty logical   % 用于判断是否需要保存当前项目中的变更
+    end
     
     methods
         function this = Project()
@@ -13,6 +17,8 @@ classdef Project < kssolv.services.filemanager.AbstractItem
             this.addChildrenItem(workflowParent);
             structureParent = kssolv.services.filemanager.Structure('Structure', 'Folder');
             this.addChildrenItem(structureParent);
+
+            this.isDirty = false;
         end
 
         function saveToKsFile(this, filename)
@@ -32,12 +38,18 @@ classdef Project < kssolv.services.filemanager.AbstractItem
         
             data = this;
             try
+                data.isDirty = false;
                 save(filename, 'data', "-mat", "-v7.3");
             catch ME
                 error('KSSOLV:FileManager:Project:FileSaveError', ...
                       'Error saving the Project file: %s', ME.message);
             end
-        end  
+        end
+
+        function set.isDirty(this, value)
+            this.isDirty = value;
+            this.updatedAt = datetime;
+        end
     end
 
     methods (Static)

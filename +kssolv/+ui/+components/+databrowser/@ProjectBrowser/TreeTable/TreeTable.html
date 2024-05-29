@@ -142,6 +142,7 @@
        ],
        "childrenCount": "2x1"
      }`
+    let debug = false;
     let MATLAB;
 
     // 找到给定节点的所有直接和递归子节点
@@ -172,15 +173,31 @@
     function toggleChildren(event) {
       const parentRowElement = event.target.closest('tr');
       const parentName = parentRowElement.getAttribute('data-name');
+      const parentLevel = parentRowElement.getAttribute('data-level');
 
-      const allRows = document.querySelectorAll(`tr[data-parent="${parentName}"]`);
+      const allChildren = findAllChildNodes(tableData, parentName);
+      // debugLog(allChildren.toLocaleString());
+      const allRows = document.querySelectorAll('tr[data-name]');
 
       const isCurrentlyExpanded = parentRowElement.classList.contains('expanded');
       parentRowElement.classList.toggle('expanded', !isCurrentlyExpanded);
 
-      allRows.forEach(row => {
-        row.classList.toggle('hidden', isCurrentlyExpanded);
-        row.style.display = isCurrentlyExpanded ? 'none' : '';
+      // 检查是否应该将 expanded 类添加到所有子节点
+      const shouldExpandChildren = !isCurrentlyExpanded && parentLevel === '0';
+
+      // 遍历所有子节点并设置显示或隐藏状态
+      allChildren.forEach(childName => {
+        const row = [...allRows].find(row => row.getAttribute('data-name') === childName);
+        if (row) {
+          const shouldHide = isCurrentlyExpanded; // 如果当前已经展开，则折叠，否则展开
+          row.classList.toggle('hidden', shouldHide);
+          row.style.display = shouldHide ? 'none' : '';
+
+          // 如果父节点级别为 0 且要展开子节点，将 expanded 类添加到每个子节点
+          if (shouldExpandChildren) {
+            row.classList.add('expanded');
+          }
+        }
       });
     }
 
@@ -193,6 +210,7 @@
 
       const rowElement = event.target.closest('tr');
       rowElement.classList.add('selected'); // Add the 'selected' class to the clicked row
+      debugLog(rowElement.innerText);
     }
 
     // Function to create the table rows
@@ -204,12 +222,16 @@
       row.addEventListener('click', function (event) {
         toggleRowSelection(event);
         const rowElement = event.target.closest('tr');
-        MATLAB.sendEventToMATLAB("RowClicked", rowElement.getAttribute('data-name'));
+        if (typeof MATLAB !== 'undefined') {
+          MATLAB.sendEventToMATLAB("RowClicked", rowElement.getAttribute('data-name'));
+        }
       });
       row.addEventListener('dblclick', function (event) {
         toggleRowSelection(event);
         const rowElement = event.target.closest('tr');
-        MATLAB.sendEventToMATLAB("RowDoubleClicked", rowElement.getAttribute('data-name'));
+        if (typeof MATLAB !== 'undefined') {
+          MATLAB.sendEventToMATLAB("RowDoubleClicked", rowElement.getAttribute('data-name'));
+        }
       });
       row.addEventListener('contextmenu', function (event) {
         // 阻止默认的上下文菜单显示
@@ -330,7 +352,9 @@
             if (itemType !== 'Project' && itemType !== 'Folder') {
               const itemName = selectedRow.getAttribute('data-name');
               selectedRow.remove();
-              MATLAB.sendEventToMATLAB("RowRemoved", itemName);
+              if (typeof MATLAB !== 'undefined') {
+                MATLAB.sendEventToMATLAB("RowRemoved", itemName);
+              }
               event.preventDefault(); // 防止页面导航等默认行为
             }
           }
@@ -351,7 +375,7 @@
 
     function testAddItem() {
       let eventData = `{
-       "itemName": "Structure(746d2d80-116a-4cbc-b1a1-157abcccb386)",
+       "itemName": "Workflow(daf54931-2fd9-4030-9497-19e58da2d084)",
        "itemJSON": "{\\n  \\"name\\": \\"new(e9eebc15-a0a8-4408-abb3-218cb29ce01a)\\",\\n  \\"label\\": \\"new\\",\\n  \\"description\\": \\"None\\",\\n  \\"type\\": \\"Structure\\",\\n  \\"children\\": [],\\n  \\"childrenCount\\": \\"0x0\\"\\n}"
      }`;
       eventData = JSON.parse(eventData);
@@ -367,26 +391,69 @@
         return;
       }
 
-      // 判断父元素是否已展开
       const isExpanded = parentRow.classList.contains('expanded');
+      const parentLevel = parseInt(parentRow.getAttribute('data-level'));
+      const newRow = createRow(itemObject, parentLevel + 1, itemName);
+      newRow.classList.toggle('hidden', !isExpanded);
 
-      // 创建新的行并添加到表格中
-      const newRow = createRow(itemObject, parseInt(parentRow.getAttribute('data-level')) + 1, itemName);
-      parentRow.after(newRow); // 将新行插入到父元素之后
+      let insertAfterRow = parentRow;
+      let nextRow = parentRow.nextElementSibling;
 
-      // 如果父元素未展开，则展开它
+      while (nextRow && parseInt(nextRow.getAttribute('data-level')) > parentLevel) {
+        insertAfterRow = nextRow;
+        nextRow = nextRow.nextElementSibling;
+      }
+
+      insertAfterRow.after(newRow);
+
       if (!isExpanded) {
         toggleChildren({target: parentRow.querySelector('.toggle-icon')});
       }
 
-      // 选中新添加的行
       toggleRowSelection({target: newRow});
+    }
+
+    function createDebugElement() {
+      const debugElement = document.createElement('div');
+      debugElement.id = 'debugElement';
+      debugElement.style.position = 'fixed';
+      debugElement.style.bottom = '0';
+      debugElement.style.left = '0';
+      debugElement.style.width = '100%';
+      debugElement.style.backgroundColor = 'rgba(0, 0, 0, 0.7)';
+      debugElement.style.color = 'white';
+      debugElement.style.padding = '10px';
+      debugElement.style.boxSizing = 'border-box';
+      debugElement.style.zIndex = '1000';
+      debugElement.style.fontSize = '12px';
+      document.body.appendChild(debugElement);
+    }
+
+    function debugLog(info) {
+      if (!debug) return;
+
+      let debugElement = document.getElementById('debugElement');
+      if (!debugElement) {
+        createDebugElement();
+        debugElement = document.getElementById('debugElement');
+      }
+
+      // 清空之前的内容
+      debugElement.innerHTML = '';
+
+      // 格式化输出内容
+      const formattedInfo = typeof info === 'object' ? JSON.stringify(info, null, 2) : info;
+      const logItem = document.createElement('div');
+      logItem.textContent = formattedInfo;
+      debugElement.appendChild(logItem);
     }
 
     // MATLAB execute this setup function
     function setup(htmlComponent) {
       MATLAB = htmlComponent;
       htmlComponent.addEventListener("DataChanged", dataFromMATLABToHTML);
+      htmlComponent.addEventListener("updateTreeTableData", updateTreeTableData);
+      htmlComponent.addEventListener("enableDebugLog", () => { debug = true; });
       htmlComponent.addEventListener("addItem", addItem);
       htmlComponent.addEventListener("patchItem", patchItem);
       handleBackspaceKey();
@@ -397,6 +464,10 @@
         tableData = [JSON.parse(text)];
         buildTable(tableData, table.children[1]);
         addResizableColumns();
+      }
+
+      function updateTreeTableData(event) {
+        tableData = [JSON.parse(event.Data)];
       }
 
       function addItem(event) {
@@ -413,10 +484,19 @@
         }
 
         const isExpanded = parentRow.classList.contains('expanded');
+        const parentLevel = parseInt(parentRow.getAttribute('data-level'));
+        const newRow = createRow(itemObject, parentLevel + 1, itemName);
+        newRow.classList.toggle('hidden', !isExpanded);
 
-        const newRow = createRow(itemObject, parseInt(parentRow.getAttribute('data-level')) + 1, itemName);
-        newRow.classList.toggle('hidden', !isExpanded); // 隐藏或显示新行，取决于父节点是否展开
-        parentRow.after(newRow); // 将新行插入到父元素之后
+        let insertAfterRow = parentRow;
+        let nextRow = parentRow.nextElementSibling;
+
+        while (nextRow && parseInt(nextRow.getAttribute('data-level')) > parentLevel) {
+          insertAfterRow = nextRow;
+          nextRow = nextRow.nextElementSibling;
+        }
+
+        insertAfterRow.after(newRow);
 
         if (!isExpanded) {
           toggleChildren({target: parentRow.querySelector('.toggle-icon')});

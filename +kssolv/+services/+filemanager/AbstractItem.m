@@ -54,6 +54,9 @@ classdef AbstractItem < handle
             end
             childrenItem.parent = this;
             this.children{end+1, 1} = childrenItem;
+            this.updatedAt = datetime;
+            projectItem = this.findProjectItem();
+            projectItem.isDirty = true;
         end
 
         function foundItem = findChildrenItem(this, name)
@@ -93,21 +96,46 @@ classdef AbstractItem < handle
                 % 如果找到子节点的名称与 itemName 相同，移除并返回
                 if strcmp(this.children{i, 1}.name, name)
                     % 从 children 中移除这个子节点
-                    this.children = {this.children{1:i-1, 1}, this.children{i+1:end, 1}};
+                    this.children = [this.children(1:i-1); this.children(i+1:end)];
+                    this.updatedAt = datetime;
+                    % 更新 Project 状态
+                    projectItem = this.findProjectItem();
+                    projectItem.isDirty = true;
                     return;
                 else
                     % 若子节点存在 children 则继续遍历
-                    this.children{i, 1}.removeChildrenItem(name);
-                    if length(this.children) < childrenLength
-                        % 如果子节点数量减少了，说明已移除，直接返回
-                        return;
+                    if ~isempty(this.children{i, 1}.children)
+                        this.children{i, 1}.removeChildrenItem(name);
+                        if length(this.children) < childrenLength
+                            % 如果子节点数量减少了，说明已移除，直接返回
+                            return;
+                        end
                     end
                 end
             end
         end
 
+        function projectItem = findProjectItem(this)
+            %FINDPROJECTITEM 获取作为当前项目树根节点的 Project 节点
+            arguments
+                this
+            end
+
+            currentNode = this;
+            while ~isempty(currentNode.parent)
+                currentNode = currentNode.parent;
+            end
+
+            if strcmp(currentNode.type, 'Project')
+                projectItem = currentNode;
+            else
+                projectItem = [];
+            end
+        end
+
         function encodedJSON = encode(this, prettyPrint)
-            % 将少数字段和 data 字段编码为 JSON，用于 Info Browser
+            %ENCODE 将少数字段和 data 字段编码为 JSON
+            % 用于 Info Browser
             arguments
                 this 
                 prettyPrint logical = false

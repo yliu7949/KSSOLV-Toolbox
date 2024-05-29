@@ -10,9 +10,11 @@ end
 
 % 创建 project 并保存至 DataStorage
 import kssolv.services.filemanager.Project
+
 if ksFile == ""
     project = Project();
 else
+    ksFile = fullfile(pwd, ksFile);
     project = Project.loadKsFile(ksFile);
 end
 kssolv.ui.util.DataStorage.setData('Project', project);

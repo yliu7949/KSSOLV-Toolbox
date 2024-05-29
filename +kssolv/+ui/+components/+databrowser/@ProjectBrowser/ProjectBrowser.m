@@ -37,6 +37,13 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             eventData = struct('itemName', itemName, 'itemJSON', itemJSON);
             this.Widgets.html.sendEventToHTMLSource(eventName, ...
                 jsonencode(eventData, "PrettyPrint", true));
+
+            if action == "PATCH"
+                % 更新 html 组件中的 tableData 变量，以便在折叠时能够折叠新增的节点
+                project = kssolv.ui.util.DataStorage.getData('Project');
+                this.Widgets.html.sendEventToHTMLSource('updateTreeTableData', ...
+                    project.encodeToJSON());
+            end
         end
     end
 
