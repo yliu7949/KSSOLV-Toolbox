@@ -41,6 +41,12 @@ classdef HomeTab < handle
         function connectTab(this)
             %CONNECTTAB 为按钮等组件添加监听器和回调函数
             % File Section
+            addlistener(this.Widgets.FileSection.FileProjectButton, ...
+                'ButtonPushed', @(src, data) callbackFileProjectButton(this));
+            addlistener(this.Widgets.FileSection.FileSaveButton, ...
+                'ButtonPushed', @(src, data) callbackFileSaveButton(this));
+            addlistener(this.Widgets.FileSection.FileCloseButton, ...
+                'ButtonPushed', @(src, data) callbackFileCloseButton(this));
             % Project Section
             addlistener(this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(1), ...
                 'ItemPushed', @(src, data) callbackImportStructureFromFile(this));
@@ -327,6 +333,109 @@ classdef HomeTab < handle
         end
 
         %% 回调函数
+        function callbackFileProjectButton(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+            [file, path] = uigetfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                message('KSSOLV:dialogs:OpenKSFileTitle'), 'MultiSelect', 'off');
+            if isequal(file, 0)
+                % 用户点击了"取消"按钮
+                return
+            end
+
+            ksFile = fullfile(path, file);
+            project = kssolv.services.filemanager.Project.loadKsFile(ksFile);
+            kssolv.ui.util.DataStorage.setData('Project', project);
+            kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
+            kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
+
+            kssolv.KSSOLVToolbox.setAppContainerTitle();
+            kssolv.KSSOLVToolbox.createListener();
+            kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
+        end
+
+        function callbackFileSaveButton(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            if ~project.isDirty
+                return
+            end
+            ksFile = kssolv.ui.util.DataStorage.getData('ProjectFilename');
+            if ksFile == ""
+                % ksFile 为空说明当前未打开某个 .ks 文件，需要选择保存为 .ks 文件的路径
+                [file,location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                    message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled.ks');
+                if isequal(file, 0) || isequal(location, 0)
+                    % 用户点击了"取消"按钮
+                    return
+                else
+                    % 用户选择了具体的文件路径
+                    ksFile = fullfile(location, file);
+                    kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
+                    project.saveToKsFile(ksFile);
+                end
+                kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
+            else
+                % ksFile 不为空说明当前已打开某个 .ks 文件，直接保存文件
+                project.saveToKsFile(ksFile);
+            end
+        end
+
+        function callbackFileCloseButton(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            projectFilename = kssolv.ui.util.DataStorage.getData('ProjectFilename');
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            if ~project.isDirty
+                % 如果 project 没有进行任何修改，则直接关闭已有的 project
+                % 此处不需要进行额外的处理
+            else
+                % 如果 project 有进行修改，则弹出对话框，包含"保存"、"不保存"和"取消"按钮                
+                YesLabel = message('KSSOLV:dialogs:ProjectCanCloseSave');
+                NoLabel = message('KSSOLV:dialogs:ProjectCanCloseDoNotSave');
+                CancelLabel = message('KSSOLV:dialogs:ProjectCanCloseCancel');
+                selection = uiconfirm(appContainer, ...
+                    message('KSSOLV:dialogs:ProjectCanCloseMessage'), ...
+                    message('KSSOLV:dialogs:ProjectCanCloseTitle'), ...
+                    "Options", {YesLabel, NoLabel, CancelLabel}, ...
+                    "DefaultOption", 1, "CancelOption", 3);
+                switch selection
+                    case YesLabel
+                        if projectFilename == ""
+                            % 如果尚未指定要保存的文件，则选择保存为 .ks 文件的路径
+                            [file,location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                                message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled.ks');
+                            if isequal(file, 0) || isequal(location, 0)
+                                % 用户点击了"取消"按钮
+                                return
+                            else
+                                % 用户选择了具体的文件路径，保存 project
+                                project.saveToKsFile(fullfile(location, file));
+                            end
+                        else
+                            % 如果已打开 .ks 文件，则保存后关闭当前 project
+                            project.saveToKsFile(projectFilename);
+                        end
+                    case NoLabel
+                        % 此处无需进行处理
+                    case CancelLabel
+                        return
+                end
+            end
+
+            % 关闭所有已打开的 document
+            documents = appContainer.getDocuments();
+            for i = 1:numel(documents)
+               documents{i}.close();
+            end
+
+            kssolv.ui.util.DataStorage.setData('Project', kssolv.services.filemanager.Project());
+            kssolv.ui.util.DataStorage.setData('ProjectFilename', '');
+            kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
+            kssolv.KSSOLVToolbox.setAppContainerTitle();
+            kssolv.KSSOLVToolbox.createListener();
+            appContainer.bringToFront();
+        end
+
         function callbackImportStructureFromFile(~, ~, ~)
             project = kssolv.ui.util.DataStorage.getData('Project');
             for i = 1:length(project.children)

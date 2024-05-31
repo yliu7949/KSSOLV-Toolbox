@@ -8,7 +8,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
         Widgets
     end
 
-    properties (SetObservable, AbortSet)
+    properties (SetObservable)
         currentSelectedItem   % 当前选中的节点
     end
     
@@ -44,6 +44,17 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                 this.Widgets.html.sendEventToHTMLSource('updateTreeTableData', ...
                     project.encodeToJSON());
             end
+        end
+
+        function reBuildUI(this)
+            % 重新渲染 Project Browser 的 UI 界面
+            % 可用于加载了新的 .ks 文件后使用
+            this.buildUI();
+        end
+
+        function resetSelectedItem(this)
+            % 触发监听 currentSelectedItem 变化的监听器
+            this.currentSelectedItem = this.currentSelectedItem;
         end
     end
 
@@ -124,8 +135,18 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
         function callbackRowRemoved(this, ~, event)
             removedItemName = event.HTMLEventData;
             project = kssolv.ui.util.DataStorage.getData('Project');
-            parentItem = project.findChildrenItem(removedItemName).parent;
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            removedItem = project.findChildrenItem(removedItemName);
+            parentItem = removedItem.parent;
+
+            % 关闭相应的 document
+            document = appContainer.getDocument(removedItem.category, removedItem.name);
+            if ~isempty(document)
+                document.close();
+            end
+            % 在 project 中移除对应的子节点
             parentItem.removeChildrenItem(removedItemName);
+            % 更新父节点的 Size 显示
             this.updateTreetable('PATCH', parentItem.name, parentItem.encodeToJSON(1));
         end
     end

@@ -19,5 +19,18 @@
         <entry key="AppCanCloseSave">保存</entry>
         <entry key="AppCanCloseDoNotSave">不保存</entry>
         <entry key="AppCanCloseCancel">取消</entry>
+
+        <!-- HomeTab: callbackFileProjectButton -->
+        <entry key="OpenKSFileTitle">打开 KSSOLV 项目文件</entry>
+
+        <!-- HomeTab: callbackFileSaveButton, callbackFileCloseButton -->
+        <entry key="SaveKSFileTitle">保存文件</entry>
+
+        <!-- HomeTab: callbackFileCloseButton -->
+        <entry key="ProjectCanCloseTitle">确认修改</entry>
+        <entry key="ProjectCanCloseMessage">您已进行了修改。在项目关闭前您希望如何处理这些修改？</entry>
+        <entry key="ProjectCanCloseSave">保存</entry>
+        <entry key="ProjectCanCloseDoNotSave">不保存</entry>
+        <entry key="ProjectCanCloseCancel">取消</entry>
     </message>
 </rsccat>

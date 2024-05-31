@@ -89,6 +89,10 @@ classdef Workflow < handle
             item = project.findChildrenItem(this.tag);
             if ~isempty(item)
                 item.graphJSON = this.graphJSON;
+                item.updatedAt = datetime;
+                project.isDirty = true;
+                % 更新 Info Browser 的界面
+                kssolv.ui.util.DataStorage.getData('ProjectBrowser').resetSelectedItem();
             end
         end
     end

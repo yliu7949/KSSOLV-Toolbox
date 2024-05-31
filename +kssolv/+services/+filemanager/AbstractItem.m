@@ -23,6 +23,10 @@ classdef AbstractItem < handle
         updatedAt       % 更新时间
         parent          % 父节点
     end
+
+    properties (Hidden, Dependent)
+        category        % 节点类别，如 Structure 或 Workflow
+    end
     
     methods
         function this = AbstractItem(label, type)
@@ -44,6 +48,16 @@ classdef AbstractItem < handle
 
         function output = get.childrenCount(this)
             output = sprintf('%dx%d', size(this.children, 1), size(this.children, 2));
+        end
+
+        function output = get.category(this)
+            if this.type == "Folder" || this.type == "Project"
+                output = strtok(this.name, '(');
+            elseif ~isempty(this.parent) && this.parent.type == "Folder"
+                output = strtok(this.parent.name, '(');
+            else
+                output = "";
+            end
         end
         
         function addChildrenItem(this, childrenItem)
@@ -97,6 +111,9 @@ classdef AbstractItem < handle
                 if strcmp(this.children{i, 1}.name, name)
                     % 从 children 中移除这个子节点
                     this.children = [this.children(1:i-1); this.children(i+1:end)];
+                    if isempty(this.children)
+                        this.children = {};
+                    end
                     this.updatedAt = datetime;
                     % 更新 Project 状态
                     projectItem = this.findProjectItem();

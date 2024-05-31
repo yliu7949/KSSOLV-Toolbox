@@ -17,5 +17,18 @@
         <entry key="AppCanCloseSave">Save</entry>
         <entry key="AppCanCloseDoNotSave">Don't Save</entry>
         <entry key="AppCanCloseCancel">Cancel</entry>
+
+        <!-- HomeTab: callbackFileProjectButton -->
+        <entry key="OpenKSFileTitle">Open KSSOLV file</entry>
+
+        <!-- HomeTab: callbackFileSaveButton, callbackFileCloseButton -->
+        <entry key="SaveKSFileTitle">Select File for Save As</entry>
+
+        <!-- HomeTab: callbackFileCloseButton -->
+        <entry key="ProjectCanCloseTitle">Confirm Changes</entry>
+        <entry key="ProjectCanCloseMessage">You have made changes. How would you like to handle them before closing?</entry>
+        <entry key="ProjectCanCloseSave">Save</entry>
+        <entry key="ProjectCanCloseDoNotSave">Don't Save</entry>
+        <entry key="ProjectCanCloseCancel">Cancel</entry>
     </message>
 </rsccat>

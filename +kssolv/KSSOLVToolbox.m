@@ -5,9 +5,7 @@ classdef KSSOLVToolbox < handle
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties (Access = public)
-        % Name
         Name
-        % App Container
         AppContainer
     end
     
@@ -17,15 +15,8 @@ classdef KSSOLVToolbox < handle
             import kssolv.ui.util.Localizer.*
             % setLocale('zh_CN');
 
-            % App 标题
-            projectFilename = kssolv.ui.util.DataStorage.getData('ProjectFilename');
-            if projectFilename == ""
-                title = message('KSSOLV:toolbox:AppTitle');
-            else
-                title = strcat(message('KSSOLV:toolbox:AppTitle'), " - ", projectFilename);
-            end
             % 创建 App Container
-            appOptions.Title = title;
+            appOptions.Title = 'KSSOLV Toolbox';
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.ToolstripEnabled = true;
             appOptions.EnableTheming = true;
@@ -33,6 +24,8 @@ classdef KSSOLVToolbox < handle
             this.Name = this.AppContainer.Tag;
             % 保存 AppContainer 至 DataStorage
             kssolv.ui.util.DataStorage.setData('AppContainer', this.AppContainer);
+            % 设定 App Container 的标题
+            kssolv.KSSOLVToolbox.setAppContainerTitle();
             % 添加工作区文字
             msg = message('KSSOLV:toolbox:WelcomeMessage');
             this.AppContainer.DocumentPlaceHolderText = msg;
@@ -69,9 +62,8 @@ classdef KSSOLVToolbox < handle
             % 注册关闭时的提示对话框
             this.AppContainer.CanCloseFcn = @(varargin) canClose(this, varargin{:});
 
-            % 添加 Project 项目根节点的监听器
-            project = kssolv.ui.util.DataStorage.getData('Project');
-            addlistener(project, 'isDirty', 'PostSet', @this.callbackProjectDirtyChanged);
+            % 添加 Project 句柄对象的监听器
+            kssolv.KSSOLVToolbox.createListener();
         end
         
         function delete(this)
@@ -100,6 +92,42 @@ classdef KSSOLVToolbox < handle
         end       
     end
 
+    methods (Static)
+        function createListener()
+            % 添加 Project 句柄对象的监听器
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            addlistener(project, 'isDirty', 'PostSet', @kssolv.KSSOLVToolbox.callbackProjectDirtyChanged);
+        end
+
+        function title = setAppContainerTitle(isDirty)
+            % 按照特定格式设定 App Container 标题
+            arguments
+                isDirty logical = false
+            end
+            import kssolv.ui.util.Localizer.message
+            import kssolv.ui.util.DataStorage.getData
+
+            projectFilename = getData('ProjectFilename');
+            if projectFilename == ""
+                title = message('KSSOLV:toolbox:AppTitle');
+            else
+                title = strcat(message('KSSOLV:toolbox:AppTitle'), " - ", projectFilename);
+            end
+            if isDirty
+                title = strcat(title, '*');
+            end
+            appContainer = getData('AppContainer');
+            appContainer.Title = title;
+        end
+    end
+
+    methods (Access = private, Static)
+        function callbackProjectDirtyChanged(~, event)
+            isDirty = event.AffectedObject.isDirty;
+            kssolv.KSSOLVToolbox.setAppContainerTitle(isDirty);
+        end
+    end
+
     methods (Access = private)
         function setPanelLayout(this)
             % 调整 Data Browsers 的布局
@@ -111,26 +139,53 @@ classdef KSSOLVToolbox < handle
         end
 
         function status = canClose(this, ~)
-            status = false;
-
-            import kssolv.ui.util.Localizer.*
-            YesLabel = message('KSSOLV:dialogs:AppCanCloseSave');
-            NoLabel = message('KSSOLV:dialogs:AppCanCloseDoNotSave');
-            CancelLabel = message('KSSOLV:dialogs:AppCanCloseCancel');
-            selection = uiconfirm(this.AppContainer, ...
-                message('KSSOLV:dialogs:AppCanCloseMessage'), ...
-                message('KSSOLV:dialogs:AppCanCloseTitle'), ...
-                'Options', {YesLabel, NoLabel, CancelLabel}, ...
-                'DefaultOption', 1, ...
-                'CancelOption', 3);
-            
-            switch selection
-                case YesLabel
-                    status = true;
-                case NoLabel
-                    status = true;
-                otherwise
+            arguments (Output)
+                status logical
             end
+            import kssolv.ui.util.Localizer.*
+
+            status = false;
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            projectFilename = kssolv.ui.util.DataStorage.getData('ProjectFilename');
+
+            if ~project.isDirty
+                % 如果 project 没有进行任何修改，则直接关闭已有的 project
+                % 此处不需要进行额外的处理
+            else
+                % 如果 project 有进行修改，则弹出对话框，包含"保存"、"不保存"和"取消"按钮
+                YesLabel = message('KSSOLV:dialogs:AppCanCloseSave');
+                NoLabel = message('KSSOLV:dialogs:AppCanCloseDoNotSave');
+                CancelLabel = message('KSSOLV:dialogs:AppCanCloseCancel');
+                selection = uiconfirm(this.AppContainer, ...
+                    message('KSSOLV:dialogs:AppCanCloseMessage'), ...
+                    message('KSSOLV:dialogs:AppCanCloseTitle'), ...
+                    'Options', {YesLabel, NoLabel, CancelLabel}, ...
+                    'DefaultOption', 1, ...
+                    'CancelOption', 3);
+                switch selection
+                    case YesLabel
+                        if projectFilename == ""
+                            % 如果尚未指定要保存的文件，则选择保存为 .ks 文件的路径
+                            [file,location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                                message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled.ks');
+                            if isequal(file, 0) || isequal(location, 0)
+                                % 用户点击了"取消"按钮
+                                return
+                            else
+                                % 用户选择了具体的文件路径，保存 project
+                                project.saveToKsFile(fullfile(location, file));
+                            end
+                        else
+                            % 如果已打开 .ks 文件，则保存后关闭当前 project
+                            project.saveToKsFile(projectFilename);
+                        end
+                    case NoLabel
+                        % 此处无需进行处理
+                    case CancelLabel
+                        return
+                end
+            end
+            status = true;
         end
 
         %% 回调函数
@@ -146,22 +201,6 @@ classdef KSSOLVToolbox < handle
                     kssolv.ui.util.Localizer.clearInstance();
                     % 清除 App Container 相关的实例
                     delete(this);
-            end
-        end
-
-        function callbackProjectDirtyChanged(this, ~, event)
-            isDirty = event.AffectedObject.isDirty;
-            if isDirty
-                % 如果对 Project 进行了更新，提示用户需要保存当前所有更改，
-                % 则在窗口标题末尾添加 * 作为提示
-                if ~endsWith(this.AppContainer.Title, '*')
-                    this.AppContainer.Title = this.AppContainer.Title + "*";
-                end
-            else
-                % 如果已保存更改，则移除窗口标题末尾的 *
-                if endsWith(this.AppContainer.Title, '*')
-                    this.AppContainer.Title = extractBefore(this.AppContainer.Title, "*");
-                end
             end
         end
     end

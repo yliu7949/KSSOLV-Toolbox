@@ -7,6 +7,10 @@ classdef Project < kssolv.services.filemanager.AbstractItem
     properties (Hidden, SetObservable)
         isDirty logical   % 用于判断是否需要保存当前项目中的变更
     end
+
+    properties (Hidden)
+        version string    % .ks 文件版本号，默认为 ks-1.0
+    end
     
     methods
         function this = Project()
@@ -19,6 +23,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
             this.addChildrenItem(structureParent);
 
             this.isDirty = false;
+            this.version = 'ks-1.0';
         end
 
         function saveToKsFile(this, filename)
@@ -38,6 +43,8 @@ classdef Project < kssolv.services.filemanager.AbstractItem
         
             data = this;
             try
+                % 在执行 save 命令前设定 isDirty 属性，
+                % 避免将值为 true 的 isDirty 保存到 .ks 文件中
                 data.isDirty = false;
                 save(filename, 'data', "-mat", "-v7.3");
             catch ME
