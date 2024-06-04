@@ -431,6 +431,7 @@ classdef HomeTab < handle
             kssolv.ui.util.DataStorage.setData('Project', kssolv.services.filemanager.Project());
             kssolv.ui.util.DataStorage.setData('ProjectFilename', '');
             kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
+            kssolv.ui.util.DataStorage.getData('InfoBrowser').reBuildUI();
             kssolv.KSSOLVToolbox.setAppContainerTitle();
             kssolv.KSSOLVToolbox.createListener();
             appContainer.bringToFront();

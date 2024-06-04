@@ -189,14 +189,31 @@
     }
 
     function makeEditable(element) {
-        const value = element.innerText;
+        const originalValue = element.innerText;
         const textarea = document.createElement('textarea');
-        textarea.value = value;
+        textarea.value = originalValue;
         adjustTextareaHeight(textarea); // Adjust initial height based on content
         requestAnimationFrame(() => adjustTextareaHeight(textarea));
         textarea.onblur = function() {
-            element.innerText = textarea.value;
+            const newValue = textarea.value;
+            element.innerText = newValue;
             element.style.display = 'block';
+
+            // Update testData with the new value if it has changed
+            if (newValue !== originalValue) {
+                const key = element.previousSibling.textContent.toLowerCase(); // Get the key from the previous label element
+                testData[key] = newValue;
+
+                // Send the updated value to MATLAB
+                if (typeof MATLAB !== 'undefined') {
+                    const update = {
+                        name: testData.name,
+                        key: key,
+                        value: newValue
+                    };
+                    MATLAB.sendEventToMATLAB("ValueChanged", JSON.stringify(update));
+                }
+            }
         };
         textarea.oninput = function() {
             adjustTextareaHeight(this); // Adjust height while typing
@@ -213,29 +230,32 @@
         textarea.focus();
     }
 
+    function addFieldContent(container, labelText, valueText, isEditable = false) {
+        const fieldLabel = document.createElement('div');
+        fieldLabel.className = 'field-label';
+        fieldLabel.textContent = labelText.toUpperCase();
+
+        const fieldContent = document.createElement('div');
+        fieldContent.className = isEditable ? 'field-content field-content-editable' : 'field-content field-content-not-editable';
+        fieldContent.textContent = valueText;
+
+        if (isEditable) {
+            fieldContent.onclick = function() {
+                makeEditable(this);
+            };
+        }
+
+        container.appendChild(fieldLabel);
+        container.appendChild(fieldContent);
+    }
+
     function loadInfoContent() {
         const infoContent = document.getElementById('info-content');
         infoContent.innerHTML = '';
 
         for (const [key, value] of Object.entries(testData)) {
             if (key === 'data') continue; // Skip the 'data' field
-
-            const fieldLabel = document.createElement('div');
-            fieldLabel.className = 'field-label';
-            fieldLabel.textContent = key.toUpperCase();
-
-            const fieldContent = document.createElement('div');
-            fieldContent.className = (key === 'label' || key === 'description') ? 'field-content field-content-editable' : 'field-content field-content-not-editable';
-            fieldContent.textContent = Array.isArray(value) ? JSON.stringify(value) : value;
-
-            if (key === 'label' || key === 'description') {
-                fieldContent.onclick = function() {
-                    makeEditable(this);
-                };
-            }
-
-            infoContent.appendChild(fieldLabel);
-            infoContent.appendChild(fieldContent);
+            addFieldContent(infoContent, key, Array.isArray(value) ? JSON.stringify(value) : value, key === 'label' || key === 'description');
         }
     }
 
@@ -248,25 +268,12 @@
             return
         }
 
-        function addFieldContent(labelText, valueText, isEditable = false) {
-            const fieldLabel = document.createElement('div');
-            fieldLabel.className = 'field-label';
-            fieldLabel.textContent = labelText.toUpperCase();
-
-            const fieldContent = document.createElement('div');
-            fieldContent.className = isEditable ? 'field-content field-content-editable' : 'field-content field-content-not-editable';
-            fieldContent.textContent = valueText;
-
-            dataContent.appendChild(fieldLabel);
-            dataContent.appendChild(fieldContent);
-        }
-
         function formatNumber(value) {
             return parseFloat(value).toFixed(3);
         }
 
         function addMatrixTable(matrix, label) {
-            addFieldContent(label, '');
+            addFieldContent(dataContent, label, '');
             const table = document.createElement('table');
             table.style.width = '100%';
             table.style.borderCollapse = 'collapse';
@@ -288,13 +295,13 @@
         }
 
         // Name
-        addFieldContent('Name', rawData.KSSOLVSetupObject.name);
+        addFieldContent(dataContent, 'Name', rawData.KSSOLVSetupObject.name);
 
         // Matrix C
         addMatrixTable(rawData.KSSOLVSetupObject.C, 'C');
 
         // Atom List
-        addFieldContent('Atom List', rawData.KSSOLVSetupObject.atomList.join(', '));
+        addFieldContent(dataContent, 'Atom List', rawData.KSSOLVSetupObject.atomList.join(', '));
 
         // XYZ List
         addMatrixTable(rawData.KSSOLVSetupObject.xyzList, 'XYZ List');

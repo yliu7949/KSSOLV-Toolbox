@@ -73,27 +73,27 @@ classdef AbstractItem < handle
             projectItem.isDirty = true;
         end
 
-        function foundItem = findChildrenItem(this, name)
-            %FINDCHILDRENITEM 在当前节点及其子节点中查找具有特定名称的项
+        function foundItem = findChildrenItem(this, nameOrLabel)
+            %FINDCHILDRENITEM 在当前节点及其子节点中查找具有特定名称或标签的项
             arguments
                 this
-                name string
+                nameOrLabel string
             end
-
-            % 检查当前节点是否匹配
-            if this.name == name
+        
+            % 检查当前节点是否匹配名称或标签
+            if this.name == nameOrLabel || this.label == nameOrLabel
                 foundItem = this;
                 return;
             end
-
+        
             % 在子节点中递归查找
             for i = 1:length(this.children)
-                foundItem = this.children{i, 1}.findChildrenItem(name);
+                foundItem = this.children{i, 1}.findChildrenItem(nameOrLabel);
                 if ~isempty(foundItem)
                     return;
                 end
             end
-
+        
             % 如果没有找到则返回空数组
             foundItem = [];
         end
@@ -130,6 +130,31 @@ classdef AbstractItem < handle
                     end
                 end
             end
+        end
+
+        function setItemProperty(this, property, value)
+            %SETITEMPROPERTY 更新当前节点的某个属性的值
+            arguments
+                this 
+                property string {mustBeNonempty}
+                value string {mustBeNonempty}
+            end
+
+            % 检查节点是否存在该属性
+            if ~ismember(property, properties(this))
+                error('KSSOLV:FileManager:AbstractItem:PropertyNotFound', ...
+                  'Unknown property in Item %s: %s', this.name, property);
+            end
+
+            if isequal(this.(property), value)
+                return
+            end
+        
+            % 更新属性值和相关信息
+            this.(property) = value;
+            this.updatedAt = datetime;
+            projectItem = this.findProjectItem();
+            projectItem.isDirty = true;
         end
 
         function projectItem = findProjectItem(this)

@@ -18,10 +18,20 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             buildUI(this);
             % 设定 FigurePanel 的 Tag
             this.Panel.Tag = 'InfoBrowser';
+            % 设定初始高度
+            this.Panel.PreferredHeight = 342;
             % 添加 ProjectBrowser 的监听器
             projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
             addlistener(projectBrowser, 'currentSelectedItem', 'PostSet', ...
                     @this.handleCurrentSelectedItem);
+            % 保存至 DataStorage
+            kssolv.ui.util.DataStorage.setData('InfoBrowser', this);
+        end
+
+        function reBuildUI(this)
+            % 重新渲染 Info Browser 的 UI 界面
+            % 可用于清空 Info Browser 的信息显示
+            this.buildUI();
         end
     end
 
@@ -37,10 +47,50 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'html', 'index.html');
             h = uihtml(g, "HTMLSource", htmlFile);
             this.Widgets.html = h;
+
+            % 接收从 HTML 组件触发的事件
+            h.HTMLEventReceivedFcn = @this.eventReceiver;
         end
     end
 
     methods (Access = private)
+        function eventReceiver(this, src, event)
+            switch event.HTMLEventName
+                case 'ValueChanged'
+                    this.callbackValueChanged(src, event);
+            end
+        end
+
+        function callbackValueChanged(~, ~, event)
+            newValueJSON = event.HTMLEventData;
+            newValueStruct = jsondecode(newValueJSON);
+        
+            name = newValueStruct.name;
+            key = newValueStruct.key;
+            value = newValueStruct.value;
+        
+            % 更新 Project 中相应 item 的属性
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            item = project.findChildrenItem(name);
+            item.setItemProperty(key, value);
+
+            % 更新 Info Browser 界面
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.resetSelectedItem();
+
+            if key == "label"
+                % 更新 Project Browser 界面
+                projectBrowser.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+
+                % 更新已打开的 document 标签页的标题
+                appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+                document = appContainer.getDocument(item.category, item.name);
+                if ~isempty(document)
+                    document.Title = item.label;
+                end
+            end
+        end
+
         function handleCurrentSelectedItem(this, ~, event)
             project = kssolv.ui.util.DataStorage.getData('Project');
             name = event.AffectedObject.currentSelectedItem;
