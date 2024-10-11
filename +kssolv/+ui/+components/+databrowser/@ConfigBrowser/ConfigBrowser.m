@@ -25,17 +25,41 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
     methods (Access = protected)
         function buildUI(this)
-            fig = this.Figure;
-            g = uigridlayout(fig);
+            import kssolv.ui.components.custom.*
+
+            % 创建网格布局
+            g = uigridlayout(this.Figure);
             g.BackgroundColor = "white";
             g.Padding = [0 0 0 0];
-            g.RowHeight = {'1x'};
+            g.RowHeight = {'fit', '1x'};
             g.ColumnWidth = {'1x'};
+
+            % 创建 buttonPanelLayout
+            buttonPanelLayout = uigridlayout(g);
+            buttonPanelLayout.BackgroundColor = "white";
+            buttonPanelLayout.Padding = 5;
+            buttonPanelLayout.ColumnWidth = {'1x', 30};
+            buttonPanelLayout.RowHeight = {30};
+
+            % 文字标签
+            label = uilabel(buttonPanelLayout);
+            label.Text = '<b style="font-size:12px;color:#616161">Node Settings</b>';
+            label.Interpreter = "html";
+            % 帮助按钮，Row = 1，Column = 2
+            button = CustomButton(buttonPanelLayout);
+            button.Layout.Row = 1;
+            button.Layout.Column = 2;
+            matlab.ui.control.internal.specifyIconID(button, 'help', 18);
+            % button.LayoutBackgroundColor = "black";
+
+            % 折叠面板
+            % togglePanel = TogglePanel(g);
+            % togglePanel.BackgroundColor = [0.5 0.5 0.5];
         end
     end
 
     methods (Hidden)
-        function app = qeShow(this)
+        function [app, this] = qeShow(this)
             % 用于在单元测试中测试 ConfigBrowser，可通过下面的命令使用：
             % b = kssolv.ui.components.databrowser.ConfigBrowser();
             % b.qeShow()

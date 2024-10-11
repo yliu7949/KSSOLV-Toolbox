@@ -27,12 +27,14 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
         function buildUI(this)
             % 创建网格布局
             g = uigridlayout(this.Figure);
+            g.BackgroundColor = "white";
             g.Padding = [0 0 0 0];
             g.RowHeight = {'fit', '1x'};
             g.ColumnWidth = {'1x'};
 
             % 创建 buttonPanelLayout
             buttonPanelLayout = uigridlayout(g);
+            buttonPanelLayout.BackgroundColor = "white";
             buttonPanelLayout.ColumnWidth = {25, 'fit', 25, 'fit', 25, '1x', 25, 'fit'};
             buttonPanelLayout.RowHeight = {'1x'};
             buttonPanelLayout.Padding = 10;
