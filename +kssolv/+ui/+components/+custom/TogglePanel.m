@@ -1,5 +1,10 @@
-classdef TogglePanel < matlab.ui.componentcontainer.ComponentContainer
-    %TOGGLEPANEL 一个简单的可折叠面板组件，带有最小化功能
+classdef TogglePanel < matlab.ui.componentcontainer.ComponentContainer & ...
+        matlab.ui.control.internal.model.mixin.MultilineTextComponent
+
+    %TOGGLEPANEL 可折叠的自定义面板组件，允许隐藏和显示面板内的内容
+
+    %   开发者：杨柳
+    %   版权 2024 合肥瀚海量子科技有限公司
     
     properties
         Title = 'Toggle Panel'   % 面板的标题
@@ -19,13 +24,13 @@ classdef TogglePanel < matlab.ui.componentcontainer.ComponentContainer
     
     methods(Access = protected)
         function setup(this)
-            % 设置组件
+            % 初始化组件
             
             % 创建用于面板的网格布局
             this.GridLayout = uigridlayout(this, [2, 1]);
-            this.GridLayout.RowHeight = {'fit', this.ContentHeight}; % 调整行高
+            this.GridLayout.RowHeight = {'fit', 'fit'};
             this.GridLayout.ColumnWidth = {'1x'};
-            this.GridLayout.Padding = [0 0 0 0]; % 取消网格布局的边框
+            this.GridLayout.Padding = [0 0 0 0];
             
             % 创建标题标签，模拟按钮效果
             this.TitleLabel = uilabel(this.GridLayout, ...
@@ -87,6 +92,30 @@ classdef TogglePanel < matlab.ui.componentcontainer.ComponentContainer
         function toggleContent(this)
             % 切换内容的可见性（折叠/展开），并设置 Minimized 状态
             this.Minimized = ~this.Minimized;  % 切换 Minimized 属性
+        end
+    end
+
+    methods (Hidden, Static)
+        function button1 = qeShow()
+            % 用于单元测试中的 TogglePanel 示例，可使用以下命令：
+            % kssolv.ui.components.custom.TogglePanel.qeShow();
+
+            % 判断是否存在名为 "Unit Test" 的窗口
+            existingFig = findall(0, 'Type', 'figure', 'Name', 'Unit Test');
+            if ~isempty(existingFig)
+                % 如果存在则关闭窗口
+                close(existingFig);
+            end
+
+            % 创建画布和面板
+            fig = uifigure("Name", "Unit Test");
+            layout = uigridlayout(fig);
+            layout.ColumnWidth = {'1x', 45};
+            layout.RowHeight = {'1x'};
+
+            % 将 CustomButton 添加到画布
+            button1 = kssolv.ui.components.custom.TogglePanel(layout);
+            button1.Title = "Test";
         end
     end
 end

@@ -4,19 +4,26 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
         matlab.ui.control.internal.model.mixin.WordWrapComponent & ...
         matlab.ui.control.internal.model.mixin.ClickableComponent
 
-    % CustomButton 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
+    % CUSTOMBUTTON 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
+
+    %   开发者：杨柳
+    %   版权 2024 合肥瀚海量子科技有限公司
 
     properties
         Icon = ''
+        AdditionalIcons = {}
         LayoutBackgroundColor = 'white'
+        LayoutHorizontalAlignment {mustBeMember(LayoutHorizontalAlignment, {'flex-start', 'center', 'flex-end'})} = 'center'
     end
 
     properties (Access = private, Transient, NonCopyable)
         HTMLComponent matlab.ui.control.HTML % 内部的 uihtml 组件
         GridLayout matlab.ui.container.GridLayout % 网格布局
 
-        privateIconURL
-        privateIconType
+        IconURL
+        IconType
+        IconIndex = 0
+        IconList
     end
 
     methods (Access = protected)
@@ -91,8 +98,8 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                     % 判断是否存在与 this.IconURL 相同的键名
                     if isfield(registryData, newValue)
                         this.Icon = newValue;
-                        this.set("privateIconType", 'preset');
-                        this.set("privateIconURL", fullfile(iconsFolder, registryData.(newValue){1}, newValue + ".svg"));
+                        this.set("IconType", 'preset');
+                        this.set("IconURL", fullfile(iconsFolder, registryData.(newValue){1}, newValue + ".svg"));
                         markPropertiesDirty(this, {'Icon'});
                     else
                         % 若 registry.json 中无匹配的键名
@@ -104,7 +111,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 end
             end
         end
-    
+
         function set.LayoutBackgroundColor(this, newValue)
             this.LayoutBackgroundColor = newValue;
             gridLayout = this.get("GridLayout");
@@ -116,6 +123,13 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
         function eventReceiver(this, ~, event)
             switch event.HTMLEventName
                 case 'ButtonClicked'
+                    % 如果有 AdditionalIcons，则每次点击时依次切换 AdditionalIcons 中的图标
+                    if ~isempty(this.AdditionalIcons)
+                        this.IconIndex = mod(this.IconIndex, length(this.AdditionalIcons)) + 1;
+                        this.Icon = this.AdditionalIcons{this.IconIndex}; 
+                    end
+
+                    % 执行用户定义的 ClickedFcn 函数
                     if ~isempty(this.ClickedFcn)
                         this.ClickedFcn();
                     end
@@ -146,7 +160,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 'body {'
                 '   background-color: transparent;'
                 '   display: flex;'
-                '   justify-content: center;'
+                sprintf('   justify-content: %s;', this.LayoutHorizontalAlignment)
                 '}'
                 '.custom-button {'
                 '   border: 1px solid transparent;'  % 默认透明边框
@@ -198,15 +212,15 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 buttonHTML = sprintf('<button class="custom-button">%s</button>', this.Text);
             else
                 % 图标按钮
-                if strcmp(this.privateIconType, "preset")
-                    svgContent = fileread(this.privateIconURL);
+                if strcmp(this.IconType, "preset")
+                    svgContent = fileread(this.IconURL);
                     buttonHTML = sprintf(...
                         '<button class="custom-button">%s%s</button>', ...
                         svgContent, this.Text);
                 else
                     buttonHTML = sprintf(...
                         '<button class="custom-button"><img src="%s" alt="Icon">%s</button>', ...
-                        this.privateIconURL, this.Text);
+                        this.IconURL, this.Text);
                 end
             end
 
@@ -269,6 +283,10 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 end
             end
         end
+
+        function htmlContent = exportHTML(this)
+            htmlContent = this.generateHTML();
+        end
     end
 
     methods (Hidden, Static)
@@ -286,8 +304,8 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
             % 创建画布和面板
             fig = uifigure("Name", "Unit Test");
             layout = uigridlayout(fig);
-            layout.ColumnWidth = {'1x', 45};
-            layout.RowHeight = {'1x'};
+            layout.ColumnWidth = {'1x', '1x'};
+            layout.RowHeight = {'1x', '1x'};
 
             % 将 CustomButton 添加到画布
             button1 = kssolv.ui.components.custom.CustomButton(layout);
@@ -295,7 +313,20 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
 
             button1 = kssolv.ui.components.custom.CustomButton(layout);
             button1.ClickedFcn = @() disp('YES');
-            matlab.ui.control.internal.specifyIconID(button1, 'webBrowserUI', 16);
+            matlab.ui.control.internal.specifyIconID(button1, 'webBrowserUI', 24);
+
+            button1 = kssolv.ui.components.custom.CustomButton(layout);
+            button1.LayoutHorizontalAlignment = "flex-start";
+            button1.Text = '<b style="font-size:12px">&nbsp;Title</b>';
+            button1.AdditionalIcons = {'treeExpandUI', 'treeCollapseUI'};
+            matlab.ui.control.internal.specifyIconID(button1, 'treeCollapseUI', 8);
+            disp(button1.generateHTML);
+
+            button1 = kssolv.ui.components.custom.CustomButton(layout);
+            button1.LayoutHorizontalAlignment = "flex-end";
+            button1.Text = "&nbsp;Title";
+            button1.AdditionalIcons = {'treeCollapseUI', 'treeExpandUI'};
+            matlab.ui.control.internal.specifyIconID(button1, 'treeExpandUI', 8);
         end
     end
 end
