@@ -1,4 +1,4 @@
-classdef AbstractItem < handle
+classdef AbstractItem < matlab.mixin.SetGet
     %ABSTRACTITEM 项目文件树中节点的抽象定义
     
     %   开发者：杨柳

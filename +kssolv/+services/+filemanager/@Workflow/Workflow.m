@@ -5,8 +5,9 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
     %   版权 2024 合肥瀚海量子科技有限公司
 
     properties (Hidden)
+        graph kssolv.services.workflow.WorkflowGraph
         graphJSON string
-        editedNode
+        editedNode = []
     end
     
     methods
@@ -27,10 +28,17 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
         function createWorkflowItem(this)
             % 创建并添加工作流节点
             workflow = kssolv.services.filemanager.Workflow();
-            workflow.graphJSON = '';
+            workflow.graphJSON = kssolv.ui.components.figuredocument.Workflow.getDagJSON();
             this.addChildrenItem(workflow);
             displayObj = kssolv.ui.components.figuredocument.Workflow(workflow.graphJSON, workflow.name);
             displayObj.Display();
+        end
+
+        function set.graphJSON(this, newValue)
+            this.graphJSON = newValue;
+            if ~strcmp(newValue, '')
+                this.set("graph", kssolv.services.workflow.WorkflowGraph(newValue));
+            end
         end
     end
 end

@@ -131,11 +131,13 @@ classdef KSSOLVToolbox < handle
     methods (Access = private)
         function setPanelLayout(this)
             % 调整 Data Browsers 的布局
-            % 这里折叠了两个 Panel
+            % 折叠了两个 Panel
             InfoBrowserPanel = this.AppContainer.getPanel('InfoBrowser');
             InfoBrowserPanel.Collapsed = true;
             RunBrowserPanel = this.AppContainer.getPanel('RunBrowser');
             RunBrowserPanel.Collapsed = true;
+            % 折叠了右侧的面板
+            this.AppContainer.RightCollapsed = true;
         end
 
         function status = canClose(this, ~)

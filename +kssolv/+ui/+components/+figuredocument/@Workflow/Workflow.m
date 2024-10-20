@@ -9,6 +9,10 @@ classdef Workflow < handle
         graphJSON string
         tag string
     end
+
+    properties (Access = private)
+        HTMLComponent
+    end
     
     methods
         function this = Workflow(graphJSON, tag)
@@ -56,16 +60,18 @@ classdef Workflow < handle
             % 添加 html 组件
             fig = document.Figure;
             g = uigridlayout(fig);
+            g.BackgroundColor = 'white';
+            g.Padding = 0;
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'index.html');
-            h = uihtml(g, "HTMLSource", htmlFile);
+            this.HTMLComponent = uihtml(g, "HTMLSource", htmlFile);
 
             % 将画布数据保存在 html 组件中
-            h.Data = this.graphJSON;
+            this.HTMLComponent.Data = this.graphJSON;
 
             % 接收从 HTML 组件触发的事件
-            h.HTMLEventReceivedFcn = @this.eventReceiver;
+            this.HTMLComponent.HTMLEventReceivedFcn = @this.eventReceiver;
 
             % 添加到 App Container
             appContainer.add(document);
@@ -76,9 +82,36 @@ classdef Workflow < handle
         function eventReceiver(this, src, event)
             switch event.HTMLEventName
                 case 'OpenSettingsWindow'
-                    disp(event.HTMLEventName);
+                    this.callbackOpenSettingsWindow(src, event);
                 case 'GraphExportToJSON'
                     this.callbackGraphExportToJSON(src, event);
+            end
+        end
+
+        function callbackOpenSettingsWindow(this, ~, event)
+            AppContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            ConfigBrowser = kssolv.ui.util.DataStorage.getData('ConfigBrowser');
+            Project = kssolv.ui.util.DataStorage.getData('Project');
+            workflowItem = Project.findChildrenItem(this.tag);
+            ConfigBrowserPanel = AppContainer.getPanel('ConfigBrowser');
+            nodeID = event.HTMLEventData;
+
+            if AppContainer.RightCollapsed
+                % 若右侧面板已被折叠，则打开右侧面板
+                ConfigBrowser.nodeID = nodeID;
+                ConfigBrowser.nodeData = workflowItem.graph.Nodes(nodeID);
+                ConfigBrowser.updateUI();
+                pause(0.5);
+
+                AppContainer.RightCollapsed = false;
+                ConfigBrowserPanel.Collapsed = false;
+                pause(0.6);
+                this.HTMLComponent.sendEventToHTMLSource('workflowZoomToFit');
+            else
+                % 若右侧面板已被打开，则不处理折叠
+                ConfigBrowser.nodeID = event.HTMLEventData;
+                ConfigBrowser.nodeData = workflowItem.graph.Nodes(nodeID);
+                ConfigBrowser.updateUI();
             end
         end
 
@@ -94,6 +127,14 @@ classdef Workflow < handle
                 % 更新 Info Browser 的界面
                 kssolv.ui.util.DataStorage.getData('ProjectBrowser').resetSelectedItem();
             end
+        end
+    end
+
+    methods (Static)
+        function content = getDagJSON()
+            % 读取 HTML 组件中的 dag.json
+            dagFilePath = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'assets', 'data', 'dag.json');
+            content = fileread(dagFilePath, "Encoding", "UTF-8");
         end
     end
 

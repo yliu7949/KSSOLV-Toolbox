@@ -2,7 +2,10 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
         matlab.ui.control.internal.model.mixin.IconIDableComponent & ...
         matlab.ui.control.internal.model.mixin.MultilineTextComponent & ...
         matlab.ui.control.internal.model.mixin.WordWrapComponent & ...
-        matlab.ui.control.internal.model.mixin.ClickableComponent
+        matlab.ui.control.internal.model.mixin.ClickableComponent & ...
+        matlab.ui.control.internal.model.mixin.EnableableComponent & ...
+        matlab.ui.control.internal.model.mixin.TooltipComponent & ...
+        matlab.ui.control.internal.model.mixin.HorizontallyAlignableComponent
 
     % CUSTOMBUTTON 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
 
@@ -12,8 +15,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
     properties
         Icon = ''
         AdditionalIcons = {}
-        LayoutBackgroundColor = 'white'
-        LayoutHorizontalAlignment {mustBeMember(LayoutHorizontalAlignment, {'flex-start', 'center', 'flex-end'})} = 'center'
+        LayoutBackgroundColor = '#f0f0f0'
     end
 
     properties (Access = private, Transient, NonCopyable)
@@ -24,6 +26,8 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
         IconType
         IconIndex = 0
         IconList
+
+        privateHorizontalAlignment {mustBeMember(privateHorizontalAlignment, {'flex-start', 'center', 'flex-end'})} = 'flex-start'
     end
 
     methods (Access = protected)
@@ -42,9 +46,8 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
             this.refreshHTML();
         end
 
-        function update(this)
+        function update(~)
             % 当属性变化时更新组件
-            this.refreshHTML();
         end
     end
 
@@ -126,7 +129,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                     % 如果有 AdditionalIcons，则每次点击时依次切换 AdditionalIcons 中的图标
                     if ~isempty(this.AdditionalIcons)
                         this.IconIndex = mod(this.IconIndex, length(this.AdditionalIcons)) + 1;
-                        this.Icon = this.AdditionalIcons{this.IconIndex}; 
+                        this.Icon = this.AdditionalIcons{this.IconIndex};
                     end
 
                     % 执行用户定义的 ClickedFcn 函数
@@ -160,13 +163,12 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 'body {'
                 '   background-color: transparent;'
                 '   display: flex;'
-                sprintf('   justify-content: %s;', this.LayoutHorizontalAlignment)
+                sprintf('   justify-content: %s;', this.privateHorizontalAlignment)
                 '}'
                 '.custom-button {'
                 '   border: 1px solid transparent;'  % 默认透明边框
                 '   background-color: transparent;'
                 '   padding: 3px;'
-                '   cursor: pointer;'
                 '   font-size: 14px;'
                 '   display: inline-flex;'
                 '   align-items: center;'
@@ -174,6 +176,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '   user-select: none;'
                 '   max-width: 100%;'
                 '   max-height: 100%;'
+                '   border-radius: 4px;'
                 '}'
                 '.custom-button:hover {'
                 '   background-color: #ffffff;'
@@ -200,27 +203,48 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '   max-width: 24px;'
                 '   max-height: 24px;'
                 '}'
+                '.custom-button:disabled {'
+                '    cursor: not-allowed;'
+                '    background-color: #f5f5f5;'
+                '    border-color: #cbcbcb;'
+                '    border-radius: 4px;'
+                '    opacity: 0.5;'
+                '}'
+                '.custom-button:disabled:hover {'
+                '    background-color: #f5f5f5;'
+                '    border-color: #cbcbcb;'
+                '    border-radius: 4px;'
+                '}'
+                '.custom-button:disabled {'
+                '    transition: background-color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;'
+                '}'
                 '</style>'
                 };
 
             % 将 cssStyles 转换为字符串
             cssStylesString = strjoin(cssStyles, '\n');
 
+            % 判断 Enable 状态
+            disableStatus = '';
+            if ~this.Enable
+                disableStatus = 'disabled';
+            end
+
             % 按钮类型
             if isempty(this.Icon)
                 % 纯文字按钮
-                buttonHTML = sprintf('<button class="custom-button">%s</button>', this.Text);
+                buttonHTML = sprintf('<button %s class="custom-button">%s</button>', disableStatus, this.Text);
             else
                 % 图标按钮
                 if strcmp(this.IconType, "preset")
                     svgContent = fileread(this.IconURL);
                     buttonHTML = sprintf(...
-                        '<button class="custom-button">%s%s</button>', ...
-                        svgContent, this.Text);
+                        '<button %s class="custom-button" title="%s">%s%s</button>', ...
+                        disableStatus, this.Tooltip, svgContent, this.Text);
                 else
                     buttonHTML = sprintf(...
-                        '<button class="custom-button"><img src="%s" alt="Icon">%s</button>', ...
-                        this.IconURL, this.Text);
+                        '<button %s class="custom-button"><img src="%s" alt="Icon">%s</button>', ...
+                        disableStatus, this.IconURL, this.Text);
                 end
             end
 
@@ -235,6 +259,14 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '       });'
                 '       button.addEventListener("mousedown", () => {'
                 '           button.focus();'
+                '       });'
+                ''
+                '       htmlComponent.addEventListener("DisableButton", (event) => {'
+                '           button.disabled = true;'
+                '       });'
+                ''
+                '       htmlComponent.addEventListener("EnableButton", (event) => {'
+                '           button.disabled = false;'
                 '       });'
                 '    }'
                 '</script>'
@@ -278,10 +310,25 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                         if ~isempty(fieldnames(this.IconID))
                             this.Icon = this.IconID.id;
                         end
-                    case 'Icon'
-                    case 'ClickedFcn'
+                    case 'Enable'
+                        if this.Enable
+                            this.HTMLComponent.sendEventToHTMLSource("EnableButton");
+                        else
+                            this.HTMLComponent.sendEventToHTMLSource("DisableButton");
+                        end
+                    case 'HorizontalAlignment'
+                        switch this.HorizontalAlignment
+                            case 'left'
+                                this.privateHorizontalAlignment = 'flex-start';
+                            case 'center'
+                                this.privateHorizontalAlignment = 'center';
+                            case 'right'
+                                this.privateHorizontalAlignment = 'flex-end';
+                        end
+                    case 'Tooltip'
                 end
             end
+            this.refreshHTML();
         end
 
         function htmlContent = exportHTML(this)
@@ -309,24 +356,29 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
 
             % 将 CustomButton 添加到画布
             button1 = kssolv.ui.components.custom.CustomButton(layout);
+            button1.LayoutBackgroundColor = 'white';
+            button1.HorizontalAlignment = 'center';
             button1.Text = "Test";
 
             button1 = kssolv.ui.components.custom.CustomButton(layout);
+            button1.HorizontalAlignment = 'center';
             button1.ClickedFcn = @() disp('YES');
             matlab.ui.control.internal.specifyIconID(button1, 'webBrowserUI', 24);
+            button1.Tooltip = 'Print YES';
 
             button1 = kssolv.ui.components.custom.CustomButton(layout);
-            button1.LayoutHorizontalAlignment = "flex-start";
+            button1.HorizontalAlignment = "left";
             button1.Text = '<b style="font-size:12px">&nbsp;Title</b>';
             button1.AdditionalIcons = {'treeExpandUI', 'treeCollapseUI'};
             matlab.ui.control.internal.specifyIconID(button1, 'treeCollapseUI', 8);
-            disp(button1.generateHTML);
 
             button1 = kssolv.ui.components.custom.CustomButton(layout);
-            button1.LayoutHorizontalAlignment = "flex-end";
+            button1.LayoutBackgroundColor = 'white';
+            button1.HorizontalAlignment = "right";
             button1.Text = "&nbsp;Title";
             button1.AdditionalIcons = {'treeCollapseUI', 'treeExpandUI'};
             matlab.ui.control.internal.specifyIconID(button1, 'treeExpandUI', 8);
+            button1.Enable = false;
         end
     end
 end
