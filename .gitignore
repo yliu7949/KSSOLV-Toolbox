@@ -19,5 +19,3 @@ data/
 # MATLAB Buildtool
 .buildtool/
 
-# KSSOLV Core
-+kssolv/+core/
