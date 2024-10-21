@@ -1,7 +1,7 @@
 classdef (Abstract) AbstractTaskUI < matlab.mixin.SetGet
     %ABSTRACTTASKUI Summary of this class goes here
     
-    properties
+    properties (Abstract, Dependent)
         options
     end
 

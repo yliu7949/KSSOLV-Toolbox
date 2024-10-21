@@ -59,5 +59,17 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
             end
         end
     end
+
+    methods (Static)
+        function importedStructures = getAllImportedStructures()
+            % 输出当前使用的工程中 Structure 节点下的所有数据结构体
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            structureItem = project.findChildrenItem('Structure');
+            importedStructures = cell(size(structureItem.children, 1), 1);
+            for i = 1:size(structureItem.children, 1)
+                importedStructures{i, 1} = structureItem.children{i}.data.KSSOLVSetupObject;
+            end
+        end
+    end
 end
 

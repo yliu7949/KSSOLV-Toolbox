@@ -8,7 +8,7 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
 
     methods
         function this = setup(this)
-            this.module = kssolv.services.workflow.module.ModuleType.Computation;
+            this.module = kssolv.services.workflow.module.ModuleType.Visualization;
             this.requiredTaskNames = 'SCF';
             this.supportGPU = false;
             this.supportParallel = false;
@@ -32,6 +32,10 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
                     delete(accordion.Children(3));
                 end
             end
+        end
+
+        function output = executeTask(~, ~, input)
+            output = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('Energy', input.info.Etotvec, 'Error', input.info.SCFerrvec);
         end
     end
 end

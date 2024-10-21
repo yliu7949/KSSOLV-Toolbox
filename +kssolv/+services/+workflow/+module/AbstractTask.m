@@ -42,13 +42,14 @@ classdef (Abstract) AbstractTask < matlab.mixin.SetGet
     methods (Abstract)
         setup(this)
         getOptionsUI(this, accordion)
+        
         %{
+        code = generateCodeSnippet(this)
         [output, status] = run(this, input)
         progress = getProgress(this)
         saveResultsToProject()
         exportResultsToWorkspace()
         tf = supportsParallel(this)
-        code = generateCodeSnippet(this)
         cleanup()
         %}
     end

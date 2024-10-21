@@ -1,20 +1,32 @@
 classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
-    %BUILDMOLECULETASKUI 与 buildMoleculeTask 的选项相关的 UI 控件
+    % BUILDMOLECULETASKUI 与 buildMoleculeTask 的选项相关的 UI 控件
+
+    properties (Dependent)
+        options
+    end
 
     properties (Access = private)
         g1
         g2
+        buttonGroup
+        structureListbox
+        functDropdown
+        ppTypeEditField
+        ecutSpinner
+        smearDropdown
+        temperatureSpinner
         nspinDropdown
         autokptsLabel
         autokptsEditField
-        lspinorbLabel
+        extranbndSpinner
         lspinorbSwitch
-        lsdaLabel
-        noncolinLabel
         lsdaSwitch
         noncolinSwitch
-        domagLabel
         domagSwitch
+        lspinorbLabel
+        lsdaLabel
+        noncolinLabel
+        domagLabel
     end
 
     methods
@@ -64,17 +76,17 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             structureTypeLabel.Layout.Column = 1;
 
             % Molecule/Crystal 选项按钮
-            buttonGroup = uibuttongroup(buttonGroupLayout);
-            buttonGroup.Layout.Row = 1;
-            buttonGroup.Layout.Column = 2;
-            buttonGroup.Tooltip = buttonGroupTooltip;
-            buttonGroup.BackgroundColor = 'white';
-            buttonGroup.BorderType = 'none';
-            buttonGroup.SelectionChangedFcn = @(src, event) this.toggleAutokpts(event.NewValue.Text);
+            this.buttonGroup = uibuttongroup(buttonGroupLayout);
+            this.buttonGroup.Layout.Row = 1;
+            this.buttonGroup.Layout.Column = 2;
+            this.buttonGroup.Tooltip = buttonGroupTooltip;
+            this.buttonGroup.BackgroundColor = 'white';
+            this.buttonGroup.BorderType = 'none';
+            this.buttonGroup.SelectionChangedFcn = @(src, event) this.toggleAutokpts(event.NewValue.Text);
 
-            radiobutton1 = uiradiobutton(buttonGroup, "Text", "Molecule", 'Position', [12 3 80 15]);
-            radiobutton2 = uiradiobutton(buttonGroup, "Text", "Crystal", 'Position', [125 3 80 15]);
-            buttonGroup.SelectedObject = radiobutton2;
+            radiobutton1 = uiradiobutton(this.buttonGroup, "Text", "Molecule", 'Position', [12 3 80 15]);
+            radiobutton2 = uiradiobutton(this.buttonGroup, "Text", "Crystal", 'Position', [125 3 80 15]);
+            this.buttonGroup.SelectedObject = radiobutton2;
 
             % 选择结构标题
             structureTooltip = 'Choose imported structures';
@@ -86,10 +98,12 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             structureSelectTitleLabel.Tooltip = structureTooltip;
 
             % 选择结构的列表框，添加左右 padding
-            structureListbox = uilistbox(this.g1, "Multiselect", "on");
-            structureListbox.Layout.Row = 3;
-            structureListbox.Layout.Column = [1 2];
-            structureListbox.Tooltip = structureTooltip;
+            this.structureListbox = uilistbox(this.g1, "Multiselect", "on");
+            this.structureListbox.Layout.Row = 3;
+            this.structureListbox.Layout.Column = [1 2];
+            importedStructures = kssolv.services.filemanager.Structure.getAllImportedStructures();
+            this.structureListbox.Items = cellfun(@(cell) cell.name, importedStructures, 'UniformOutput', false);
+            this.structureListbox.Tooltip = structureTooltip;
 
             % funct 下拉菜单
             functTooltip = 'Select the functional';
@@ -100,10 +114,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             functLabel.Text = "Function:";
             functLabel.Tooltip = functTooltip;
 
-            functDropdown = uidropdown(this.g1, 'Items', {'LDA', 'GGA', 'Hybrid'}, 'Value', 'LDA');
-            functDropdown.Layout.Row = 4;
-            functDropdown.Layout.Column = 2;
-            functDropdown.Tooltip = functTooltip;
+            this.functDropdown = uidropdown(this.g1, 'Items', {'LDA', 'GGA', 'Hybrid'}, 'Value', 'LDA');
+            this.functDropdown.Layout.Row = 4;
+            this.functDropdown.Layout.Column = 2;
+            this.functDropdown.Tooltip = functTooltip;
 
             % pseudopotential.PpType 编辑框
             ppTypeTooltip = 'Enter pseudopotential type';
@@ -114,11 +128,11 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             ppTypeLabel.Text = "Pseudopotential:";
             ppTypeLabel.Tooltip = ppTypeTooltip;
 
-            ppTypeEditField = uieditfield(this.g1, 'text');
-            ppTypeEditField.Layout.Row = 5;
-            ppTypeEditField.Layout.Column = 2;
-            ppTypeEditField.Value = 'default';
-            ppTypeEditField.Tooltip = ppTypeTooltip;
+            this.ppTypeEditField = uieditfield(this.g1, 'text');
+            this.ppTypeEditField.Layout.Row = 5;
+            this.ppTypeEditField.Layout.Column = 2;
+            this.ppTypeEditField.Value = 'default';
+            this.ppTypeEditField.Tooltip = ppTypeTooltip;
 
             % Ecut 数值输入框（默认值 20 Hartree）
             ecutTooltip = 'Set energy cutoff in Hartree';
@@ -129,10 +143,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             ecutLabel.Text = "Ecut (Hartree):";
             ecutLabel.Tooltip = ecutTooltip;
 
-            ecutSpinner = uispinner(this.g1, 'Value', 20);
-            ecutSpinner.Layout.Row = 6;
-            ecutSpinner.Layout.Column = 2;
-            ecutSpinner.Tooltip = ecutTooltip;
+            this.ecutSpinner = uispinner(this.g1, 'Value', 20);
+            this.ecutSpinner.Layout.Row = 6;
+            this.ecutSpinner.Layout.Column = 2;
+            this.ecutSpinner.Tooltip = ecutTooltip;
 
             % Smearing 方法下拉菜单
             smearTooltip = 'Select the smearing method';
@@ -143,10 +157,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             smearLabel.Text = "Smearing:";
             smearLabel.Tooltip = smearTooltip;
 
-            smearDropdown = uidropdown(this.g1, 'Items', {'fermi-dirac', 'cold', 'gaussian', 'mp'}, 'Value', 'fermi-dirac');
-            smearDropdown.Layout.Row = 7;
-            smearDropdown.Layout.Column = 2;
-            smearDropdown.Tooltip = smearTooltip;
+            this.smearDropdown = uidropdown(this.g1, 'Items', {'fermi-dirac', 'cold', 'gaussian', 'mp'}, 'Value', 'fermi-dirac');
+            this.smearDropdown.Layout.Row = 7;
+            this.smearDropdown.Layout.Column = 2;
+            this.smearDropdown.Tooltip = smearTooltip;
 
             % Temperature 输入框（默认值 0 K）
             temperatureTooltip = 'Set the temperature in Kelvin';
@@ -157,10 +171,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             temperatureLabel.Text = "Temperature (K):";
             temperatureLabel.Tooltip = temperatureTooltip;
 
-            temperatureSpinner = uispinner(this.g1, 'Value', 0);
-            temperatureSpinner.Layout.Row = 8;
-            temperatureSpinner.Layout.Column = 2;
-            temperatureSpinner.Tooltip = temperatureTooltip;
+            this.temperatureSpinner = uispinner(this.g1, 'Value', 0);
+            this.temperatureSpinner.Layout.Row = 8;
+            this.temperatureSpinner.Layout.Column = 2;
+            this.temperatureSpinner.Tooltip = temperatureTooltip;
 
             % nspin 下拉菜单
             nspinTooltip = 'Select the number of spin components';
@@ -168,7 +182,7 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             nspinLabel.Layout.Row = 9;
             nspinLabel.Layout.Column = 1;
             nspinLabel.HorizontalAlignment = 'right';
-            nspinLabel.Text = "nspin:";
+            nspinLabel.Text = "Nspin:";
             nspinLabel.Tooltip = nspinTooltip;
 
             this.nspinDropdown = uidropdown(this.g1, 'Items', {'1', '2', '4'}, 'Value', '1');
@@ -211,10 +225,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             extranbndLabel.Text = 'Extra bands:';
             extranbndLabel.Tooltip = extranbndTooltip;
 
-            extranbndSpinner = uispinner(this.g2, 'Value', 0);  % 默认值设置为 0
-            extranbndSpinner.Layout.Row = 1;
-            extranbndSpinner.Layout.Column = 2;
-            extranbndSpinner.Tooltip = extranbndTooltip;
+            this.extranbndSpinner = uispinner(this.g2, 'Value', 0);  % 默认值设置为 0
+            this.extranbndSpinner.Layout.Row = 1;
+            this.extranbndSpinner.Layout.Column = 2;
+            this.extranbndSpinner.Tooltip = extranbndTooltip;
 
             % lspinorb (逻辑开关) - 启用自旋轨道耦合
             lspinorbTooltip = 'Enable spin-orbit coupling';
@@ -234,7 +248,7 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.lspinorbSwitch.Visible = false;
             this.g2.RowHeight{2} = 0;
 
-            % lsda (逻辑开关) - 启用LSDA近似
+            % lsda (逻辑开关) - 启用 LSDA 近似
             lsdaTooltip = 'Enable LSDA approximation';
             this.lsdaLabel = uilabel(this.g2);
             this.lsdaLabel.Layout.Row = 3;
@@ -308,6 +322,36 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                     existingPanels(i).Parent = accordion;
                 end
             end
+        end
+
+        function output = get.options(this)
+            % 创建结构体并提取所有 UI 控件的值
+
+            output.type = this.buttonGroup.SelectedObject.Text;
+            
+            output.structures = [];
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            for i = 1:length(this.structureListbox.Value)
+                structureItem = project.findChildrenItem(this.structureListbox.Value{i});
+                output.structures = [output.structures, structureItem.data.KSSOLVSetupObject];
+            end
+
+            output.pseudopotentialPpType = this.ppTypeEditField.Value;
+
+            % 选项
+            output.funct = this.functDropdown.Value;
+            output.ecut = this.ecutSpinner.Value;
+            output.smearing = this.smearDropdown.Value;
+            output.temperature = this.temperatureSpinner.Value;
+            output.nspin = this.nspinDropdown.Value;
+            output.autokpts = this.autokptsEditField.Value;
+
+            % 高级选项
+            output.extranbnd = this.extranbndSpinner.Value;
+            output.lspinorb = this.lspinorbSwitch.Value;
+            output.lsda = this.lsdaSwitch.Value;
+            output.noncolin = this.noncolinSwitch.Value;
+            output.domag = this.domagSwitch.Value;
         end
     end
 

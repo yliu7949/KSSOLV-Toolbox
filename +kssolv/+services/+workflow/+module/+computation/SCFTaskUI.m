@@ -1,6 +1,10 @@
 classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     %SCFTASKUI 与 SCFTask 的选项相关的 UI 控件
 
+    properties (Dependent)
+        options
+    end
+
     properties (Access = private)
         eigMethodValueDropdown
         maxSCFIterationValueSpinner
@@ -106,6 +110,15 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                     existingPanels(i).Parent = accordion;
                 end
             end
+        end
+
+        function output = get.options(this)
+            % 获取控件对应的值
+            output = struct();
+            output.eigmethod = this.eigMethodValueDropdown.Value;
+            output.maxscfiter = this.maxSCFIterationValueSpinner.Value;
+            output.force = this.forceComputeCheckbox.Value;
+            output.exxmethod = this.exxMethodValueDropdown.Value;
         end
     end
 
