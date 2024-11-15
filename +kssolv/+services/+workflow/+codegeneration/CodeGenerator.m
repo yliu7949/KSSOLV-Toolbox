@@ -25,21 +25,22 @@ classdef CodeGenerator < handle
                 end
             end
 
+            % 初始化上下文和输入
+            input = struct();
+            context = struct();
+
             % 遍历连通子图中的每个节点，执行任务
             for i = 1:length(connectedComponents)
                 % 当前连通子图的节点列表
                 nodeList = connectedComponents{i};
-
-                % 初始化上下文和输入
-                context = struct();
-                input = struct();
+                initialInput = input;
 
                 for j = 1:length(nodeList)
                     nodeID = nodeList{j};
                     node = workflow.Nodes(nodeID);  % 获取当前节点
 
                     % 执行任务，得到输出
-                    output = node.task.executeTask(context, input);
+                    output = node.task.executeTask(context, initialInput);
 
                     % 传递 output 作为下一个节点的 input
                     input = output;

@@ -5,6 +5,10 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
         options
     end
 
+    properties
+        widgets
+    end
+
     properties (Access = private)
         eigMethodValueDropdown
         maxSCFIterationValueSpinner
@@ -12,31 +16,14 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
         exxMethodValueDropdown
     end
 
-    methods
-        function this = setup(this, accordion)
-            arguments
-                this
-                accordion matlab.ui.container.internal.Accordion
-            end
-
-            if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
-                    % 删除旧的 Options AccordionPanel
-                    delete(accordion.Children(3));
-                end
-
-                if accordion.Children(3).Title == "Advanced Options"
-                    % 删除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
-                    delete(accordion.Children(3));
-                end
-            end
-
+    methods (Access = protected)
+        function setup(this)
             % Options AccordionPanel
-            accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
-            accordionPanel1.BackgroundColor = 'white';
-            accordionPanel1.Title = 'Options';
+            this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
+            this.widgets.accordionPanel1.BackgroundColor = 'white';
+            this.widgets.accordionPanel1.Title = 'Options';
 
-            g1 = uigridlayout(accordionPanel1);
+            g1 = uigridlayout(this.widgets.accordionPanel1);
             g1.BackgroundColor = 'white';
             g1.ColumnWidth = {120, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
@@ -70,12 +57,12 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.forceComputeCheckbox.Text = 'Calculate force';
 
             % Advanced Options AccordionPanel
-            accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
-            accordionPanel2.BackgroundColor = 'white';
-            accordionPanel2.Title = 'Advanced Options';
-            accordionPanel2.collapse();
+            this.widgets.accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
+            this.widgets.accordionPanel2.BackgroundColor = 'white';
+            this.widgets.accordionPanel2.Title = 'Advanced Options';
+            this.widgets.accordionPanel2.collapse();
 
-            g2 = uigridlayout(accordionPanel2);
+            g2 = uigridlayout(this.widgets.accordionPanel2);
             g2.BackgroundColor = 'white';
             g2.ColumnWidth = {120, '1x'};
             g2.RowHeight = {'fit'};
@@ -89,11 +76,33 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.exxMethodValueDropdown = uidropdown(g2);
             this.exxMethodValueDropdown.Items = {'ace', 'normal', 'default', 'qrcp', 'kmeans'};
             this.exxMethodValueDropdown.Tooltip = exxMethodLabelTooltip;
+        end
+    end
+
+    methods
+        function attachUIToAccordion(this, accordion)
+            arguments
+                this
+                accordion matlab.ui.container.internal.Accordion
+            end
+
+            if size(accordion.Children, 1) >= 4
+                if accordion.Children(3).Title == "Options"
+                    % 移除旧的 Options AccordionPanel
+                    accordion.Children(3).Parent = [];
+                end
+
+                if accordion.Children(3).Title == "Advanced Options"
+                    % 移除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
+                    accordion.Children(3).Parent = [];
+                end
+            end
+
 
             % 将两个 accordionPanel 添加到 accordion
             if isempty(accordion.Children)
-                accordionPanel1.Parent = accordion;
-                accordionPanel2.Parent = accordion;
+                this.widgets.accordionPanel1.Parent = accordion;
+                this.widgets.accordionPanel2.Parent = accordion;
             elseif size(accordion.Children, 1) >= 3
                 existingPanels = accordion.Children;
 
@@ -103,13 +112,18 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
 
                 existingPanels(1).Parent = accordion;
                 existingPanels(2).Parent = accordion;
-                accordionPanel1.Parent = accordion;
-                accordionPanel2.Parent = accordion;
+                this.widgets.accordionPanel1.Parent = accordion;
+                this.widgets.accordionPanel2.Parent = accordion;
 
                 for i = 3:numel(existingPanels)
                     existingPanels(i).Parent = accordion;
                 end
             end
+        end
+
+        function detachUIFromAccordion(this)
+            this.widgets.accordionPanel1.Parent = [];
+            this.widgets.accordionPanel2.Parent = [];
         end
 
         function output = get.options(this)
@@ -123,15 +137,16 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     end
 
     methods (Hidden, Static)
-        function qeShow(debug)
-            % 用于在单元测试中测试 BuildMoleculeTaskUI，可通过下面的命令使用：
-            % kssolv.services.workflow.module.computation.BuildMoleculeTaskUI.qeShow();
+        function this = qeShow(debug)
+            % 用于在单元测试中测试 SCFTaskUI，可通过下面的命令使用：
+            % kssolv.services.workflow.module.computation.SCFTaskUI.qeShow();
             arguments
                 debug logical = false
             end
 
             accordion = kssolv.services.workflow.module.AbstractTaskUI.qeShow(debug);
-            kssolv.services.workflow.module.computation.SCFTaskUI(accordion);
+            this = kssolv.services.workflow.module.computation.SCFTaskUI();
+            this.attachUIToAccordion(accordion);
         end
     end
 end

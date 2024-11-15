@@ -6,36 +6,25 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
         DESCRIPTION = 'Plot showing SCF energy convergence over iterations';
     end
 
-    methods
+    methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Visualization;
             this.requiredTaskNames = 'SCF';
             this.supportGPU = false;
             this.supportParallel = false;
         end
+    end
 
-        function getOptionsUI(~, accordion)
-            % 该 Task 没有 options 选项，因此不提供 Options UI
-            arguments
-                ~
-                accordion matlab.ui.container.internal.Accordion
-            end
-
-            if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
-                    % 删除旧的 Options AccordionPanel
-                    delete(accordion.Children(3));
-                end
-
-                if accordion.Children(3).Title == "Advanced Options"
-                    % 删除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
-                    delete(accordion.Children(3));
-                end
-            end
+    methods
+        function getOptionsUI(this)
+            % 该 Task 仅使用 BlankTaskUI
+            this.optionsUI = kssolv.services.workflow.module.BlankTaskUI;
         end
 
         function output = executeTask(~, ~, input)
-            output = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('Energy', input.info.Etotvec, 'Error', input.info.SCFerrvec);
+            output = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', input.info.Etotvec, 'SCFError', input.info.SCFerrvec);
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(output);
+            dataPlot.Display('EnergyConvergence');
         end
     end
 end

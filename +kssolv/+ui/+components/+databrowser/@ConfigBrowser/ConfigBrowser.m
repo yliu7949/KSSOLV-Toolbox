@@ -177,7 +177,6 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             accordionPanel3 = matlab.ui.container.internal.AccordionPanel('Parent', this.accordion);
             accordionPanel3.BackgroundColor = 'white';
             accordionPanel3.Title = 'Execution Resources';
-            accordionPanel3.collapse();
 
             g3 = uigridlayout(accordionPanel3);
             g3.BackgroundColor = 'white';
@@ -265,8 +264,8 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
         end
 
         function insertOptionsAccordionPanel(this)
-            if ~isempty(this.nodeData) && ~isempty(this.nodeData.task)
-                this.nodeData.task.getOptionsUI(this.accordion);
+            if ~isempty(this.nodeData) && ~isempty(this.nodeData.task) && ~isempty(this.nodeData.task.optionsUI)
+                this.nodeData.task.optionsUI.attachUIToAccordion(this.accordion);
             end
         end
     end

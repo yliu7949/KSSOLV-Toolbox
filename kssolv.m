@@ -20,6 +20,10 @@ end
 kssolv.ui.util.DataStorage.setData('Project', project);
 kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
 
+% 添加 +core 下面的 KSSOLV 文件夹到 MATLAB 路径中
+addpath("+kssolv/+core/kssolv-3o/");
+evalc('KSSOLV.startup()');
+
 % 初始化及运行用户图形界面
 app = kssolv.KSSOLVToolbox();
 end

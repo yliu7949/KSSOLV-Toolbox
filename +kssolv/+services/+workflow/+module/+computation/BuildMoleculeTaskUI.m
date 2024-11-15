@@ -5,6 +5,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
         options
     end
 
+    properties
+        widgets
+    end
+
     properties (Access = private)
         g1
         g2
@@ -29,31 +33,14 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
         domagLabel
     end
 
-    methods
-        function this = setup(this, accordion)
-            arguments
-                this
-                accordion matlab.ui.container.internal.Accordion
-            end
-
-            if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
-                    % 删除旧的 Options AccordionPanel
-                    delete(accordion.Children(3));
-                end
-
-                if accordion.Children(3).Title == "Advanced Options"
-                    % 删除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
-                    delete(accordion.Children(3));
-                end
-            end
-
+    methods (Access = protected)
+        function setup(this)
             % Options AccordionPanel
-            accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
-            accordionPanel1.BackgroundColor = 'white';
-            accordionPanel1.Title = 'Options';
+            this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
+            this.widgets.accordionPanel1.BackgroundColor = 'white';
+            this.widgets.accordionPanel1.Title = 'Options';
 
-            this.g1 = uigridlayout(accordionPanel1);
+            this.g1 = uigridlayout(this.widgets.accordionPanel1);
             this.g1.BackgroundColor = 'white';
             this.g1.ColumnWidth = {100, '1x'};
             this.g1.RowHeight = {20, 'fit', 'fit', 'fit', 'fit', 'fit', 'fit'};
@@ -111,10 +98,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             functLabel.Layout.Row = 4;
             functLabel.Layout.Column = 1;
             functLabel.HorizontalAlignment = 'right';
-            functLabel.Text = "Function:";
+            functLabel.Text = "Functional:";
             functLabel.Tooltip = functTooltip;
 
-            this.functDropdown = uidropdown(this.g1, 'Items', {'LDA', 'GGA', 'Hybrid'}, 'Value', 'LDA');
+            this.functDropdown = uidropdown(this.g1, 'Items', {'PBE', 'PZ', 'HSE06'}, 'Value', 'PBE');
             this.functDropdown.Layout.Row = 4;
             this.functDropdown.Layout.Column = 2;
             this.functDropdown.Tooltip = functTooltip;
@@ -206,12 +193,12 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.autokptsEditField.Tooltip = autokptsTooltip;
 
             % Advanced Options AccordionPanel
-            accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
-            accordionPanel2.BackgroundColor = 'white';
-            accordionPanel2.Title = 'Advanced Options';
-            accordionPanel2.collapse();  % 默认折叠
+            this.widgets.accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
+            this.widgets.accordionPanel2.BackgroundColor = 'white';
+            this.widgets.accordionPanel2.Title = 'Advanced Options';
+            this.widgets.accordionPanel2.collapse();  % 默认折叠
 
-            this.g2 = uigridlayout(accordionPanel2);
+            this.g2 = uigridlayout(this.widgets.accordionPanel2);
             this.g2.BackgroundColor = 'white';
             this.g2.ColumnWidth = {120, '1x'};
             this.g2.RowHeight = {'fit', 'fit', 'fit', 'fit', 'fit'};  % 5 行布局
@@ -301,11 +288,32 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.domagSwitch.Tooltip = domagTooltip;
             this.domagSwitch.Visible = false;
             this.g2.RowHeight{5} = 0;
+        end
+    end
+
+    methods
+        function attachUIToAccordion(this, accordion)
+            arguments
+                this
+                accordion matlab.ui.container.internal.Accordion
+            end
+
+            if size(accordion.Children, 1) >= 4
+                if accordion.Children(3).Title == "Options"
+                    % 移除旧的 Options AccordionPanel
+                    accordion.Children(3).Parent = [];
+                end
+
+                if accordion.Children(3).Title == "Advanced Options"
+                    % 移除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
+                    accordion.Children(3).Parent = [];
+                end
+            end
 
             % 将两个 accordionPanel 添加到 accordion
             if isempty(accordion.Children)
-                accordionPanel1.Parent = accordion;
-                accordionPanel2.Parent = accordion;
+                this.widgets.accordionPanel1.Parent = accordion;
+                this.widgets.accordionPanel2.Parent = accordion;
             elseif size(accordion.Children, 1) >= 3
                 existingPanels = accordion.Children;
 
@@ -315,13 +323,18 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
 
                 existingPanels(1).Parent = accordion;
                 existingPanels(2).Parent = accordion;
-                accordionPanel1.Parent = accordion;
-                accordionPanel2.Parent = accordion;
+                this.widgets.accordionPanel1.Parent = accordion;
+                this.widgets.accordionPanel2.Parent = accordion;
 
                 for i = 3:numel(existingPanels)
                     existingPanels(i).Parent = accordion;
                 end
             end
+        end
+
+        function detachUIFromAccordion(this)
+            this.widgets.accordionPanel1.Parent = [];
+            this.widgets.accordionPanel2.Parent = [];
         end
 
         function output = get.options(this)
@@ -341,17 +354,17 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             % 选项
             output.funct = this.functDropdown.Value;
             output.ecut = this.ecutSpinner.Value;
-            output.smearing = this.smearDropdown.Value;
+            output.smear = this.smearDropdown.Value;
             output.temperature = this.temperatureSpinner.Value;
-            output.nspin = this.nspinDropdown.Value;
-            output.autokpts = this.autokptsEditField.Value;
+            output.nspin = str2double(this.nspinDropdown.Value);
+            output.autokpts = str2num(this.autokptsEditField.Value); %#ok<ST2NM>
 
             % 高级选项
             output.extranbnd = this.extranbndSpinner.Value;
-            output.lspinorb = this.lspinorbSwitch.Value;
-            output.lsda = this.lsdaSwitch.Value;
-            output.noncolin = this.noncolinSwitch.Value;
-            output.domag = this.domagSwitch.Value;
+            output.lspinorb = matlab.lang.OnOffSwitchState(this.lspinorbSwitch.Value);
+            output.lsda = matlab.lang.OnOffSwitchState(this.lsdaSwitch.Value);
+            output.noncolin = matlab.lang.OnOffSwitchState(this.noncolinSwitch.Value);
+            output.domag = matlab.lang.OnOffSwitchState(this.domagSwitch.Value);
         end
     end
 
@@ -413,7 +426,7 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     end
 
     methods (Hidden, Static)
-        function qeShow(debug)
+        function this = qeShow(debug)
             % 用于在单元测试中测试 BuildMoleculeTaskUI，可通过下面的命令使用：
             % kssolv.services.workflow.module.computation.BuildMoleculeTaskUI.qeShow();
             arguments
@@ -421,7 +434,8 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             end
 
             accordion = kssolv.services.workflow.module.AbstractTaskUI.qeShow(debug);
-            kssolv.services.workflow.module.computation.BuildMoleculeTaskUI(accordion);
+            this = kssolv.services.workflow.module.computation.BuildMoleculeTaskUI();
+            this.attachUIToAccordion(accordion);
         end
     end
 end

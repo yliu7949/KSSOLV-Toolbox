@@ -213,9 +213,9 @@ classdef CIFReader < handle
         
             % 读取原子信息
             nAtoms = length(this.CIFObject.atomLabel);
-            atomList = strings(1, nAtoms);
+            atomList = cell(1, nAtoms);
             for i = 1:nAtoms
-                atomList(i) = regexprep(this.CIFObject.atomLabel{i}, '\d', '');
+                atomList{i} = regexprep(this.CIFObject.atomLabel{i}, '\d', '');
             end
             this.KSSOLVSetupObject.atomList = atomList;
         

@@ -1,5 +1,5 @@
 classdef (Sealed = true) TaskStatus < int8
-    %TASKSTATUS Summary of this class goes here
+    %TASKSTATUS 任务进行状态
     
     enumeration
         NotStarted (1)   % 任务尚未开始

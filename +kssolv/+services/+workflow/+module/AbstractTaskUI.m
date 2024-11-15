@@ -5,17 +5,23 @@ classdef (Abstract) AbstractTaskUI < matlab.mixin.SetGet
         options
     end
 
+    properties (Abstract)
+        widgets
+    end
+
     methods (Access = protected)
-        function this = AbstractTaskUI(accordion)
-            arguments
-                accordion matlab.ui.container.internal.Accordion
-            end
-            this.setup(accordion);
+        function this = AbstractTaskUI()
+            this.setup();
         end
     end
-    
+
+    methods (Abstract, Access = protected)
+        setup(this);
+    end
+
     methods (Abstract)
-        setup(this, accordion)
+        attachUIToAccordion(this, accordion)
+        detachUIFromAccordion(this)
     end
 
     methods (Hidden, Static)

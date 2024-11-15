@@ -2,8 +2,18 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
     %ENERGYCONVERGENCEPLOT 用于绘制能量收敛曲线图和误差曲线的自定义图表类
 
     properties
-        Energy % Etot 能量数据 (eV)
-        Error % 误差数据
+        TotalEnergy % Etot 能量数据 (eV)
+        SCFError % 误差数据
+    end
+
+    properties (Access = private)
+        axes
+    end
+
+    methods
+        function axes = getAxesObject(this)
+            axes = this.axes;
+        end
     end
 
     methods (Access = protected)
@@ -17,7 +27,7 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
             cla(ax);
 
             % 生成迭代步数，假设与 Energy 数组长度相同
-            iterations = 1:length(this.Energy);
+            iterations = 1:length(this.TotalEnergy);
 
             % 设置X轴
             xlabel(ax, 'Iterations');
@@ -27,15 +37,18 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
             % 左Y轴：能量
             yyaxis(ax, 'left');
             ylabel(ax, 'Energy (eV)');
-            plot(ax, iterations, this.Energy, '-o', 'LineWidth', 2, 'Color', 'b');  % 蓝色，线宽2，圆形标记
+            plot(ax, iterations, this.TotalEnergy, '-o', 'LineWidth', 2, 'Color', '#0b8fcb');  % 蓝色，线宽2，圆形标记
 
             % 右Y轴：误差
             yyaxis(ax, 'right');
             ylabel(ax, 'Error');
-            plot(ax, iterations, this.Error, '--s', 'LineWidth', 2, 'Color', 'r');  % 红色，线宽2，方形标记
+            plot(ax, iterations, this.SCFError, '--s', 'LineWidth', 2, 'Color', '#f38a12');  % 橙色，线宽2，方形标记
 
             % 添加图例
             legend(ax, {'Etot', 'Error'}, 'Location', 'best');
+
+            % 保存 Axes
+            this.axes = ax;
         end
     end
 end

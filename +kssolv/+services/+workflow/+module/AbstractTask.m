@@ -29,20 +29,28 @@ classdef (Abstract) AbstractTask < matlab.mixin.SetGet
         canShareOutputWithOtherTasks logical = true
         saveOutputToProjectResults logical = false
 
+        options
         optionsUI
         isDebugMode logical = false
     end
 
-    methods (Access = protected)
+    methods
         function this = AbstractTask()
             this.setup();
+            this.getOptionsUI();
+            if ~isempty(this.optionsUI)
+                this.options = this.optionsUI.options;
+            end
         end
     end
 
-    methods (Abstract)
+    methods (Abstract, Access = protected)
         setup(this)
-        getOptionsUI(this, accordion)
-        
+    end
+
+    methods (Abstract)
+        getOptionsUI(this)
+
         %{
         code = generateCodeSnippet(this)
         [output, status] = run(this, input)

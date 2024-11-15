@@ -3,7 +3,7 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
 
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     methods
         function this = Structure(label, type)
             %STRUCTURE 构造函数
@@ -13,7 +13,7 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
             end
             this = this@kssolv.services.filemanager.AbstractItem(label, type);
         end
-        
+
         function showMoleculerDisplay(this)
             % 使用 Data 数据中的文件路径以打开对应结构的渲染界面
             kssolv.ui.components.figuredocument.MoleculerDisplay(this.data.rawFileContent, this.name).Display();
@@ -22,39 +22,57 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
         function importedFileCount = importStructureFromFile(this)
             % 打开导入结构文件对话框，创建并添加 Structure 节点，渲染结构
             import kssolv.ui.util.Localizer.message
-            [files, path] = uigetfile({'*.cif';'*.vasp';'*.*'}, ...
+            [files, path] = uigetfile({'*.cif';'*.vasp';'*.poscar';'*.POSCAR';'*.*'}, ...
                 message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
-        
+
             % 检查用户是否点击了取消按钮
             if isequal(files, 0)
                 importedFileCount = 0;
                 return
             end
-        
+
             % 确保 files 是一个 cell 数组，方便统一处理
             if ~iscell(files)
                 files = {files};
             end
-        
+
             % 初始化成功导入的文件计数
             importedFileCount = 0;
-        
+
             % 遍历所有选中的文件
             for i = 1:length(files)
                 fullPath = fullfile(path, files{i});
-                [~, filename, ~] = fileparts(files{i});
-        
+                [~, filename, ext] = fileparts(files{i});
+                ext = lower(ext);
+
                 % 解析文件并创建结构节点
                 structure = kssolv.services.filemanager.Structure(filename);
-                structure.data = kssolv.services.fileparser.CIFReader(fullPath);
-                if ~isempty(structure.data)
-                    this.addChildrenItem(structure);
-                    importedFileCount = importedFileCount + 1;
-        
-                    % 渲染结构文件中的结构
-                    cifFileContent = fileread(fullPath);
-                    displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(cifFileContent, structure.name);
-                    displayObj.Display();
+
+                % 根据文件扩展名进行解析
+                switch ext
+                    case '.cif'
+                        structure.data = kssolv.services.fileparser.CIFReader(fullPath);
+
+                        if ~isempty(structure.data)
+                            this.addChildrenItem(structure);
+                            importedFileCount = importedFileCount + 1;
+
+                            % 只有CIF文件才读取文件内容并展示
+                            cifFileContent = fileread(fullPath);
+                            displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(cifFileContent, structure.name);
+                            displayObj.Display();
+                        end
+
+                    case {'.poscar', '.vasp'}
+                        structure.data = kssolv.services.fileparser.POSCARReader(fullPath);
+
+                        if ~isempty(structure.data)
+                            this.addChildrenItem(structure);
+                            importedFileCount = importedFileCount + 1;
+                        end
+
+                    otherwise
+                        warning('Unsupported file format: %s', ext);
                 end
             end
         end

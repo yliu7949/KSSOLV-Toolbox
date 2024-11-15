@@ -6,11 +6,13 @@ classdef BlankTask < kssolv.services.workflow.module.AbstractTask
         DESCRIPTION = '';
     end
 
-    methods
+    methods (Access = protected)
         function setup(~)
             % 保持函数体为空
         end
+    end
 
+    methods
         function setModuleType(this, moduleType)
             arguments
                 this 
@@ -19,24 +21,9 @@ classdef BlankTask < kssolv.services.workflow.module.AbstractTask
             this.module = moduleType;
         end
 
-        function getOptionsUI(~, accordion)
-            % 该 Task 没有 options 选项，因此不提供 Options UI
-            arguments
-                ~
-                accordion matlab.ui.container.internal.Accordion
-            end
-
-            if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
-                    % 删除旧的 Options AccordionPanel
-                    delete(accordion.Children(3));
-                end
-
-                if accordion.Children(3).Title == "Advanced Options"
-                    % 删除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
-                    delete(accordion.Children(3));
-                end
-            end
+        function getOptionsUI(this)
+            % 该 Task 仅使用 BlankTaskUI
+            this.optionsUI = kssolv.services.workflow.module.BlankTaskUI;
         end
     end
 end

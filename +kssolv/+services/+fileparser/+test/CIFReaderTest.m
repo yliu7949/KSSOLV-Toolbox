@@ -64,7 +64,7 @@ classdef CIFReaderTest < matlab.unittest.TestCase
         
             fprintf(fid, 'atomList = [\n');
             for i = 1:numel(uniqueAtoms)
-                fprintf(fid, '    repmat(Atom(''%s''), 1, %d)', uniqueAtoms(i), atomCounts(i));  % 显示原子符号和数量
+                fprintf(fid, '    repmat(Atom(''%s''), 1, %d)', string(uniqueAtoms(i)), atomCounts(i));  % 显示原子符号和数量
                 if i < numel(uniqueAtoms)
                     fprintf(fid, ' ...\n');
                 end

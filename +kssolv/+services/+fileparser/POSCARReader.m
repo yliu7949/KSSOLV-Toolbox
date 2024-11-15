@@ -79,7 +79,9 @@ classdef POSCARReader < handle
             % 提取晶格矢量
             latticeVectors = zeros(3, 3, 'double');
             for i = 1:3
-                latticeVectors(i, :) = str2double(strsplit(this.fileContent{this.currentLineIndex}));
+                splitLine = strsplit(this.fileContent{this.currentLineIndex});
+                splitLine = splitLine(~cellfun('isempty', splitLine));
+                latticeVectors(i, :) = str2double(splitLine);
                 this.currentLineIndex = this.currentLineIndex + 1;
             end
             this.POSCARObject.latticeVectors = latticeVectors;
@@ -100,7 +102,7 @@ classdef POSCARReader < handle
                 C = latticeVectors * diag(this.POSCARObject.scalingFactor);
             end
 
-            this.KSSOLVSetupObject.C = C;
+            this.KSSOLVSetupObject.C = C ./ 0.5291772083;
         end
 
         function extractAtomSpecies(this)
@@ -125,7 +127,7 @@ classdef POSCARReader < handle
                 startIndex = endIndex + 1;
             end
 
-            this.KSSOLVSetupObject.atomList = string(atomList);
+            this.KSSOLVSetupObject.atomList = atomList;
         end
 
         function extractSelectiveDynamics(this)

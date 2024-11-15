@@ -19,3 +19,5 @@ data/
 # MATLAB Buildtool
 .buildtool/
 
+# Debug scipts
+Untitled*

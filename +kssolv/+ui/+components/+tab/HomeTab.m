@@ -3,14 +3,14 @@ classdef HomeTab < handle
 
     %   开发者：杨柳、高俊、林海饶
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     properties
         Tab       % Home 标签页
         Tag       % 标签
         Title     % 标题
         Widgets   % 小组件
     end
-    
+
     methods
         function this = HomeTab()
             %HOMETAB 构造函数，初始设置相关参数
@@ -24,7 +24,7 @@ classdef HomeTab < handle
         end
     end
 
-    methods (Access = protected) 
+    methods (Access = protected)
         function buildTab(this)
             %BUILDTAB 创建 Home Tab 对象
             this.Tab = matlab.ui.internal.toolstrip.Tab(this.Title);
@@ -58,7 +58,7 @@ classdef HomeTab < handle
             addlistener(this.Widgets.RunningSection.RunningRunButton, ...
                 'ButtonPushed', @(src, data) callbackRunningRunButton(this));
             addlistener(this.Widgets.RunningSection.RunningStopButton, ...
-                'ButtonPushed', @(src, data) callbackRunningStopButton(this))
+                'ButtonPushed', @(src, data) callbackRunningStopButton(this));
             % Environment Section
             % Resource Section
         end
@@ -72,7 +72,7 @@ classdef HomeTab < handle
 
     methods (Access = private)
         %% 创建 Sections
-        function createFileSection(this) 
+        function createFileSection(this)
             %CREATEFILESECTION 创建"文件"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
@@ -121,7 +121,7 @@ classdef HomeTab < handle
                 'FileSaveButton', FileSaveButton, 'FileCloseButton', FileCloseButton);
         end
 
-        function createProjectSection(this) 
+        function createProjectSection(this)
             %CREATEPROJECTSECTION 创建"项目"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
@@ -140,7 +140,7 @@ classdef HomeTab < handle
             ProjectStructureButton = CreateButton('dropdown', 'ProjectStructure', section.Tag, 'import_data');
             ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'artifactGraph');
             ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, 'legend');
-            
+
             % 创建并组装 PopupList(下拉菜单)
             ProjectStructureButtonPopup = PopupList();
             ImportStructureFromFileListItem = CreateListItem('default', 'ImportStructureFromFile', section.Tag, 0, 'importDiagram');
@@ -157,7 +157,7 @@ classdef HomeTab < handle
             NewVariableListItem = CreateListItem('default', 'NewVariable', section.Tag, 0, 'new_sectionHighlighted');
             ImportVariableFromFileListItem = CreateListItem('default', 'ImportVariableFromFile', section.Tag, 0, 'importDiagram');
             ImportVariableFromMATLABListItem = CreateListItem('default', 'ImportVariableFromMATLAB', section.Tag, 0, 'matlabWorkspaceFile');
-           
+
             ProjectStructureButtonPopup.add(ImportStructureFromFileListItem)
             ProjectStructureButtonPopup.add(ImportStructureFromLinkListItem);
             ProjectStructureButtonPopup.add(ImportStructureFromLibraryListItem);
@@ -171,7 +171,7 @@ classdef HomeTab < handle
             ProjectStructureButton.Popup = ProjectStructureButtonPopup;
             ProjectWorkflowButton.Popup = ProjectWorkflowButtonPopup;
             ProjectVariableButton.Popup = ProjectVariableButtonPopup;
-            
+
             % 组装 Column 和 Button
             column1.add(ProjectStructureButton);
             column2.add(ProjectWorkflowButton);
@@ -185,8 +185,8 @@ classdef HomeTab < handle
             this.Widgets.ProjectSection = struct('ProjectStructureButton', ProjectStructureButton, ...
                 'ProjectWorkflowButton', ProjectWorkflowButton, 'ProjectVariableButton', ProjectVariableButton);
         end
-        
-        function createRunningSection(this) 
+
+        function createRunningSection(this)
             %CREATERUNNINGSECTION 创建"运行"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
@@ -225,8 +225,8 @@ classdef HomeTab < handle
             this.Widgets.RunningSection = struct('RunningRunButton', RunningRunButton, ...
                 'RunningStepButton', RunningStepButton, 'RunningStopButton', RunningStopButton);
         end
-            
-        function createEnvironmentSection(this) 
+
+        function createEnvironmentSection(this)
             %CREATENVIRONMENTSECTION 创建"环境"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
@@ -248,7 +248,7 @@ classdef HomeTab < handle
             EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'matlabCloud');
             EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
             EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
-            
+
             % 创建并组装 PopupList(下拉菜单)
             RemotePopup = PopupList();
             ExtraPopup = PopupList();
@@ -258,7 +258,7 @@ classdef HomeTab < handle
             ExtraPopup.add(GetExtraFeatureListItem);
             EnvironmentRemoteButton.Popup = RemotePopup;
             EnvironmentExtraButton.Popup = ExtraPopup;
-        
+
             % 组装 Column 和 Button
             column1.add(EnvironmentSettingsButton);
             column2.add(EnvironmentRemoteButton);
@@ -276,7 +276,7 @@ classdef HomeTab < handle
                 'EnvironmentExtraButton', EnvironmentExtraButton);
         end
 
-        function createResourceSection(this) 
+        function createResourceSection(this)
             %CREATERESOURCESECTION 创建"资源"小节，并添加到 HomeTab 中
             import matlab.ui.internal.toolstrip.*
             import kssolv.ui.util.Localizer.message
@@ -297,7 +297,7 @@ classdef HomeTab < handle
             ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, 'community');
             ResourceHelpButton = CreateButton('split', 'ResourceHelp', section.Tag, 'help');
             ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'helpRecolorUI');
-            
+
             % 创建并组装 PopupList(下拉菜单)
             HelpPopup = PopupList();
             OpenDocumentListItem = CreateListItem('default', 'OpenDocument', section.Tag, 0, 'documentList');
@@ -389,7 +389,7 @@ classdef HomeTab < handle
                 % 如果 project 没有进行任何修改，则直接关闭已有的 project
                 % 此处不需要进行额外的处理
             else
-                % 如果 project 有进行修改，则弹出对话框，包含"保存"、"不保存"和"取消"按钮                
+                % 如果 project 有进行修改，则弹出对话框，包含"保存"、"不保存"和"取消"按钮
                 YesLabel = message('KSSOLV:dialogs:ProjectCanCloseSave');
                 NoLabel = message('KSSOLV:dialogs:ProjectCanCloseDoNotSave');
                 CancelLabel = message('KSSOLV:dialogs:ProjectCanCloseCancel');
@@ -425,7 +425,7 @@ classdef HomeTab < handle
             % 关闭所有已打开的 document
             documents = appContainer.getDocuments();
             for i = 1:numel(documents)
-               documents{i}.close();
+                documents{i}.close();
             end
 
             kssolv.ui.util.DataStorage.setData('Project', kssolv.services.filemanager.Project());
@@ -486,6 +486,13 @@ classdef HomeTab < handle
 
             app = kssolv.ui.util.DataStorage.getData('AppContainer');
             app.Busy = true;
+
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            workflowRoot = project.findChildrenItem('Workflow');
+            workflow = workflowRoot.children{1};
+            kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
+
+            %{
             pause(3)
             app.Busy = false;
 
@@ -497,7 +504,9 @@ classdef HomeTab < handle
             pause(2)
             kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'si.fig')).Display();
             pause(1)
-            
+            %}
+
+            app.Busy = false;
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
         end
@@ -514,7 +523,7 @@ classdef HomeTab < handle
             % 用于在单元测试中测试 HomeTab，可通过下面的命令使用：
             % kssolv.ui.components.tab.HomeTab.qeShow();
 
-            % 创建 AppContainer          
+            % 创建 AppContainer
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
