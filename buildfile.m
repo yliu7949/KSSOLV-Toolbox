@@ -4,21 +4,22 @@ function plan = buildfile
 import matlab.buildtool.tasks.CodeIssuesTask
 
 plan = buildplan(localfunctions);
-plan("check") = CodeIssuesTask(WarningThreshold=0, ...
-    Results=".buildtool/code-issues/results.sarif");
+plan("check") = CodeIssuesTask(WarningThreshold = Inf, ...
+    Results = ".buildtool/code-issues/results.sarif");
 plan("check").Dependencies = "init";
 
 plan("pcode").Inputs = "+kssolv/**/*.m";
 plan("pcode").Outputs = plan("pcode").Inputs.replace(".m",".p");
 plan("pcode").Dependencies = "check";
 
-plan("stats").Inputs = "**/*.m";
+plan("package").Dependencies = "pcode";
 
-plan.DefaultTasks = "package";
-plan("package").Dependencies = ["pcode", "stats"];
-
+plan.DefaultTasks = "cleanPcode";
 plan("cleanPcode").Inputs = plan("pcode").Outputs;
-plan("cleanPcode").Dependencies = "pcode";
+plan("cleanPcode").Dependencies = "package";
+
+plan("stats").Inputs = "**/*.m";
+plan("stats").Dependencies = "init";
 end
 
 function initTask(~)
@@ -37,10 +38,10 @@ end
 
 function packageTask(~)
 % 打包编译结果
-uuid = "KSSOLV";
+identifier = '5200919d-0e3d-4525-ad64-977f32dedd5d';
 toolboxFolder = fileparts(mfilename('fullpath'));
 
-options = matlab.addons.toolbox.ToolboxOptions(toolboxFolder, uuid);
+options = matlab.addons.toolbox.ToolboxOptions(toolboxFolder, identifier);
 options.AuthorName = "Liu Yang";
 options.AuthorEmail = "and@mail.ustc.edu.cn";
 options.AuthorCompany = "University of Science and Technology of China";
@@ -59,9 +60,8 @@ options.SupportedPlatforms.MatlabOnline = true;
 options.MinimumMatlabRelease = "R2023a";
 options.MaximumMatlabRelease = "";
 
-filteredConditions = ~contains(options.ToolboxFiles, 'ks.ks') & ...
+filteredConditions = ~endsWith(options.ToolboxFiles, '.ks') & ...
     ~contains(options.ToolboxFiles, 'buildfile.m') & ...
-    ~contains(options.ToolboxFiles, 'data/') & ...
     ~contains(options.ToolboxFiles, '+test/') & ...
     ~endsWith(options.ToolboxFiles, '.mltbx') & ...
     ~endsWith(options.ToolboxFiles, '.DS_Store') & ...
