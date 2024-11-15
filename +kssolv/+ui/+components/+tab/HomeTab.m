@@ -296,7 +296,7 @@ classdef HomeTab < handle
             ResourceLibraryButton = CreateButton('push', 'ResourceLibrary', section.Tag, 'documentation');
             ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, 'community');
             ResourceHelpButton = CreateButton('split', 'ResourceHelp', section.Tag, 'help');
-            ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'helpRecolorUI');
+            ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'requestSupport');
 
             % 创建并组装 PopupList(下拉菜单)
             HelpPopup = PopupList();
