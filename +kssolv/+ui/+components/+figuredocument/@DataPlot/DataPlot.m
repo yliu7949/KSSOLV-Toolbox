@@ -76,6 +76,7 @@ classdef DataPlot < handle
                 else
                     ax = this.figure.getAxesObject();
                     ax.Parent = g;
+                    this.figure.Parent = [];
                 end
             else
                 image = uiimage(g);

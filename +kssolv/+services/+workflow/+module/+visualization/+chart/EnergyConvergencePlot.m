@@ -24,26 +24,30 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
 
         function update(this)
             ax = getAxes(this);
-            hold(ax, 'on');
             cla(ax);
 
             % 生成迭代步数，假设与 Energy 数组长度相同
             iterations = 1:length(this.TotalEnergy);
 
-            % 设置X轴
+            % 设置 X 轴
             xlabel(ax, 'Iterations');
             title(ax, 'Energy Convergence and Error');
             grid(ax, 'on');
 
-            % 左Y轴：能量
+            % 左 Y 轴：能量
+            yyaxis(ax, 'left');
+            plot(ax, iterations, this.TotalEnergy, '-o', 'LineWidth', 2, 'Color', '#0b8fcb');
+
+            % 右 Y 轴：误差（设置为对数坐标）
+            yyaxis(ax, 'right');
+            semilogy(ax, iterations, this.SCFError, '--s', 'LineWidth', 2, 'Color', '#f38a12');
+
+            % 设置双 Y 轴标签
+            hold(ax, "on");
             yyaxis(ax, 'left');
             ylabel(ax, 'Energy (eV)');
-            plot(ax, iterations, this.TotalEnergy, '-o', 'LineWidth', 2, 'Color', '#0b8fcb');  % 蓝色，线宽2，圆形标记
-
-            % 右Y轴：误差
             yyaxis(ax, 'right');
             ylabel(ax, 'Error');
-            plot(ax, iterations, this.SCFError, '--s', 'LineWidth', 2, 'Color', '#f38a12');  % 橙色，线宽2，方形标记
 
             % 保存 Axes
             this.axes = ax;
