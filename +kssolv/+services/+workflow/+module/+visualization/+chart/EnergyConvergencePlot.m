@@ -17,8 +17,9 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
     end
 
     methods (Access = protected)
-        function setup(~)
-            % 保持为空，用于初始化设置
+        function setup(this)
+            % 用于初始化设置
+            this.Parent.Visible = 'off';
         end
 
         function update(this)
@@ -43,9 +44,6 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
             yyaxis(ax, 'right');
             ylabel(ax, 'Error');
             plot(ax, iterations, this.SCFError, '--s', 'LineWidth', 2, 'Color', '#f38a12');  % 橙色，线宽2，方形标记
-
-            % 添加图例
-            legend(ax, {'Etot', 'Error'}, 'Location', 'best');
 
             % 保存 Axes
             this.axes = ax;

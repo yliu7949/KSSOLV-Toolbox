@@ -10,7 +10,7 @@ classdef (Abstract) AbstractTask < matlab.mixin.SetGet
     end
 
     properties (SetAccess = protected)
-        module (1, 1) kssolv.services.workflow.module.ModuleType
+        module (1, 1) kssolv.services.workflow.module.ModuleType = 1
         requiredTaskNames = [] % 依赖的任务名
 
         supportGPU logical = false
