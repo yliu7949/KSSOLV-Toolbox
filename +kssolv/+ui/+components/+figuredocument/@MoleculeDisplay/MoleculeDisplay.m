@@ -1,5 +1,5 @@
-classdef MoleculerDisplay < handle
-    %MOLECULERDISPLAY 三维渲染分子结构和晶体结构的组件
+classdef MoleculeDisplay < handle
+    %MOLECULEDISPLAY 三维渲染分子结构和晶体结构的组件
     
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
@@ -11,8 +11,8 @@ classdef MoleculerDisplay < handle
     end
     
     methods
-        function this = MoleculerDisplay(cifFileContent, tag)
-            %MOLECULERDISPLAY 构造此类的实例
+        function this = MoleculeDisplay(cifFileContent, tag)
+            %MOLECULEDISPLAY 构造此类的实例
             arguments
                 cifFileContent string = ""
                 tag string = ""
@@ -78,8 +78,8 @@ classdef MoleculerDisplay < handle
 
     methods (Hidden)
         function app = qeShow(this)
-            % 用于在单元测试中测试 MolecularDisplay，可通过下面的命令使用：
-            % m = kssolv.ui.components.figuredocument.MoleculerDisplay();
+            % 用于在单元测试中测试 MoleculeDisplay，可通过下面的命令使用：
+            % m = kssolv.ui.components.figuredocument.MoleculeDisplay();
             % m.qeShow()
 
             % 创建 App Container          

@@ -14,9 +14,9 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
             this = this@kssolv.services.filemanager.AbstractItem(label, type);
         end
 
-        function showMoleculerDisplay(this)
+        function showMoleculeDisplay(this)
             % 使用 Data 数据中的文件路径以打开对应结构的渲染界面
-            kssolv.ui.components.figuredocument.MoleculerDisplay(this.data.rawFileContent, this.name).Display();
+            kssolv.ui.components.figuredocument.MoleculeDisplay(this.data.rawFileContent, this.name).Display();
         end
 
         function importedFileCount = importStructureFromFile(this)
@@ -59,7 +59,7 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
 
                             % 只有CIF文件才读取文件内容并展示
                             cifFileContent = fileread(fullPath);
-                            displayObj = kssolv.ui.components.figuredocument.MoleculerDisplay(cifFileContent, structure.name);
+                            displayObj = kssolv.ui.components.figuredocument.MoleculeDisplay(cifFileContent, structure.name);
                             displayObj.Display();
                         end
 

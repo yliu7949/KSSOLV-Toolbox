@@ -116,7 +116,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                         end
                     else
                         % 直接显示渲染的结构
-                        item.showMoleculerDisplay();
+                        item.showMoleculeDisplay();
                     end
                 case 'kssolv.services.filemanager.Workflow'
                     if startsWith(item.parent.name, 'Project')
