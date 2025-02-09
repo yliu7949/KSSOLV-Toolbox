@@ -5,13 +5,15 @@ classdef KSSOLVToolbox < handle
     %   版权 2024 合肥瀚海量子科技有限公司
     
     properties (Access = public)
-        Name
-        AppContainer
+        Name string
+        AppContainer matlab.ui.container.internal.AppContainer
+        HostInBrowser (1, 1) logical = false
     end
     
     methods
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
+
             import kssolv.ui.util.Localizer.*
             % setLocale('zh_CN');
 
@@ -56,9 +58,6 @@ classdef KSSOLVToolbox < handle
             quickAccessBar = kssolv.ui.components.others.QuickAccessBar();
             quickAccessBar.addToAppContainer(this.AppContainer)
 
-            % 展示布局好的界面
-            show(this);
-
             % 注册关闭时的提示对话框
             this.AppContainer.CanCloseFcn = @(varargin) canClose(this, varargin{:});
 
@@ -83,6 +82,7 @@ classdef KSSOLVToolbox < handle
         function show(this)
             % 绘制并展示 App 界面
             this.AppContainer.WindowBounds = [100 100 1200 800];
+            this.AppContainer.HostInBrowser = this.HostInBrowser;
             this.AppContainer.Visible = true;
         end
         

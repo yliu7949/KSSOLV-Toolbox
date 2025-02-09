@@ -1,4 +1,4 @@
-function app = kssolv(ksFile)
+function app = kssolv(ksFile, hostInBrowser)
 %KSSOLV 运行 KSSOLV 的图形用户界面
 
 % 开发者：杨柳
@@ -6,6 +6,7 @@ function app = kssolv(ksFile)
 
 arguments
     ksFile string = ""
+    hostInBrowser (1, 1) logical = strcmpi(getenv("HostAppInBrowser"), 'true')
 end
 
 % 创建 project 并保存至 DataStorage
@@ -21,10 +22,17 @@ kssolv.ui.util.DataStorage.setData('Project', project);
 kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
 
 % 添加 +core 下面的 KSSOLV 文件夹到 MATLAB 路径中
-addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'kssolv-3o'));
-evalc('KSSOLV.startup()');
+try
+    addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'kssolv-3o'));
+    evalc('KSSOLV.startup()');
+catch
+end
 
-% 初始化及运行用户图形界面
+% 初始化图形用户界面
 app = kssolv.KSSOLVToolbox();
+app.HostInBrowser = hostInBrowser;
+
+% 展示图形用户界面
+app.show();
 end
 
