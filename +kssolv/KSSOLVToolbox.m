@@ -42,6 +42,8 @@ classdef KSSOLVToolbox < handle
             configBrowser.addToAppContainer(this.AppContainer);
             runBrowser = kssolv.ui.components.databrowser.RunBrowser();
             runBrowser.addToAppContainer(this.AppContainer);
+            commandWindow = kssolv.ui.components.databrowser.CommandWindow();
+            commandWindow.addToAppContainer(this.AppContainer);
             this.setPanelLayout();
             % 添加多个 Tab 组件
             homeTab = kssolv.ui.components.tab.HomeTab();
@@ -136,8 +138,9 @@ classdef KSSOLVToolbox < handle
             InfoBrowserPanel.Collapsed = true;
             RunBrowserPanel = this.AppContainer.getPanel('RunBrowser');
             RunBrowserPanel.Collapsed = true;
-            % 折叠了右侧的面板
+            % 折叠了右侧和底部的面板
             this.AppContainer.RightCollapsed = true;
+            this.AppContainer.BottomCollapsed = true;
         end
 
         function status = canClose(this, ~)

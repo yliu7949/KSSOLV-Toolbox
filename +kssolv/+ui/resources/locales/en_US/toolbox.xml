@@ -131,6 +131,9 @@
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">Simulation</entry>
 
+        <!-- Command Window -->
+        <entry key="CommandWindowTitle">Command Window</entry>
+
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">Structure</entry>
         <entry key="DocumentWorkflowTitle">Workflow</entry>

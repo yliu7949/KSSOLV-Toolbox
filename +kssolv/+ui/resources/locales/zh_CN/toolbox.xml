@@ -131,6 +131,9 @@
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">模拟</entry>
 
+        <!-- Command Window -->
+        <entry key="CommandWindowTitle">命令行窗口</entry>
+
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">结构</entry>
         <entry key="DocumentWorkflowTitle">工作流</entry>

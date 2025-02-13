@@ -4,7 +4,7 @@ classdef WebWindow < handle
     end
 
     methods
-        function webWindow = getWebWindow(this)
+        function webWindow = get.webWindow(this)
             arguments (Output)
                 webWindow matlab.internal.webwindow
             end
@@ -19,6 +19,16 @@ classdef WebWindow < handle
 
             webWindow = struct(appContainer).Window;
             this.webWindow = webWindow;
+        end
+    end
+
+    methods (Static)
+        function openDevTools()
+            webWindow = kssolv.ui.debug.WebWindow().webWindow;
+
+            if ~isempty(webWindow)
+                webWindow.openDevTools();
+            end
         end
     end
 end
