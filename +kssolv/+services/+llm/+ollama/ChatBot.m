@@ -11,22 +11,24 @@ classdef ChatBot < handle
         bot (1, 1) % 对话机器人对象
         modelName (1, 1) string % 所使用的 Ollama™ 中 LLM 模型的名称
         systemPrompt (1, 1) string % 系统提示词
+        streamFunction (1, 1) % 流式传输函数
         messageHistory (1, 1) % 对话消息历史记录
     end
 
     methods
-        function this = ChatBot(modelName, systemPrompt)
+        function this = ChatBot(modelName, systemPrompt, streamFunction)
             %CHATBOT 构造函数，构造对话机器人对象
             arguments
                 modelName (1, 1) string = "deepseek-r1:7b"
-                systemPrompt (1, 1) string = "请用中文尽可能简洁地直接回复最终结论。"
+                systemPrompt (1, 1) string = ""
+                streamFunction (1, 1) function_handle = @(token) fprintf("%s\n", token)
             end
 
             this.modelName = modelName;
             this.systemPrompt = systemPrompt;
             this.messageHistory = messageHistory();
-            this.bot = ollamaChat(modelName, systemPrompt, ...
-                StreamFun=@(token) fprintf("%s", token));
+            this.bot = ollamaChat(modelName, systemPrompt, Temperature=0.6, ...
+                StreamFun=streamFunction);
         end
 
         function chat(this, prompt, useHistoryMessages)
@@ -40,17 +42,22 @@ classdef ChatBot < handle
             if useHistoryMessages
                 % 将本次用户的 prompt 保存到历史消息中
                 this.messageHistory = addUserMessage(this.messageHistory, prompt);
-
-                % 携带所有历史消息获取 LLM 的响应消息
-                [~, response] = generate(this.bot, this.messageHistory, MaxNumTokens=500);
-
-                % 将 LLM 的响应消息保存到历史消息中
-                this.messageHistory = addResponseMessage(this.messageHistory, response);
-            else
-                generate(this.bot, prompt, MaxNumTokens=500);
+                prompt = this.messageHistory;
             end
 
-            fprintf('\n');
+            try
+                % 携带所有历史消息获取 LLM 的响应消息
+                [~, response] = generate(this.bot, prompt, MaxNumTokens=Inf);
+            catch
+                this.bot = ollamaChat(this.modelName, this.systemPrompt, Temperature=0.6, ...
+                    StreamFun=this.streamFunction);
+                [~, response] = generate(this.bot, prompt, MaxNumTokens=Inf);
+            end
+
+            if useHistoryMessages
+                % 将 LLM 的响应消息保存到历史消息中
+                this.messageHistory = addResponseMessage(this.messageHistory, response);
+            end
         end
 
         function showMessageHistory(this, filterThinkContent)

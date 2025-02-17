@@ -6,6 +6,7 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
 
     properties
         Widgets % 小组件
+        ChatBot % 对话机器人
     end
 
     methods
@@ -22,6 +23,10 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             this.Panel.PreferredHeight = 280;
             % 将该 Browser 放在界面右侧
             this.Panel.Region = "bottom";
+
+            % 构造对话机器人
+            this.ChatBot = kssolv.services.llm.ollama.ChatBot("deepseek-r1:7b", '', ...
+                    @(tokens) this.addChat(tokens));
         end
     end
 
@@ -79,10 +84,19 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             this.Widgets.html.Data = data;
         end
 
+        function addChat(this, content)
+            %ADDCHAT 向 html 组件流式更新 tokens
+            % content = replace(content, newline, " <br>");
+            this.Widgets.html.sendEventToHTMLSource('TokensStreamed', content);
+            drawnow
+        end
+
         function eventReceiver(this, src, event)
             switch event.HTMLEventName
                 case 'CommandSubmitted'
                     this.callbackCommandSubmitted(src, event);
+                case 'UserPromptSubmitted'
+                    this.callbackUserPromptSubmitted(src, event);
             end
         end
 
@@ -106,6 +120,12 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             end
 
             this.Widgets.html.sendEventToHTMLSource('ResultUpdated', output);
+        end
+
+        function callbackUserPromptSubmitted(this, ~, event)
+            % 执行命令行窗口提交的用户提示词
+            userPrompt = event.HTMLEventData;
+            this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
         end
     end
 

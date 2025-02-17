@@ -5,6 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Command Window UI</title>
 
+    <script src="./3p/markdown-it/markdown-it.min.js"></script>
+    <script defer src="./3p/katex/katex.min.js"
+            integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
+            crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="./3p/katex/katex.min.css"
+          integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+    <script src="./3p/highlight.js/highlight.min.js"></script>
+    <link rel="stylesheet" href="./3p/highlight.js/default.min.css">
+
     <style>
         * {
             margin: 0;
@@ -15,18 +24,29 @@
         html, body {
             font-family: Arial, sans-serif;
             height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow: hidden; /* 防止body出现滚动条 */
+        }
+
+        body {
             display: flex;
             flex-direction: column;
             padding: 5px;
         }
 
+        #container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+
         #terminal {
-            flex-grow: 1;
-            width: 100%;
-            border: transparent;
-            background: white;
+            flex: 1;
             overflow-y: auto;
-            padding: 5px;
+            padding: 5px 5px 55px 5px; /* 给input-container留出空间 */
             font-family: monospace;
             font-size: 13px;
             white-space: pre-wrap;
@@ -36,10 +56,13 @@
             display: flex;
             align-items: center;
             border-top: 1px solid #ccc;
-            padding-top: 10px;
-            position: sticky;
-            bottom: 0;
+            padding: 10px 5px 5px;
             background: white;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
         }
 
         #input-container span {
@@ -110,18 +133,22 @@
         .suggestion-item.selected {
             background-color: #e0e0e0;
         }
+
+        .katex {
+            font-size: 13px; /* 让公式的字号变得小一些 */
+        }
     </style>
 </head>
 <body>
-<div id="terminal"></div>
-
-<div id="input-container">
-    <span>&gt;&gt;</span>
-    <label for="command-input"></label>
-    <input autofocus id="command-input" type="text">
-    <div id="suggestions-container"></div>
+<div id="container">
+    <div id="terminal"></div>
+    <div id="input-container">
+        <span>&gt;&gt;</span>
+        <label for="command-input"></label>
+        <input autofocus id="command-input" type="text">
+        <div id="suggestions-container"></div>
+    </div>
 </div>
-
 <script>
     // 基础变量声明
     let MATLAB;                          // MATLAB组件引用
@@ -301,20 +328,57 @@
             let command = input.value.trim();
 
             if (command) {
+                // 检查是否是特殊命令格式
+                const singleDollarMatch = command.match(/^\$\s*(.*)/);
+                const doubleDollarMatch = command.match(/^\$\$\s*(.*)/);
+
+                if (singleDollarMatch || doubleDollarMatch) {
+                    const actualCommand = singleDollarMatch ?
+                        singleDollarMatch[1] : doubleDollarMatch[1];
+                    const useHistory = !doubleDollarMatch;
+
+                    if (actualCommand) {
+                        history.push(command);
+                        historyIndex = history.length;
+                        if (terminal.innerHTML.length > 0 && !terminal.innerHTML.endsWith('\n')) {
+                            terminal.innerHTML += `\n`;
+                        }
+                        terminal.innerHTML += `>> ${command}\n`;
+                        currentResponseContent = '';
+                        responseContainer = null;
+                        sendUserPromptToMATLAB(actualCommand, useHistory);
+                        input.value = "";
+                        return;
+                    }
+                }
+
                 history.push(command);
                 historyIndex = history.length;
 
                 if (/\bclear\b/i.test(command)) {
                     input.value = "";
+                    if (terminal.innerHTML.length > 0 && !terminal.innerHTML.endsWith('\n')) {
+                        terminal.innerHTML += `\n`;
+                    }
                     terminal.innerHTML += `>> ${command}\n`;
+                    currentResponseContent = '';
+                    responseContainer = null;
                     return;
                 } else if (/\bclc\b/i.test(command)) {
                     terminal.innerHTML = "";
                     input.value = "";
+                    currentResponseContent = '';
+                    responseContainer = null;
                     return;
                 }
 
+                if (terminal.innerHTML.length > 0 && !terminal.innerHTML.endsWith('\n')) {
+                    terminal.innerHTML += `\n`;
+                }
                 terminal.innerHTML += `>> ${command}\n`;
+                currentResponseContent = '';
+                responseContainer = null;
+
                 if (command === "dev") {
                     command = "kssolv.ui.debug.WebWindow.openDevTools()";
                 }
@@ -364,6 +428,16 @@
 
     // 输入时更新建议列表
     input.addEventListener("input", function () {
+        // 恢复自动滚动至底部
+        autoScrolledUp = true;
+
+        // 如果输入以 $ 或 $$ 开头，不自动显示建议
+        if (input.value.startsWith('$')) {
+            suggestionsContainer.style.display = 'none';
+            selectedSuggestionIndex = -1;
+            return;
+        }
+
         const cursorPosition = input.selectionStart;
         const lastWord = getLastWord(input.value, cursorPosition);
         const matches = getSuggestions(lastWord);
@@ -378,7 +452,21 @@
         }
     });
 
-    // 发送命令到MATLAB
+    let autoScrolledUp = true;
+    // 监听输出区域的滚动事件
+    terminal.addEventListener('wheel', (event) => {
+        if (event.deltaY < 0) {
+            // 用户向上滚动
+            autoScrolledUp = false;
+        } else if (event.deltaY > 0) {
+            // 用户向下滚动，检查是否到达底部
+            if (terminal.scrollTop + terminal.clientHeight >= terminal.scrollHeight) {
+                autoScrolledUp = true;
+            }
+        }
+    });
+
+    // 发送命令到 MATLAB
     function sendCommandToMATLAB(command) {
         if (typeof MATLAB !== 'undefined') {
             MATLAB.sendEventToMATLAB("CommandSubmitted", command);
@@ -387,7 +475,19 @@
         }
     }
 
-    // 设置MATLAB组件
+    // 发送用户提示词到 MATLAB
+    function sendUserPromptToMATLAB(prompt, useHistory) {
+        if (typeof MATLAB !== 'undefined') {
+            MATLAB.sendEventToMATLAB("UserPromptSubmitted", {
+                prompt: prompt,
+                useHistory: useHistory
+            });
+        } else {
+            terminal.innerHTML += "!! MATLAB 不可用\n\n";
+        }
+    }
+
+    // 设置 MATLAB 组件
     function setup(htmlComponent) {
         MATLAB = htmlComponent;
         htmlComponent.addEventListener("ResultUpdated", resultFromMATLABToHTML);
@@ -396,9 +496,10 @@
             references = references.split(',');
             references = ['ANS', 'dev'].concat(references);
         });
+        htmlComponent.addEventListener("TokensStreamed", tokensStreamedFromMATLABToHTML);
     }
 
-    // 处理MATLAB返回结果
+    // 处理 MATLAB 返回结果
     function resultFromMATLABToHTML(event) {
         if (event.Data) {
             terminal.innerHTML += event.Data + "\n";
@@ -413,7 +514,158 @@
                 });
             });
         }
-        terminal.scrollTop = terminal.scrollHeight;
+        if (autoScrolledUp) {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+    }
+
+    // 当前是否在处理思考内容
+    let isProcessingThink = false;
+    let currentThinkContent = '';
+    let thinkContainer = null;
+    let currentResponseContent = '';
+    let responseContainer = null;
+    const md = window.markdownit({
+        breaks: false,
+        typographer: true,
+        highlight: function (str, lang) {
+            if (lang && hljs.getLanguage(lang)) {
+                try {
+                    return '<pre><code class="hljs">' +
+                        hljs.highlight(str, {language: lang, ignoreIllegals: true}).value +
+                        '</code></pre>';
+                } catch (__) {
+                }
+            }
+
+            return '<pre><code class="hljs">' + md.utils.escapeHtml(str) + '</code></pre>';
+        }
+    });
+
+    // 处理 MATLAB 返回 tokens
+    function tokensStreamedFromMATLABToHTML(event) {
+
+        if (!event.Data) return;
+
+        const terminal = document.getElementById("terminal");
+        let content = event.Data;
+
+        // 检测 think 标签的开始
+        if (content.includes('<think>')) {
+            isProcessingThink = true;
+            return
+        }
+
+        // 检测思考标签的结束
+        if (content.includes('</think>')) {
+            isProcessingThink = false;
+            currentThinkContent = '';
+            if (thinkContainer) {
+                thinkContainer.scrollTop = thinkContainer.scrollHeight;
+            }
+            thinkContainer = null;
+            return
+        }
+
+        // 如果正在处理思考内容
+        if (isProcessingThink) {
+            if (currentThinkContent === '') {
+                // 若此前并没有保留下来的思考内容
+
+                if (/^\n+$/.test(content)) {
+                    // 若 content 仅包含换行符号则直接返回
+                    return;
+                } else {
+                    // 若当前 tokens 为非空白字符，则是思考内容的第一个 tokens
+                    if (thinkContainer == null) {
+                        thinkContainer = document.createElement('div');
+                        thinkContainer.style.cssText = `
+                            color: #888;
+                            background-color: #f5f5f5;
+                            padding: 8px;
+                            margin: 4px 0;
+                            border-radius: 4px;
+                            max-height: 80px;
+                            overflow-y: auto;
+                            white-space: pre-wrap;
+                            font-size: 0.9em;
+                        `;
+                        terminal.appendChild(thinkContainer);
+                    }
+                    currentThinkContent += content;
+                    thinkContainer.innerHTML = currentThinkContent;
+                    thinkContainer.scrollTop = thinkContainer.scrollHeight;
+                    if (autoScrolledUp) {
+                        terminal.scrollTop = terminal.scrollHeight;
+                    }
+                }
+            } else {
+                // 若已输出思考内容
+                currentThinkContent += content;
+                thinkContainer.innerHTML = currentThinkContent;
+                thinkContainer.scrollTop = thinkContainer.scrollHeight;
+                if (autoScrolledUp) {
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+            }
+            return
+        }
+
+        // 如果正在处理非思考内容
+        if (responseContainer == null) {
+            responseContainer = document.createElement('div');
+            responseContainer.style.cssText = `
+                width: 100%;
+                border: transparent;
+                background: white;
+                font-family: monospace;
+                font-size: 13px;
+                white-space: pre-wrap;
+            `;
+            terminal.appendChild(responseContainer);
+        }
+
+        if (/^\n{2,}$/.test(content)) {
+            content = '\n';
+        }
+
+        currentResponseContent += content;
+
+        let processedContent = currentResponseContent;
+        // 分别替换行内公式 (\(...\)) 和行间公式 (\[...\]) 为 $...$ 和 $$...$$
+        processedContent = processedContent.replace(/\\\((.*?)\\\)/g, (match, formula) => {
+            return `$${formula}$`;
+        });
+        processedContent = processedContent.replace(/\\\[([\s\S]*?)\\\]/g, (match, formula) => {
+            return `$$${formula}$$`;
+        });
+        // 使用 markdown-it 渲染处理后的内容
+        responseContainer.innerHTML = md.render(processedContent);
+
+        // 获取所有非 <pre> 和 <code> 元素，使用 katex 进行公式渲染
+        const elements = responseContainer.querySelectorAll(':not(pre):not(code)');
+        elements.forEach((element) => {
+            // 渲染行间公式 $$ ... $$ 为独立的块级元素
+            let text = element.innerHTML.replace(/\$\$(.*?)\$\$/gs, (match, formula) => {
+                // 使用 KaTeX 渲染公式，并包裹在 <div> 中
+                return `<div class="katex">${katex.renderToString(formula)}</div>`;
+            });
+
+            // 渲染行内公式 $ ... $ 为行内元素
+            text = text.replace(/\$([^$]+)\$/g, (match, formula) => {
+                // 使用 KaTeX 渲染公式，并包裹在 <span> 中
+                return `<span class="katex">${katex.renderToString(formula)}</span>`;
+            });
+
+            element.innerHTML = text;
+        });
+
+        // 高亮代码块中的代码
+        hljs.highlightAll();
+
+        if (autoScrolledUp) {
+            terminal.scrollTop = terminal.scrollHeight;
+        }
     }
 </script>
 </body>
