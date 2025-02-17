@@ -52,6 +52,22 @@
             white-space: pre-wrap;
         }
 
+        /* 调整列表间距和高度 */
+        #terminal ul, #terminal ol {
+            line-height: 1;
+            padding-left: 1.5em;
+            height: fit-content;
+            display: flex;
+            flex-direction: column;
+            gap: 0.1em;
+        }
+
+        #terminal li {
+            height: fit-content;
+            margin: 0;
+            line-height: 1;
+        }
+
         #input-container {
             display: flex;
             align-items: center;
@@ -616,6 +632,7 @@
             responseContainer = document.createElement('div');
             responseContainer.style.cssText = `
                 width: 100%;
+                height: fit-content;
                 border: transparent;
                 background: white;
                 font-family: monospace;
