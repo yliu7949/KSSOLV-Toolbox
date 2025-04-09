@@ -11,6 +11,10 @@ classdef HomeTab < handle
         Widgets   % 小组件
     end
 
+    properties (Access = private)
+        settingsDialog % 设置对话框
+    end
+
     methods
         function this = HomeTab()
             %HOMETAB 构造函数，初始设置相关参数
@@ -60,6 +64,8 @@ classdef HomeTab < handle
             addlistener(this.Widgets.RunningSection.RunningStopButton, ...
                 'ButtonPushed', @(src, data) callbackRunningStopButton(this));
             % Environment Section
+            addlistener(this.Widgets.EnvironmentSection.EnvironmentSettingsButton, ...
+                'ButtonPushed', @(src, data) callbackEnvironmentSettingsButton(this));
             % Resource Section
         end
 
@@ -514,6 +520,24 @@ classdef HomeTab < handle
         function callbackRunningStopButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
+        end
+
+        function callbackEnvironmentSettingsButton(this, ~, ~)
+            this.Widgets.EnvironmentSection.EnvironmentSettingsButton.Enabled = false;
+
+            if isempty(this.settingsDialog) || ~isvalid(this.settingsDialog)
+                this.settingsDialog = kssolv.ui.components.dialog.SettingsDialog();
+                registerUIListeners(this.settingsDialog, ...
+                    addlistener(this.settingsDialog, 'CloseEvent', ...
+                    @(src, event) settingsDialogClosed(this, src, event)));
+            end
+
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            this.settingsDialog.show(appContainer);
+        end
+
+        function settingsDialogClosed(this, ~, ~)
+            this.Widgets.EnvironmentSection.EnvironmentSettingsButton.Enabled = true;
         end
     end
 

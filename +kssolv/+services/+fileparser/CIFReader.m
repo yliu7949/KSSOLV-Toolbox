@@ -12,6 +12,7 @@ classdef CIFReader < handle
 
     properties (Hidden)
         fileContent                % CIF 文件内容
+        fileType = "cif"           % CIF 文件类型
         CIFObject         struct   % 从 CIF 文件中解析出的数据结构
     end
 

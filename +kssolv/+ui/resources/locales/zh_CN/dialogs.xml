@@ -32,5 +32,21 @@
         <entry key="ProjectCanCloseSave">保存</entry>
         <entry key="ProjectCanCloseDoNotSave">不保存</entry>
         <entry key="ProjectCanCloseCancel">取消</entry>
+
+        <!-- SettingsDialog -->
+        <entry key="SettingsDialogName">设置</entry>
+        <entry key="SettingsDialogHelpButtonText">帮助</entry>
+        <entry key="SettingsDialogOKButtonText">确认</entry>
+        <entry key="SettingsDialogCancelButtonText">取消</entry>
+        <!-- SettingsDialog/GeneralTab -->
+        <entry key="SettingsDialogGeneralTabName">通用</entry>
+        <!-- SettingsDialog/GeneralTab/LanguagePanel -->
+        <entry key="SettingsDialogGeneralTabLanguagePanelName">语言</entry>
+        <entry key="SettingsDialogGeneralTabLanguageLabel">选择语言：</entry>
+        <entry key="SettingsDialogGeneralTabLanguageNote">更改语言设置后，下次启动时将生效。</entry>
+        <!-- SettingsDialog/GeneralTab/LLMPanel -->
+        <entry key="SettingsDialogGeneralTabLLMPanelName">大语言模型</entry>
+        <entry key="SettingsDialogGeneralTabLLMType">类型：</entry>
+        <entry key="SettingsDialogGeneralTabLLMModelName">使用的模型：</entry>
     </message>
 </rsccat>

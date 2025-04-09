@@ -13,6 +13,7 @@ classdef POSCARReader < handle
 
     properties (Hidden)
         fileContent                % POSCAR 文件内容
+        fileType = "vasp"          % POSCAR 文件类型
         POSCARObject      struct   % 从 POSCAR 文件中解析出的数据结构
     end
 
@@ -107,9 +108,9 @@ classdef POSCARReader < handle
 
         function extractAtomSpecies(this)
             % 提取原子种类和数量并构造 atomList
-            species = strsplit(this.fileContent{this.currentLineIndex});
+            species = strsplit(strtrim(this.fileContent{this.currentLineIndex}));
             this.currentLineIndex = this.currentLineIndex + 1;
-            atomNumber = str2double(strsplit(this.fileContent{this.currentLineIndex}));
+            atomNumber = str2double(strsplit(strtrim(this.fileContent{this.currentLineIndex})));
             this.currentLineIndex = this.currentLineIndex + 1;
 
             % 预分配 atomList，提升性能
@@ -152,7 +153,7 @@ classdef POSCARReader < handle
 
             ionPositons = zeros(length(this.KSSOLVSetupObject.atomList), 3, 'double');
             for i = 1:length(this.KSSOLVSetupObject.atomList)
-                lineData = strsplit(this.fileContent{this.currentLineIndex});
+                lineData = strsplit(strtrim(this.fileContent{this.currentLineIndex}));
                 ionPositons(i, :) = str2double(lineData(1:3));
                 this.currentLineIndex = this.currentLineIndex + 1;
             end

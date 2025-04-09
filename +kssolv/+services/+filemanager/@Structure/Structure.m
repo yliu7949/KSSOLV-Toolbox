@@ -16,14 +16,24 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
 
         function showMoleculeDisplay(this)
             % 使用 Data 数据中的文件路径以打开对应结构的渲染界面
-            kssolv.ui.components.figuredocument.MoleculeDisplay(this.data.rawFileContent, this.name).Display();
+            kssolv.ui.components.figuredocument.MoleculeDisplay(this.data.rawFileContent, this.data.fileType, this.name).Display();
         end
 
         function importedFileCount = importStructureFromFile(this)
             % 打开导入结构文件对话框，创建并添加 Structure 节点，渲染结构
             import kssolv.ui.util.Localizer.message
-            [files, path] = uigetfile({'*.cif';'*.vasp';'*.poscar';'*.POSCAR';'*.*'}, ...
-                message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
+
+            if ismac
+                % 在 Mac 平台上 uigetfile 对话框存在缺陷，无法过滤和选中 .vasp 等文件
+                % 因此只能使用 uigetfile('*') 选择所有文件后再判断选中文件的扩展名
+                % 参考资料：https://ww2.mathworks.cn/matlabcentral/answers/484281-why-am-i-unable-to-select-a-file-when-i-use-uigetfile-function-on-the-newest-mac-operation-system
+                [files, path] = uigetfile('*', message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
+            else
+                [files, path] = uigetfile({'*.cif', 'CIF Files (*.cif)'; ...
+                    '*.vasp;*.poscar', 'VASP Files (*.vasp, *.poscar)'; ...
+                    '*.*', 'All Files (*.*)'}, ...
+                    message("KSSOLV:dialogs:ImportStructureFromFile"), 'MultiSelect', 'on');
+            end
 
             % 检查用户是否点击了取消按钮
             if isequal(files, 0)
@@ -57,18 +67,23 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
                             this.addChildrenItem(structure);
                             importedFileCount = importedFileCount + 1;
 
-                            % 只有CIF文件才读取文件内容并展示
+                            % 读取文件内容并展示结构
                             cifFileContent = fileread(fullPath);
-                            displayObj = kssolv.ui.components.figuredocument.MoleculeDisplay(cifFileContent, structure.name);
+                            displayObj = kssolv.ui.components.figuredocument.MoleculeDisplay(cifFileContent, "cif", structure.name);
                             displayObj.Display();
                         end
 
-                    case {'.poscar', '.vasp'}
+                    case {'.vasp', '.poscar'}
                         structure.data = kssolv.services.fileparser.POSCARReader(fullPath);
 
                         if ~isempty(structure.data)
                             this.addChildrenItem(structure);
                             importedFileCount = importedFileCount + 1;
+
+                            % 读取文件内容并展示结构
+                            vaspFileContent = fileread(fullPath);
+                            displayObj = kssolv.ui.components.figuredocument.MoleculeDisplay(vaspFileContent, "vasp", structure.name);
+                            displayObj.Display();
                         end
 
                     otherwise

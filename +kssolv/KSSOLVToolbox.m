@@ -157,6 +157,11 @@ classdef KSSOLVToolbox < handle
                 % 如果 project 没有进行任何修改，则直接关闭已有的 project
                 % 此处不需要进行额外的处理
             else
+                % 如果 App 正忙，取消正忙的状态
+                if this.AppContainer.Busy
+                    this.AppContainer.Busy = false;
+                end
+
                 % 如果 project 有进行修改，则弹出对话框，包含"保存"、"不保存"和"取消"按钮
                 YesLabel = message('KSSOLV:dialogs:AppCanCloseSave');
                 NoLabel = message('KSSOLV:dialogs:AppCanCloseDoNotSave');

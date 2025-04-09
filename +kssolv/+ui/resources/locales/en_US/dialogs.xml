@@ -30,5 +30,21 @@
         <entry key="ProjectCanCloseSave">Save</entry>
         <entry key="ProjectCanCloseDoNotSave">Don't Save</entry>
         <entry key="ProjectCanCloseCancel">Cancel</entry>
+
+        <!-- SettingsDialog -->
+        <entry key="SettingsDialogName">Settings</entry>
+        <entry key="SettingsDialogHelpButtonText">Help</entry>
+        <entry key="SettingsDialogOKButtonText">OK</entry>
+        <entry key="SettingsDialogCancelButtonText">Cancel</entry>
+        <!-- SettingsDialog/GeneralTab -->
+        <entry key="SettingsDialogGeneralTabName">General</entry>
+        <!-- SettingsDialog/GeneralTab/LanguagePanel -->
+        <entry key="SettingsDialogGeneralTabLanguagePanelName">Language</entry>
+        <entry key="SettingsDialogGeneralTabLanguageLabel">Select the language:</entry>
+        <entry key="SettingsDialogGeneralTabLanguageNote">The changes to the language settings will take effect the next time you start.</entry>
+        <!-- SettingsDialog/GeneralTab/LLMPanel -->
+        <entry key="SettingsDialogGeneralTabLLMPanelName">LLM</entry>
+        <entry key="SettingsDialogGeneralTabLLMType">Type:</entry>
+        <entry key="SettingsDialogGeneralTabLLMModelName">Model used:</entry>
     </message>
 </rsccat>

@@ -1,28 +1,32 @@
 classdef MoleculeDisplay < handle
     %MOLECULEDISPLAY 三维渲染分子结构和晶体结构的组件
-    
+
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     properties
         DocumentGroupTag
-        cifFileContent string
+        structureFileContent string
+        structureFileType string
         tag string
     end
-    
+
     methods
-        function this = MoleculeDisplay(cifFileContent, tag)
+        function this = MoleculeDisplay(structureFileContent, structureFileType, tag)
             %MOLECULEDISPLAY 构造此类的实例
             arguments
-                cifFileContent string = ""
+                structureFileContent string = ""
+                structureFileType string = ""
                 tag string = ""
             end
-            if cifFileContent == ""
-                cifFilePath = fullfile(fileparts(mfilename('fullpath')), ...
-                'test', 'MoS2_mp-2815_conventional_standard.cif');
-                this.cifFileContent = fileread(cifFilePath);
+            if structureFileContent == ""
+                structureFilePath = fullfile(fileparts(mfilename('fullpath')), ...
+                    'test', 'MoS2_mp-2815_conventional_standard.cif');
+                this.structureFileContent = fileread(structureFilePath);
+                this.structureFileType = "cif";
             else
-                this.cifFileContent = cifFileContent;
+                this.structureFileContent = structureFileContent;
+                this.structureFileType = structureFileType;
             end
             this.tag = tag;
             this.DocumentGroupTag = 'Structure';
@@ -39,7 +43,7 @@ classdef MoleculeDisplay < handle
                 appContainer.add(group);
             end
         end
-        
+
         function Display(this)
             %DISPLAY 在 Document Group 中展示渲染的分子/晶体结构
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
@@ -49,8 +53,8 @@ classdef MoleculeDisplay < handle
                 document.Selected = true;
                 return
             end
-            
-            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentStructureTitle'); 
+
+            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentStructureTitle');
             figOptions.DocumentGroupTag = this.DocumentGroupTag;
             if this.tag ~= ""
                 figOptions.Tag = this.tag;
@@ -68,8 +72,9 @@ classdef MoleculeDisplay < handle
             htmlFile = fullfile(fileparts(mfilename('fullpath')), '3Dmol', '3Dmol.html');
             h = uihtml(g, "HTMLSource", htmlFile);
 
-            % 将 CIF 格式文件的内容保存在 html 组件中
-            h.Data = this.cifFileContent;
+            % 将包含结构信息的文件的内容发送到 html 组件中
+            eventData = struct('type', this.structureFileType, 'data', this.structureFileContent);
+            h.Data = jsonencode(eventData, "PrettyPrint", true);
 
             % 添加到 App Container
             appContainer.add(document);
@@ -82,7 +87,7 @@ classdef MoleculeDisplay < handle
             % m = kssolv.ui.components.figuredocument.MoleculeDisplay();
             % m.qeShow()
 
-            % 创建 App Container          
+            % 创建 App Container
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
@@ -98,7 +103,7 @@ classdef MoleculeDisplay < handle
             group.Title = 'DocumentGroupTest';
             group.DefaultRegion = 'left';
             app.add(group);
-            
+
             % 展示界面
             app.Visible = true;
 
