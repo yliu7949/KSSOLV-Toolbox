@@ -10,7 +10,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
     % CUSTOMBUTTON 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         Icon = ''
@@ -159,11 +159,15 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 'html, body {'
                 '   height: 100%;'
                 '   margin: 0;'
+                '   overflow: hidden;' % 禁止滚动条
                 '}'
                 'body {'
                 '   background-color: transparent;'
                 '   display: flex;'
                 sprintf('   justify-content: %s;', this.privateHorizontalAlignment)
+                '   align-items: center;' % 垂直居中
+                '   width: 100%;' % 确保占满宽度
+                '   box-sizing: border-box;' % 确保尺寸计算包含内边距和边框
                 '}'
                 '.custom-button {'
                 '   border: 1px solid transparent;'  % 默认透明边框
@@ -177,6 +181,9 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '   max-width: 100%;'
                 '   max-height: 100%;'
                 '   border-radius: 4px;'
+                '   box-sizing: border-box;' % 确保尺寸计算包含内边距和边框
+                '   white-space: nowrap;' % 防止文本换行导致额外高度
+                '   overflow: hidden;' % 如果内容过多，隐藏溢出部分
                 '}'
                 '.custom-button:hover {'
                 '   background-color: #ffffff;'
@@ -196,12 +203,15 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '.custom-button img {'
                 sprintf('   width: %s;', imgWidth)
                 '   height: auto;'
+                '   max-width: 100%;' % 确保图片不超出按钮范围
+                '   object-fit: contain;' % 确保图片适应容器
                 '}'
                 '.custom-button svg {'
                 sprintf('   width: %s;', imgWidth)
                 '   height: auto;'
                 '   max-width: 24px;'
                 '   max-height: 24px;'
+                '   flex-shrink: 0;' % 防止SVG被压缩
                 '}'
                 '.custom-button:disabled {'
                 '    cursor: not-allowed;'
