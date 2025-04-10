@@ -57,7 +57,7 @@ options.SupportedPlatforms.Maci64 = true;
 options.SupportedPlatforms.Glnxa64 = true;
 options.SupportedPlatforms.MatlabOnline = true;
 
-options.MinimumMatlabRelease = "R2023a";
+options.MinimumMatlabRelease = "R2024a";
 options.MaximumMatlabRelease = "";
 
 filteredConditions = ~endsWith(options.ToolboxFiles, '.ks') & ...

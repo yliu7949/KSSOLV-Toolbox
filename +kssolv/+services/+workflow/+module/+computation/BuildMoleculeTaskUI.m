@@ -1,5 +1,5 @@
 classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
-    % BUILDMOLECULETASKUI 与 buildMoleculeTask 的选项相关的 UI 控件
+    %BUILDMOLECULETASKUI 与 buildMoleculeTask 的选项相关的 UI 控件
 
     properties (Dependent)
         options
