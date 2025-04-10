@@ -50,7 +50,7 @@ options.Summary = "Plane Wave Basis, First-Principles Calculation";
 
 options.OutputFile = fullfile(toolboxFolder, "KSSOLV_Toolbox.mltbx");
 options.ToolboxName = "KSSOLV Toolbox";
-options.ToolboxVersion = "0.1.0";
+options.ToolboxVersion = "0.1.1";
 options.AppGalleryFiles = "kssolv.m";
 options.SupportedPlatforms.Win64 = true;
 options.SupportedPlatforms.Maci64 = true;

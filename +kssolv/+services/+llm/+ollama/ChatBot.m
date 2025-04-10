@@ -1,4 +1,4 @@
-classdef ChatBot < handle
+classdef ChatBot < handle % & kssolv.services.llm.internal.tools
     %CHATBOT 基于部署在本地 Ollama™ 中的大语言模型实现对话功能
 
     % 此类依赖 MathWorks 发布的 Large Language Models with MATLAB 工具
@@ -26,6 +26,11 @@ classdef ChatBot < handle
 
             this.modelName = modelName;
             this.systemPrompt = systemPrompt;
+
+            if ~kssolv.services.llm.isLLMWithMATLABAddonAvailable
+                return
+            end
+
             this.messageHistory = messageHistory();
             this.bot = ollamaChat(modelName, systemPrompt, Temperature=0.6, ...
                 StreamFun=streamFunction);
@@ -39,6 +44,10 @@ classdef ChatBot < handle
                 useHistoryMessages (1, 1) logical = true
             end
 
+            if ~kssolv.services.llm.isLLMWithMATLABAddonAvailable
+                return
+            end
+
             if useHistoryMessages
                 % 将本次用户的 prompt 保存到历史消息中
                 this.messageHistory = addUserMessage(this.messageHistory, prompt);
@@ -47,16 +56,16 @@ classdef ChatBot < handle
 
             try
                 % 携带所有历史消息获取 LLM 的响应消息
-                [~, response] = generate(this.bot, prompt, MaxNumTokens=Inf);
+                [~, message, ~] = generate(this.bot, prompt, MaxNumTokens=Inf);
             catch
                 this.bot = ollamaChat(this.modelName, this.systemPrompt, Temperature=0.6, ...
                     StreamFun=this.streamFunction);
-                [~, response] = generate(this.bot, prompt, MaxNumTokens=Inf);
+                [~, message, ~] = generate(this.bot, prompt, MaxNumTokens=Inf);
             end
 
             if useHistoryMessages
                 % 将 LLM 的响应消息保存到历史消息中
-                this.messageHistory = addResponseMessage(this.messageHistory, response);
+                this.messageHistory = addResponseMessage(this.messageHistory, message);
             end
         end
 

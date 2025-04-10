@@ -211,7 +211,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
                 '   height: auto;'
                 '   max-width: 24px;'
                 '   max-height: 24px;'
-                '   flex-shrink: 0;' % 防止SVG被压缩
+                '   flex-shrink: 0;' % 防止 SVG 被压缩
                 '}'
                 '.custom-button:disabled {'
                 '    cursor: not-allowed;'
