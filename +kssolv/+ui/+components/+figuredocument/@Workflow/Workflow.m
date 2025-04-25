@@ -77,7 +77,7 @@ classdef Workflow < handle
             appContainer.add(document);
 
             % 等待渲染完成
-            pause(0.5);
+            pause(0.3);
 
             % 请求同步一次 graphJSON，目的是在此刻初始化画布中所有节点对应的 taskUI 控件
             this.HTMLComponent.sendEventToHTMLSource('workflowExportToJSON', '[]');

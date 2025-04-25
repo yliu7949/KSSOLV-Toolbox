@@ -503,10 +503,7 @@ classdef HomeTab < handle
         function callbackRunningRunButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = false;
             this.Widgets.RunningSection.RunningStopButton.Enabled = true;
-
-            app = kssolv.ui.util.DataStorage.getData('AppContainer');
-            app.Busy = true;
-
+            
             project = kssolv.ui.util.DataStorage.getData('Project');
             workflowRoot = project.findChildrenItem('Workflow');
             workflow = workflowRoot.children{1};
@@ -526,7 +523,6 @@ classdef HomeTab < handle
             pause(1)
             %}
 
-            app.Busy = false;
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
         end

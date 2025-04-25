@@ -6,7 +6,7 @@
     "y": 110,
     "data": {
       "label": "Configuration",
-      "status": "success"
+      "status": "default"
     },
     "ports": [
       {
@@ -22,7 +22,7 @@
     "y": 225,
     "data": {
       "label": "SCF",
-      "status": "success"
+      "status": "default"
     },
     "ports": [
       {
@@ -32,55 +32,27 @@
       {
         "id": "2-2",
         "group": "bottom"
-      },
-      {
-        "id": "2-3",
-        "group": "bottom"
       }
     ]
   },
   {
     "id": "3",
     "shape": "dag-node",
-    "x": 170,
-    "y": 350,
+    "x": 290,
+    "y": 340,
     "data": {
-      "label": "Plot1",
+      "label": "Plot",
       "status": "default"
     },
     "ports": [
       {
         "id": "3-1",
         "group": "top"
-      },
-      {
-        "id": "3-2",
-        "group": "bottom"
       }
     ]
   },
   {
     "id": "4",
-    "shape": "dag-node",
-    "x": 450,
-    "y": 350,
-    "data": {
-      "label": "Plot2",
-      "status": "failed"
-    },
-    "ports": [
-      {
-        "id": "4-1",
-        "group": "top"
-      },
-      {
-        "id": "4-2",
-        "group": "bottom"
-      }
-    ]
-  },
-  {
-    "id": "5",
     "shape": "dag-edge",
     "source": {
       "cell": "1",
@@ -93,7 +65,7 @@
     "zIndex": 0
   },
   {
-    "id": "6",
+    "id": "5",
     "shape": "dag-edge",
     "source": {
       "cell": "2",
@@ -102,19 +74,6 @@
     "target": {
       "cell": "3",
       "port": "3-1"
-    },
-    "zIndex": 0
-  },
-  {
-    "id": "7",
-    "shape": "dag-edge",
-    "source": {
-      "cell": "2",
-      "port": "2-3"
-    },
-    "target": {
-      "cell": "4",
-      "port": "4-1"
     },
     "zIndex": 0
   }

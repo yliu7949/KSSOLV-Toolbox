@@ -10,6 +10,12 @@ classdef CodeGenerator < handle
                 workflow kssolv.services.workflow.WorkflowGraph
             end
 
+            function changeNodeStatus(nodeID, status)
+                kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowUpdateNodeStatus', ...
+                    struct('nodeID', nodeID, 'newStatus', status));
+                pause(0.1);
+            end
+
             % 获取所有节点 ID
             allNodeIDs = keys(workflow.Nodes);
 
@@ -20,10 +26,11 @@ classdef CodeGenerator < handle
             % 查找连通的子图，忽略孤立节点
             for i = 1:length(allNodeIDs)
                 nodeID = allNodeIDs{i};
+                changeNodeStatus(nodeID, 'default');
                 if ~isKey(visited, nodeID)
                     subgraph = kssolv.services.workflow.codegeneration.CodeGenerator.findConnectedNodes(workflow, nodeID, visited);
                     if ~isempty(subgraph)
-                        connectedComponents{end+1} = subgraph;
+                        connectedComponents{end+1} = subgraph; %#ok<*AGROW>
                     end
                 end
             end
@@ -42,7 +49,14 @@ classdef CodeGenerator < handle
                     node = workflow.Nodes(nodeID);  % 获取当前节点
 
                     % 执行任务，得到输出
-                    output = node.task.executeTask(context, input);
+                    changeNodeStatus(nodeID, 'running');
+                    try
+                        output = node.task.executeTask(context, input);
+                    catch ME
+                        changeNodeStatus(nodeID, 'error');
+                        throw(ME);
+                    end
+                    changeNodeStatus(nodeID, 'success');
 
                     % 传递 output 作为下一个节点的 input
                     input = output;
