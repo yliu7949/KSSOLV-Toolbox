@@ -1,6 +1,9 @@
 classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
     %ENERGYCONVERGENCEPLOT 用于绘制能量收敛曲线图和误差曲线的自定义图表类
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties
         TotalEnergy % Etot 能量数据 (eV)
         SCFError % 误差数据

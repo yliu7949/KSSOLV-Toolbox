@@ -12,6 +12,9 @@ function [taskNames, classNames] = getTaskNames(moduleType)
 %   [taskNames, classNames] = getTaskNames(ModuleType.Computation);
 %   taskNames 将包含所有 "Task" 结尾的类的 TASK_NAME，classNames 将包含对应的类名。
 
+%   开发者：杨柳
+%   版权 2024-2025 合肥瀚海量子科技有限公司
+
 arguments
     moduleType kssolv.services.workflow.module.ModuleType
 end

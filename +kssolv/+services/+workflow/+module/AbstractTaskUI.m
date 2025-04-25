@@ -1,27 +1,64 @@
 classdef (Abstract) AbstractTaskUI < matlab.mixin.SetGet
-    %ABSTRACTTASKUI Summary of this class goes here
-    
+    %ABSTRACTTASKUI 任务的选项 UI 的抽象类
+
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Abstract, Dependent)
         options
     end
 
-    properties (Abstract)
+    properties (Abstract, Transient)
         widgets
+    end
+
+    properties (Access = protected)
+        defaultOptions (1, 1) struct
+        privateOptions (1, 1) struct
+        isDirty (1, 1) logical = false
     end
 
     methods (Access = protected)
         function this = AbstractTaskUI()
-            this.setup();
+            this.setupDefaultOptions();
+            this.setupUI();
+        end
+
+        function markDirty(this)
+            this.isDirty = true;
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            if ~isempty(project)
+                project.isDirty = true;
+            end
         end
     end
 
     methods (Abstract, Access = protected)
-        setup(this);
+        setupDefaultOptions(this)
+        setup(this, options);
     end
 
     methods (Abstract)
         attachUIToAccordion(this, accordion)
         detachUIFromAccordion(this)
+    end
+
+    methods
+        function setupUI(this)
+            if ~isempty(fields(this.privateOptions))
+                this.setup(this.privateOptions);
+            else
+                this.setup(this.defaultOptions);
+            end
+        end
+
+        function set.isDirty(this, value)
+            if value
+                % 更新 privateOptions
+                this.get("options");
+            end
+            this.isDirty = false;
+        end
     end
 
     methods (Hidden, Static)

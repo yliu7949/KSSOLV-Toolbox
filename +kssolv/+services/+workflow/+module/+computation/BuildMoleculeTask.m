@@ -1,6 +1,9 @@
 classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
     %BUILDMOLECULETASK 由结构信息生成 KSSOLV 的 Molecule/Crystal 类的实例
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Constant)
         TASK_NAME = 'Build Molecule';
         DESCRIPTION = 'Build Molecule/Crystal object of KSSOLV';
@@ -16,7 +19,7 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
     end
 
     methods
-        function getOptionsUI(this)
+        function setupOptionsUI(this)
             this.optionsUI = kssolv.services.workflow.module.computation.BuildMoleculeTaskUI();
         end
 

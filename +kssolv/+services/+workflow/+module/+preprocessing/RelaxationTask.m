@@ -1,6 +1,9 @@
 classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
     %RELAXATIONTASK 优化已有的结构信息，生成 Molecule/Crystal 类的新实例
 
+    %   开发者：杨柳
+    %   版权 2025 合肥瀚海量子科技有限公司
+
     properties (Constant)
         TASK_NAME = 'Geometry Optimization';
         DESCRIPTION = 'Optimize the structure information of Molecule/Crystal object of KSSOLV';
@@ -16,7 +19,7 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
     end
 
     methods
-        function getOptionsUI(this)
+        function setupOptionsUI(this)
             this.optionsUI = kssolv.services.workflow.module.preprocessing.RelaxationTaskUI();
         end
 

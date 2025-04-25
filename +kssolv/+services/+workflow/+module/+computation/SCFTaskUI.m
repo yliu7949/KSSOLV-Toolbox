@@ -1,23 +1,29 @@
 classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     %SCFTASKUI 与 SCFTask 的选项相关的 UI 控件
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Dependent)
         options
     end
 
-    properties
+    properties (Transient)
         widgets
     end
 
-    properties (Access = private)
-        eigMethodValueDropdown
-        maxSCFIterationValueSpinner
-        forceComputeCheckbox
-        exxMethodValueDropdown
-    end
-
     methods (Access = protected)
-        function setup(this)
+        function setupDefaultOptions(this)
+            this.defaultOptions = struct('eigmethod', 'davidson_qe', ...
+                'maxscfiter', 100, 'force', false, 'exxmethod', 'default');
+        end
+
+        function setup(this, options)
+            arguments
+                this
+                options (1, 1) struct = this.defaultOptions
+            end
+
             % Options AccordionPanel
             this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
             this.widgets.accordionPanel1.BackgroundColor = 'white';
@@ -34,10 +40,12 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             eigMethodLabel.HorizontalAlignment = 'right';
             eigMethodLabel.Text = "DiagMethod: ";
             eigMethodLabel.Tooltip = eigMethodLabelTooltip;
-            this.eigMethodValueDropdown = uidropdown(g1);
-            this.eigMethodValueDropdown.Items = {'davidson_qe', 'lobpcg', ...
+            this.widgets.eigMethodValueDropdown = uidropdown(g1);
+            this.widgets.eigMethodValueDropdown.Items = {'davidson_qe', 'lobpcg', ...
                 'eigs', 'ppcg', 'davidson', 'davidson2', 'davpcg'};
-            this.eigMethodValueDropdown.Tooltip = eigMethodLabelTooltip;
+            this.widgets.eigMethodValueDropdown.Value = options.eigmethod;
+            this.widgets.eigMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.eigMethodValueDropdown.Tooltip = eigMethodLabelTooltip;
 
             % 最大迭代步数
             maxSCFIterationLabelTooltip = 'Max SCF iteration steps';
@@ -45,16 +53,19 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             maxSCFIterationLabel.HorizontalAlignment = 'right';
             maxSCFIterationLabel.Text = "Max SCF steps: ";
             maxSCFIterationLabel.Tooltip = maxSCFIterationLabelTooltip;
-            this.maxSCFIterationValueSpinner = uispinner(g1);
-            this.maxSCFIterationValueSpinner.Limits = [0 300];
-            this.maxSCFIterationValueSpinner.Value = 100;
-            this.eigMethodValueDropdown.Tooltip = maxSCFIterationLabelTooltip;
+            this.widgets.maxSCFIterationValueSpinner = uispinner(g1);
+            this.widgets.maxSCFIterationValueSpinner.Limits = [0 300];
+            this.widgets.maxSCFIterationValueSpinner.Value = options.maxscfiter;
+            this.widgets.maxSCFIterationValueSpinner.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.maxSCFIterationValueSpinner.Tooltip = maxSCFIterationLabelTooltip;
 
             % 是否计算力
-            this.forceComputeCheckbox = uicheckbox(g1);
-            this.forceComputeCheckbox.Layout.Row = 3;
-            this.forceComputeCheckbox.Layout.Column = 2;
-            this.forceComputeCheckbox.Text = 'Calculate force';
+            this.widgets.forceComputeCheckbox = uicheckbox(g1);
+            this.widgets.forceComputeCheckbox.Layout.Row = 3;
+            this.widgets.forceComputeCheckbox.Layout.Column = 2;
+            this.widgets.forceComputeCheckbox.Text = 'Calculate force';
+            this.widgets.forceComputeCheckbox.Value = options.force;
+            this.widgets.forceComputeCheckbox.ValueChangedFcn = @(src, event) this.markDirty();
 
             % Advanced Options AccordionPanel
             this.widgets.accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
@@ -73,9 +84,11 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             exxMethodLabel.HorizontalAlignment = 'right';
             exxMethodLabel.Text = "ExxMethod: ";
             exxMethodLabel.Tooltip = exxMethodLabelTooltip;
-            this.exxMethodValueDropdown = uidropdown(g2);
-            this.exxMethodValueDropdown.Items = {'ace', 'normal', 'default', 'qrcp', 'kmeans'};
-            this.exxMethodValueDropdown.Tooltip = exxMethodLabelTooltip;
+            this.widgets.exxMethodValueDropdown = uidropdown(g2);
+            this.widgets.exxMethodValueDropdown.Items = {'ace', 'normal', 'default', 'qrcp', 'kmeans'};
+            this.widgets.exxMethodValueDropdown.Value = options.exxmethod;
+            this.widgets.exxMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.exxMethodValueDropdown.Tooltip = exxMethodLabelTooltip;
         end
     end
 
@@ -97,7 +110,6 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                     accordion.Children(3).Parent = [];
                 end
             end
-
 
             % 将两个 accordionPanel 添加到 accordion
             if isempty(accordion.Children)
@@ -128,11 +140,11 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
 
         function output = get.options(this)
             % 获取控件对应的值
-            output = struct();
-            output.eigmethod = this.eigMethodValueDropdown.Value;
-            output.maxscfiter = this.maxSCFIterationValueSpinner.Value;
-            output.force = this.forceComputeCheckbox.Value;
-            output.exxmethod = this.exxMethodValueDropdown.Value;
+            this.privateOptions.eigmethod = this.widgets.eigMethodValueDropdown.Value;
+            this.privateOptions.maxscfiter = this.widgets.maxSCFIterationValueSpinner.Value;
+            this.privateOptions.force = this.widgets.forceComputeCheckbox.Value;
+            this.privateOptions.exxmethod = this.widgets.exxMethodValueDropdown.Value;
+            output = this.privateOptions;
         end
     end
 

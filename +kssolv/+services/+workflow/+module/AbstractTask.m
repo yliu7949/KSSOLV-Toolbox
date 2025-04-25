@@ -1,8 +1,8 @@
 classdef (Abstract) AbstractTask < matlab.mixin.SetGet
-    %ABSTRACTTASK Summary of this class goes here
+    %ABSTRACTTASK 任务的抽象类
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Abstract, Constant)
         TASK_NAME
@@ -34,13 +34,32 @@ classdef (Abstract) AbstractTask < matlab.mixin.SetGet
         isDebugMode logical = false
     end
 
+    properties (Hidden, Transient)
+        taskUICreated (1, 1) logical = false
+    end
+
     methods
         function this = AbstractTask()
             this.setup();
-            this.getOptionsUI();
+            this.setupOptionsUI();
+
             if ~isempty(this.optionsUI)
                 this.options = this.optionsUI.options;
             end
+        end
+
+        function resetOptionsUI(this)
+            if this.taskUICreated
+                return
+            end
+
+            if ~isempty(this.optionsUI)
+                this.optionsUI.setupUI();
+            else
+                this.setupOptionsUI();
+            end
+
+            this.taskUICreated = true;
         end
     end
 
@@ -49,7 +68,7 @@ classdef (Abstract) AbstractTask < matlab.mixin.SetGet
     end
 
     methods (Abstract)
-        getOptionsUI(this)
+        setupOptionsUI(this)
 
         %{
         code = generateCodeSnippet(this)

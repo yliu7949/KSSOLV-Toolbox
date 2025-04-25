@@ -1,22 +1,29 @@
 classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     %RELAXATIONTASKUI 与 relaxationTask 的选项相关的 UI 控件
 
+    %   开发者：杨柳
+    %   版权 2025 合肥瀚海量子科技有限公司
+
     properties (Dependent)
         options
     end
 
-    properties
+    properties (Transient)
         widgets
     end
 
-    properties (Access = private)
-        relaxationMethodValueDropdown
-        relaxationToleranceEditField
-        maxRelaxationIterationsSpinner
-    end
-
     methods (Access = protected)
-        function setup(this)
+        function setupDefaultOptions(this)
+            this.defaultOptions = struct('relaxmethod', 'fminunc', ...
+                'relaxtol', 1e-2, 'maxrelaxiter', 100);
+        end
+
+        function setup(this, options)
+            arguments
+                this
+                options (1, 1) struct = this.defaultOptions
+            end
+
             % Options AccordionPanel
             this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
             this.widgets.accordionPanel1.BackgroundColor = 'white';
@@ -33,10 +40,12 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             relaxationMethodLabel.HorizontalAlignment = 'right';
             relaxationMethodLabel.Text = "RelaxMethod: ";
             relaxationMethodLabel.Tooltip = relaxationMethodLabelTooltip;
-            this.relaxationMethodValueDropdown = uidropdown(g1);
-            this.relaxationMethodValueDropdown.Items = {'fminunc', 'nlcg2', ...
+            this.widgets.relaxationMethodValueDropdown = uidropdown(g1);
+            this.widgets.relaxationMethodValueDropdown.Items = {'fminunc', 'nlcg2', ...
                 'bfgs', 'fire'};
-            this.relaxationMethodValueDropdown.Tooltip = relaxationMethodLabelTooltip;
+            this.widgets.relaxationMethodValueDropdown.Value = options.relaxmethod;
+            this.widgets.relaxationMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.relaxationMethodValueDropdown.Tooltip = relaxationMethodLabelTooltip;
 
             % 结构优化收敛阈值编辑框
             relaxationToleranceTooltip = 'Set relaxation tolerance';
@@ -47,11 +56,12 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             relaxationToleranceLabel.Text = "RelaxTolerance:";
             relaxationToleranceLabel.Tooltip = relaxationToleranceTooltip;
 
-            this.relaxationToleranceEditField = uieditfield(g1, 'text');
-            this.relaxationToleranceEditField.Layout.Row = 2;
-            this.relaxationToleranceEditField.Layout.Column = 2;
-            this.relaxationToleranceEditField.Value = '1e-2';
-            this.relaxationToleranceEditField.Tooltip = relaxationToleranceTooltip;
+            this.widgets.relaxationToleranceEditField = uieditfield(g1, 'text');
+            this.widgets.relaxationToleranceEditField.Layout.Row = 2;
+            this.widgets.relaxationToleranceEditField.Layout.Column = 2;
+            this.widgets.relaxationToleranceEditField.Value = num2str(options.relaxtol);
+            this.widgets.relaxationToleranceEditField.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.relaxationToleranceEditField.Tooltip = relaxationToleranceTooltip;
 
             % 结构优化最大步数数值输入框（默认值 100）
             maxRelaxationIterationsTooltip = 'Set maximum relaxation iterations';
@@ -62,10 +72,12 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             maxRelaxationIterationsLabel.Text = "MaxRelaxSteps:";
             maxRelaxationIterationsLabel.Tooltip = maxRelaxationIterationsTooltip;
 
-            this.maxRelaxationIterationsSpinner = uispinner(g1, 'Value', 100);
-            this.maxRelaxationIterationsSpinner.Layout.Row = 3;
-            this.maxRelaxationIterationsSpinner.Layout.Column = 2;
-            this.maxRelaxationIterationsSpinner.Tooltip = maxRelaxationIterationsTooltip;
+            this.widgets.maxRelaxationIterationsSpinner = uispinner(g1);
+            this.widgets.maxRelaxationIterationsSpinner.Layout.Row = 3;
+            this.widgets.maxRelaxationIterationsSpinner.Layout.Column = 2;
+            this.widgets.maxRelaxationIterationsSpinner.Value = options.maxrelaxiter;
+            this.widgets.maxRelaxationIterationsSpinner.ValueChangedFcn = @(src, event) this.markDirty();
+            this.widgets.maxRelaxationIterationsSpinner.Tooltip = maxRelaxationIterationsTooltip;
         end
     end
 
@@ -115,10 +127,12 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
 
         function output = get.options(this)
             % 获取控件对应的值
-            output = struct();
-            output.relaxmethod = this.relaxationMethodValueDropdown.Value;
-            output.relaxtol = str2double(this.relaxationToleranceEditField.Value);
-            output.maxrelaxiter = this.maxRelaxationIterationsSpinner.Value;
+            this.privateOptions.relaxmethod = this.widgets.relaxationMethodValueDropdown.Value;
+            this.privateOptions.relaxtol = str2double(this.widgets.relaxationToleranceEditField.Value);
+            this.privateOptions.maxrelaxiter = this.widgets.maxRelaxationIterationsSpinner.Value;
+            this.isDirty = false;
+
+            output = this.privateOptions;
         end
     end
 

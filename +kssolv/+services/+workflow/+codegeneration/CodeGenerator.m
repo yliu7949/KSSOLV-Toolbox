@@ -1,6 +1,9 @@
 classdef CodeGenerator < handle
     %CODEGENERATOR 用于执行工作流中节点任务的代码生成器类
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     methods (Static)
         function executeTasks(workflow)
             arguments
@@ -26,21 +29,20 @@ classdef CodeGenerator < handle
             end
 
             % 初始化上下文和输入
-            input = struct();
             context = struct();
 
             % 遍历连通子图中的每个节点，执行任务
             for i = 1:length(connectedComponents)
                 % 当前连通子图的节点列表
                 nodeList = connectedComponents{i};
-                initialInput = input;
+                input = struct();
 
                 for j = 1:length(nodeList)
                     nodeID = nodeList{j};
                     node = workflow.Nodes(nodeID);  % 获取当前节点
 
                     % 执行任务，得到输出
-                    output = node.task.executeTask(context, initialInput);
+                    output = node.task.executeTask(context, input);
 
                     % 传递 output 作为下一个节点的 input
                     input = output;

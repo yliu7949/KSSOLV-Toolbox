@@ -1,16 +1,21 @@
-classdef BlankTaskUI
+classdef BlankTaskUI < kssolv.services.workflow.module.AbstractTaskUI
     %BLANKTASKUI 空白的任务 UI 类
+
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Dependent)
         options
     end
 
-    properties
+    properties (Transient)
         widgets
     end
 
     methods (Access = protected)
-        function setup(~)
+        function setupDefaultOptions(~)
+        end
+        function setup(~, ~)
         end
     end
 
@@ -37,9 +42,10 @@ classdef BlankTaskUI
         function detachUIFromAccordion(~)
         end
 
-        function output = get.options(~)
+        function output = get.options(this)
             % 获取控件对应的值
-            output = struct.empty;
+            this.privateOptions = struct();
+            output = this.privateOptions;
         end
     end
 end

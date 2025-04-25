@@ -3,11 +3,15 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
     %CONFIGBROWSER 自定义的 Data Browser 组件，Workflow 中工作节点具体配置的编辑器
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (SetAccess = {?kssolv.ui.components.figuredocument.Workflow})
         nodeID (1, :) char
-        nodeData kssolv.services.workflow.WorkflowNodeData
+        graph kssolv.services.workflow.WorkflowGraph
+    end
+
+    properties (Dependent)
+        nodeData
     end
 
     properties (Access = private)
@@ -68,6 +72,14 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             this.outputSaveCheckbox.Value = this.nodeData.task.saveOutputToProjectResults;
             this.outputPassCheckbox.Value = this.nodeData.task.canShareOutputWithOtherTasks;
             this.insertOptionsAccordionPanel();
+        end
+
+        function data = get.nodeData(this)
+            if ~isempty(this.nodeID)
+                data = this.graph.Nodes(this.nodeID);
+            else
+                data = struct.empty;
+            end
         end
     end
 
@@ -131,6 +143,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             nodeLabel.Tooltip = nodeLabelTooltip;
             this.nodeLabelValue = uieditfield(g1);
             this.nodeLabelValue.Tooltip = nodeLabelTooltip;
+            this.nodeLabelValue.ValueChangedFcn = @(src, event) this.nodeLabelChanged(src, event);
 
             nodeModuleTooltip = 'Tooltip';
             nodeModule = uilabel(g1);
@@ -227,6 +240,12 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
     end
 
     methods (Access = private)
+        function nodeLabelChanged(this, ~, event)
+            this.nodeData.label = event.Value;
+            eventDataStruct = struct('nodeID', this.nodeID, 'newLabel', event.Value); 
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowRenameNodeLabel', eventDataStruct);
+        end
+
         function moduleSelectionChanged(this, src, ~)
             moduleType = kssolv.services.workflow.module.ModuleType(src.ValueIndex);
             taskNames = kssolv.services.workflow.module.getTaskNames(moduleType);

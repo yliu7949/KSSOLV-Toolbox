@@ -287,70 +287,47 @@ classdef WorkflowTab < handle
 
         %% 回调函数
         function callbackSaveWorkflowAsTemplateButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowExportToJSON');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowExportToJSON');
         end
 
         function callbackOperationUndoButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowUndo');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowUndo');
         end
 
         function callbackOperationRedoButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRedo');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowRedo');
         end
 
         function callbackAddNodeButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddNode');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowAddNode');
         end
 
         function callbackAddTopPortListItem(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddTopPort');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowAddTopPort');
         end
 
         function callbackRemoveTopPortListItem(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRemoveTopPort');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowRemoveTopPort');
         end
 
         function callbackAddBottomPortListItem(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowAddBottomPort');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowAddBottomPort');
         end
 
         function callbackRemoveBottomPortListItem(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowRemoveBottomPort');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowRemoveBottomPort');
         end
 
         function callbackZoomInButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomIn');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowZoomIn');
         end
 
         function callbackZoomOutButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomOut');
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowZoomOut');
         end
 
         function callbackZoomResetButton(~)
-            kssolv.ui.components.tab.WorkflowTab.sendEventToWorkflowUI('workflowZoomToFit');
-        end
-    end
-
-    %% 静态私有函数
-    methods (Static, Access = private)
-        function sendEventToWorkflowUI(eventName, eventData)
-            arguments
-                eventName string {mustBeNonempty} 
-                eventData = ''
-            end
-            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
-            documentGroup = appContainer.getDocumentGroup('Workflow');
-            
-            if isempty(documentGroup) || isempty(documentGroup.LastSelected.tag)
-                % 说明该 documentGroup 下没有 document 被选中
-                return
-            end
-
-            tag = documentGroup.LastSelected.tag;
-            document = appContainer.getDocument('Workflow', tag);
-            h = document.Figure.Children.Children;
-            h.sendEventToHTMLSource(eventName, ...
-                jsonencode(eventData, "PrettyPrint", true));
+            kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowZoomToFit');
         end
     end
 

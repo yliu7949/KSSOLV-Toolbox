@@ -58,6 +58,8 @@ classdef HomeTab < handle
                 'ButtonPushed', @(src, data) callbackProjectWorkflowButton(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(2), ...
                 'ItemPushed', @(src, data) callbackImportTemplateWorkflow(this));
+            addlistener(this.Widgets.ProjectSection.ProjectVariableButton, ...
+                'ButtonPushed', @(src, data) callbackProjectVariableButton(this));
             % Running Section
             addlistener(this.Widgets.RunningSection.RunningRunButton, ...
                 'ButtonPushed', @(src, data) callbackRunningRunButton(this));
@@ -349,7 +351,9 @@ classdef HomeTab < handle
             end
 
             ksFile = fullfile(path, file);
+            kssolv.ui.util.DataStorage.setData('LoadingKsFile', true);
             project = kssolv.services.filemanager.Project.loadKsFile(ksFile);
+            kssolv.ui.util.DataStorage.setData('LoadingKsFile', false);
             kssolv.ui.util.DataStorage.setData('Project', project);
             kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
             kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
@@ -484,6 +488,16 @@ classdef HomeTab < handle
             import kssolv.ui.components.dialog.BuildWorkflowFromTemplate
             import kssolv.ui.util.DataStorage
             BuildWorkflowFromTemplate().show(DataStorage.getData('AppContainer'));
+        end
+
+        function callbackProjectVariableButton(~, ~, ~)
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            if ~isempty(projectBrowser.currentSelectedItem)
+                % 添加到 base 工作空间
+                item = project.findChildrenItem(projectBrowser.currentSelectedItem);
+                assignin('base', item.label, item);
+            end
         end
 
         function callbackRunningRunButton(this, ~, ~)

@@ -1,9 +1,9 @@
 classdef Workflow < handle
     %WORKFLOW 工作流组件
-    
+
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     properties
         DocumentGroupTag
         graphJSON string
@@ -13,7 +13,7 @@ classdef Workflow < handle
     properties (Access = private)
         HTMLComponent
     end
-    
+
     methods
         function this = Workflow(graphJSON, tag)
             %WORKFLOW 构造此类的实例
@@ -50,7 +50,7 @@ classdef Workflow < handle
                 return
             end
 
-            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentWorkflowTitle'); 
+            figOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DocumentWorkflowTitle');
             figOptions.DocumentGroupTag = this.DocumentGroupTag;
             if this.tag ~= ""
                 figOptions.Tag = this.tag;
@@ -75,6 +75,12 @@ classdef Workflow < handle
 
             % 添加到 App Container
             appContainer.add(document);
+
+            % 等待渲染完成
+            pause(0.5);
+
+            % 请求同步一次 graphJSON，目的是在此刻初始化画布中所有节点对应的 taskUI 控件
+            this.HTMLComponent.sendEventToHTMLSource('workflowExportToJSON', '[]');
         end
     end
 
@@ -85,6 +91,8 @@ classdef Workflow < handle
                     this.callbackOpenSettingsWindow(src, event);
                 case 'GraphExportToJSON'
                     this.callbackGraphExportToJSON(src, event);
+                case 'RefreshWorkflowCanvas'
+                    this.callbackRefreshWorkflowCanvas(src, event);
             end
         end
 
@@ -99,7 +107,7 @@ classdef Workflow < handle
             if AppContainer.RightCollapsed
                 % 若右侧面板已被折叠，则打开右侧面板
                 ConfigBrowser.nodeID = nodeID;
-                ConfigBrowser.nodeData = workflowItem.graph.Nodes(nodeID);
+                ConfigBrowser.graph = workflowItem.graph;
                 ConfigBrowser.updateUI();
                 pause(0.5);
 
@@ -110,7 +118,7 @@ classdef Workflow < handle
             else
                 % 若右侧面板已被打开，则不处理折叠
                 ConfigBrowser.nodeID = event.HTMLEventData;
-                ConfigBrowser.nodeData = workflowItem.graph.Nodes(nodeID);
+                ConfigBrowser.graph = workflowItem.graph;
                 ConfigBrowser.updateUI();
             end
         end
@@ -128,6 +136,10 @@ classdef Workflow < handle
                 kssolv.ui.util.DataStorage.getData('ProjectBrowser').resetSelectedItem();
             end
         end
+
+        function callbackRefreshWorkflowCanvas(this, ~, ~)
+            this.HTMLComponent.Data = this.graphJSON;
+        end
     end
 
     methods (Static)
@@ -135,6 +147,38 @@ classdef Workflow < handle
             % 读取 HTML 组件中的 dag.json
             dagFilePath = fullfile(fileparts(mfilename('fullpath')), 'workflow', 'assets', 'data', 'dag.json');
             content = fileread(dagFilePath, "Encoding", "UTF-8");
+        end
+
+        function document = getCurrentWorkflowDocument()
+            % 获取当前最新打开的工作流 document
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            documentGroup = appContainer.getDocumentGroup('Workflow');
+
+            if isempty(documentGroup) || isempty(documentGroup.LastSelected.tag)
+                % 说明该 documentGroup 下没有 document 被选中
+                document = matlab.ui.internal.FigureDocument.empty;
+                return
+            end
+
+            tag = documentGroup.LastSelected.tag;
+            document = appContainer.getDocument('Workflow', tag);
+        end
+
+        function sendEventToWorkflowUI(eventName, eventData)
+            % 向当前最新打开的工作流 document 发送事件
+            arguments
+                eventName string {mustBeNonempty}
+                eventData = struct.empty
+            end
+            
+            document = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
+            if isempty(document)
+                return
+            end
+
+            h = document.Figure.Children.Children;
+            h.sendEventToHTMLSource(eventName, ...
+                jsonencode(eventData, "PrettyPrint", true));
         end
     end
 
@@ -144,7 +188,7 @@ classdef Workflow < handle
             % w = kssolv.ui.components.figuredocument.Workflow();
             % w.qeShow()
 
-            % 创建 App Container          
+            % 创建 App Container
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
@@ -160,7 +204,7 @@ classdef Workflow < handle
             group.Title = 'DocumentGroupTest';
             group.DefaultRegion = 'left';
             app.add(group);
-            
+
             % 展示界面
             app.Visible = true;
 

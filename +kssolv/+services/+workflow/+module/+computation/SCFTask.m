@@ -1,6 +1,9 @@
 classdef SCFTask < kssolv.services.workflow.module.AbstractTask
     %SCFTASK SCF 计算任务
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Constant)
         TASK_NAME = 'SCF';
         DESCRIPTION = 'SCF computation';
@@ -16,7 +19,7 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
     end
 
     methods
-        function getOptionsUI(this)
+        function setupOptionsUI(this)
             this.optionsUI = kssolv.services.workflow.module.computation.SCFTaskUI();
         end
 

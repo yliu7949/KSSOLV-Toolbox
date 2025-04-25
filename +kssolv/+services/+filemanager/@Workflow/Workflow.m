@@ -2,14 +2,14 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
     %WORKFLOW 定义了以".wf"为扩展名的 KSSOLV Toolbox 工作流类和相关操作函数
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Hidden)
         graph kssolv.services.workflow.WorkflowGraph
         graphJSON string
         editedNode = []
     end
-    
+
     methods
         function this = Workflow(label, type)
             %WORKFLOW 构造函数
@@ -36,8 +36,14 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
 
         function set.graphJSON(this, newValue)
             this.graphJSON = newValue;
-            if ~strcmp(newValue, '')
-                this.set("graph", kssolv.services.workflow.WorkflowGraph(newValue));
+            thisGraph = this.get("graph");
+            if isempty(thisGraph)
+                this.set("graph", kssolv.services.workflow.WorkflowGraph(jsondecode(newValue)));
+                return
+            end
+
+            if ~strcmp(newValue, '') && ~isempty(thisGraph) && ~kssolv.ui.util.DataStorage.getData('LoadingKsFile')
+                thisGraph.updateFromJSON(jsondecode(newValue));
             end
         end
     end

@@ -1,6 +1,9 @@
 classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
     %ENERGYCONVERGENCETASK 能量收敛曲线和迭代误差曲线可视化任务
 
+    %   开发者：杨柳
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Constant)
         TASK_NAME = 'Energy Curve';
         DESCRIPTION = 'Plot showing SCF energy convergence over iterations';
@@ -16,9 +19,9 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
     end
 
     methods
-        function getOptionsUI(this)
+        function setupOptionsUI(this)
             % 该 Task 仅使用 BlankTaskUI
-            this.optionsUI = kssolv.services.workflow.module.BlankTaskUI;
+            this.optionsUI = kssolv.services.workflow.module.BlankTaskUI();
         end
 
         function output = executeTask(~, ~, input)

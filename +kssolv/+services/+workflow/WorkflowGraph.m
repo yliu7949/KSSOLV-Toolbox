@@ -1,12 +1,8 @@
-classdef WorkflowGraph
-    %WORKFLOWGRAPH 从工作流画布中获取的 graphJSON 中解析节点间关系，
-    % 更新节点信息（如标签和状态）后可以重新导出为 graphJSON。
-    %
-    % 用法示例：
-    %
+classdef WorkflowGraph < handle
+    %WORKFLOWGRAPH 从工作流画布中获取的 graphJSON 中解析节点和节点之间的关系
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         Nodes       % 存储节点数据的 Map，键为节点 ID，值为 WorkflowNodeData 类的实例
@@ -14,66 +10,47 @@ classdef WorkflowGraph
     end
 
     methods
-        % 构造函数，从 JSON 初始化图
         function this = WorkflowGraph(graphJSON)
+            % 构造函数，使用解码后的 graphJSON 初始化图
+            arguments
+                graphJSON cell
+            end
+
             this.Nodes = containers.Map();      % 存储自定义节点数据
             this.Adjacency = containers.Map();  % 存储父子关系
 
             % 从 graphJSON 添加节点和边
-            this = this.updateFromJSON(jsondecode(graphJSON));
+            this.updateFromJSON(graphJSON);
         end
 
-        % 添加节点并初始化其邻接数据的函数
-        function this = addNode(this, node)
+        function updateNode(this, node)
+            % 更新已有节点或初始化新的节点
             nodeID = node.id;
 
-            % 如果节点已经存在，保留其旧的 task 信息
+            % 如果节点已经存在，更新除 task 外的信息
             if isKey(this.Nodes, nodeID)
-                oldTask = this.Nodes(nodeID).task;  % 迁移旧的 task
-            else
-                oldTask = kssolv.services.workflow.module.computation.SCFTask();  % 新节点没有旧任务
+                thisNode = this.Nodes(nodeID);
+                thisNode.label = node.data.label;
+                thisNode.status = node.data.status;
+                thisNode.task.resetOptionsUI();
+                return
             end
 
-            % 使用 WorkflowNodeData 类存储节点数据
-            this.Nodes(nodeID) = kssolv.services.workflow.WorkflowNodeData(node.data.label, node.data.status, oldTask);
-
-            % 初始化该节点的邻接列表（父节点和子节点）
-            if ~isKey(this.Adjacency, nodeID)
-                this.Adjacency(nodeID) = struct( ...
-                    'parents', {{}}, ...
-                    'children', {{}} ...
-                    );
-            end
+            % 如果节点不存在，则使用 WorkflowNodeData 类初始化节点数据
+            task = kssolv.services.workflow.module.computation.SCFTask();
+            this.Nodes(nodeID) = kssolv.services.workflow.WorkflowNodeData(node.data.label, node.data.status, task);
         end
 
-        % 移除节点并更新邻接列表的函数
-        function this = removeNode(this, nodeID)
+        function removeNode(this, nodeID)
+            % 移除节点
             if isKey(this.Nodes, nodeID)
                 % 从 Nodes 中移除节点
                 remove(this.Nodes, nodeID);
-
-                % 更新邻接：删除该节点作为父节点或子节点的引用
-                nodeAdj = this.Adjacency(nodeID);
-
-                % 从其父节点的子节点列表中删除该节点
-                for i = 1:length(nodeAdj.parents)
-                    parentID = nodeAdj.parents{i};
-                    this.Adjacency(parentID).children = setdiff(this.Adjacency(parentID).children, {nodeID}, 'stable');
-                end
-
-                % 从其子节点的父节点列表中删除该节点
-                for i = 1:length(nodeAdj.children)
-                    childID = nodeAdj.children{i};
-                    this.Adjacency(childID).parents = setdiff(this.Adjacency(childID).parents, {nodeID}, 'stable');
-                end
-
-                % 从邻接列表中移除该节点
-                remove(this.Adjacency, nodeID);
             end
         end
 
-        % 添加边（定义父子关系）的函数
-        function this = addEdge(this, edge)
+        function addEdge(this, edge)
+            % 添加边（定义父子关系）
             sourceID = edge.source.cell;
             targetID = edge.target.cell;
 
@@ -81,17 +58,19 @@ classdef WorkflowGraph
             if ~ismember(sourceID, this.Adjacency(targetID).parents)
                 target = this.Adjacency(targetID);
                 target.parents{end+1} = sourceID;
+                this.Adjacency(targetID) = target;
             end
 
             % 将 target 添加为 source 的子节点
             if ~ismember(targetID, this.Adjacency(sourceID).children)
                 source = this.Adjacency(sourceID);
                 source.children{end+1} = targetID;
+                this.Adjacency(sourceID) = source;
             end
         end
 
-        % 移除边（解除父子关系）的函数
-        function this = removeEdge(this, sourceID, targetID)
+        function removeEdge(this, sourceID, targetID)
+            % 移除边（解除父子关系）
             if isKey(this.Adjacency, sourceID) && isKey(this.Adjacency, targetID)
                 % 从 source 的子节点列表中删除 target
                 this.Adjacency(sourceID).children = setdiff(this.Adjacency(sourceID).children, {targetID}, 'stable');
@@ -100,8 +79,8 @@ classdef WorkflowGraph
             end
         end
 
-        % 获取节点的父节点（上游节点）的函数
         function parents = getParents(this, nodeID)
+            % 获取节点的父节点（上游节点）
             if isKey(this.Adjacency, nodeID)
                 parents = this.Adjacency(nodeID).parents;
             else
@@ -109,8 +88,8 @@ classdef WorkflowGraph
             end
         end
 
-        % 获取节点的子节点（下游节点）的函数
         function children = getChildren(this, nodeID)
+            % 获取节点的子节点（下游节点）
             if isKey(this.Adjacency, nodeID)
                 children = this.Adjacency(nodeID).children;
             else
@@ -118,8 +97,8 @@ classdef WorkflowGraph
             end
         end
 
-        % 更新节点数据（如标签、状态）的函数
-        function this = updateNode(this, nodeID, newData)
+        function updateNodeData(this, nodeID, newData)
+            % 更新节点数据（如标签、状态）
             if isKey(this.Nodes, nodeID)
                 % 仅更新节点的相关字段
                 fields = fieldnames(newData);
@@ -129,37 +108,44 @@ classdef WorkflowGraph
             end
         end
 
-        % 从 graphJSON 更新图结构的函数
-        function this = updateFromJSON(this, graphJSON)
-            % 记录当前存在的节点 ID
-            existingNodeIDs = keys(this.Nodes);
-            newNodeIDs = {};
-
+        function updateFromJSON(this, graphJSON)
+            % 从 graphJSON 更新图结构
             if isstruct(graphJSON)
-                graphJSON = graphJSON.cells;
+                graphJSONCells = graphJSON.cells;
+            else
+                graphJSONCells = graphJSON;
             end
 
+            newNodeIDs = {};
+            existingNodeIDs = keys(this.Nodes);
+
+            % 重置所有邻接列表
+            this.Adjacency = containers.Map();
+
             % 首先处理节点
-            for i = 1:length(graphJSON)
-                cell = graphJSON{i};
+            for i = 1:length(graphJSONCells)
+                cell = graphJSONCells{i};
                 if isfield(cell, 'shape') && strcmp(cell.shape, 'dag-node')
-                    this = this.addNode(cell);
-                    newNodeIDs{end+1} = cell.id; %#ok<AGROW> % 收集新节点 ID
+                    this.updateNode(cell);
+                    % 初始化该节点的邻接列表
+                    this.Adjacency(cell.id) = struct('parents', {{}}, 'children', {{}});
+                    % 收集新节点 ID
+                    newNodeIDs{end+1} = cell.id; %#ok<AGROW>
                 end
             end
 
-            % 再处理边
-            for i = 1:length(graphJSON)
-                cell = graphJSON{i};
+            % 重新添加所有的边
+            for i = 1:length(graphJSONCells)
+                cell = graphJSONCells{i};
                 if isfield(cell, 'shape') && strcmp(cell.shape, 'dag-edge')
-                    this = this.addEdge(cell);
+                    this.addEdge(cell);
                 end
             end
 
             % 移除不再存在的节点
             nodesToRemove = setdiff(existingNodeIDs, newNodeIDs);
             for i = 1:length(nodesToRemove)
-                this = this.removeNode(nodesToRemove{i});
+                this.removeNode(nodesToRemove{i});
             end
         end
     end
