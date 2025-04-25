@@ -87,6 +87,7 @@ end
 function statsTask(context)
 % 统计所有 .m 文件的数量和总代码行数（非空行和非注释行）
 filePaths = context.Task.Inputs.paths;
+filePaths = filePaths(~contains(filePaths, filesep + "+core" + filesep));
 numFiles = numel(filePaths);
 totalLines = 0;
 codeLines = 0;
