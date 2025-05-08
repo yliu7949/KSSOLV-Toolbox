@@ -25,7 +25,7 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             this.Panel.Region = "bottom";
 
             % 构造对话机器人
-            this.ChatBot = kssolv.services.llm.ollama.ChatBot("deepseek-r1:7b", '', ...
+            this.ChatBot = kssolv.services.llm.ollama.ChatBot("qwen2.5:7b", '', ...
                     @(tokens) this.addChat(tokens));
         end
     end

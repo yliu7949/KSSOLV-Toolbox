@@ -1,19 +1,92 @@
 classdef (Abstract) tools < handle
-    %TOOLS 将 KSSOLV APIs 定义为可以被 LLM 使用的 function tools
+    %TOOLS 将部分 KSSOLV APIs 定义为可以被 LLM 使用的 function tools
 
     % 开发者：杨柳
     % 版权 2025 合肥瀚海量子科技有限公司
 
     properties
         toolsList (1, :) {mustBeA(toolsList, "openAIFunction")} = openAIFunction.empty
+        registry containers.Map
     end
 
     methods
         function this = tools()
-            %TOOLS 构造函数，构建所有的工具函数并存放在 toolsList 中
+            %TOOLS 构造函数，构建所有的工具函数并进行注册
+            import kssolv.api.v1.*
+            this.registry = containers.Map('KeyType', 'char', 'ValueType', 'any');
+
+            % 定义 getCurrentGraph 工具函数
             getCurrentGraphTool = openAIFunction("getCurrentGraph", ...
                 "Retrieve the current workflow's information in JSON format");
-            this.toolsList(end + 1) = getCurrentGraphTool;
+            % 注册 getCurrentGraph 工具函数
+            this.register(getCurrentGraphTool, @(~) workflow.getCurrentGraph());
+
+            % 定义 changeNodeLabel 工具函数
+            changeNodeLabelTool = openAIFunction("changeNodeLabel", ...
+                "Change the label of a specified node in the current workflow");
+            changeNodeLabelTool = addParameter(changeNodeLabelTool, ...
+                "nodeID", type="string", ...
+                description="Unique identifier of the node");
+            changeNodeLabelTool = addParameter(changeNodeLabelTool, ...
+                "newLabel", type="string", ...
+                description="New label for the node");
+            % 注册 changeNodeLabel 工具函数
+            this.register(changeNodeLabelTool, ...
+                @(args) workflow.changeNodeLabel(args.nodeID, args.newLabel));
+        end
+
+        function register(this, toolFunction, invoker)
+            %REGISTER 把相关信息写入 registry
+            arguments
+                this
+                toolFunction (1, 1) openAIFunction
+                invoker (1, 1) function_handle
+            end
+
+            if ~isKey(this.registry, toolFunction.FunctionName)
+                this.registry(toolFunction.FunctionName) = struct("tool", toolFunction, ...
+                    "required", toolFunction.Parameters, "invoke", invoker);
+                this.toolsList(end + 1) = toolFunction;
+            end
+        end
+
+        function output = functionCallAttempt(this, functionCall)
+            %FUNCTIONCALLATTEMPT 核对函数后，尝试运行被调用的函数
+            functionName = functionCall.function.name;
+
+            % 校验被调用的工具函数的名称
+            if ~isKey(this.registry, functionName)
+                error("KSSOLV:LLM:NotRegisteredTool", "Function tool “%s” is not registered.", functionName);
+            end
+
+            % 获取注册的工具函数
+            registeredFunction = this.registry(functionName);
+            if ~isempty(registeredFunction)
+                requiredArguments = fields(registeredFunction.required);
+            else
+                output = sprintf("The function “%s” doesn't exist.", functionName);
+                return
+            end
+
+            % 解析参数并执行工具函数
+            if ~isempty(requiredArguments)
+                % 校验参数
+                functionArguments = functionCall.function.arguments;
+                if ~all(isfield(functionArguments, requiredArguments))
+                    missingArguments = requiredArguments(~isfield(functionArguments, requiredArguments));
+                    error("KSSOLV:LLM:ImproperFunctionCalling", ...
+                        "Function “%s” is missing required argument(s): %s", ...
+                        functionName, strjoin(missingArguments, ", "));
+                end
+
+                % 注入参数，执行工具函数
+                output = jsonencode(registeredFunction.invoke(functionArguments));
+            else
+                % 无参数时直接执行工具函数
+                output = jsonencode(registeredFunction.invoke());
+            end
+
+            output = sprintf("The result of calling the function “%s” is: %s", functionName, output);
         end
     end
 end

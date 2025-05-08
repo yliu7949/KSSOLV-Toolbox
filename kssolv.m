@@ -20,6 +20,7 @@ else
 end
 kssolv.ui.util.DataStorage.setData('Project', project);
 kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
+kssolv.ui.util.DataStorage.setData('LoadingKsFile', false);
 
 % 添加 +core 下面的 KSSOLV 文件夹到 MATLAB 路径中
 try
