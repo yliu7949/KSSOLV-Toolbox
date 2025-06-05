@@ -7,6 +7,7 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
     properties
         Widgets % 小组件
         ChatBot % 对话机器人
+        Workspace % 命令行变量工作空间
     end
 
     methods
@@ -27,6 +28,11 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 构造对话机器人
             this.ChatBot = kssolv.services.llm.ollama.ChatBot("qwen2.5:7b", '', ...
                     @(tokens) this.addChat(tokens));
+
+            % 初始化命令行变量工作空间
+            if ~isMATLABReleaseOlderThan('R2025a', "release")
+                this.Workspace = matlab.lang.Workspace;
+            end
         end
     end
 
@@ -113,10 +119,20 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 在函数工作区内预置持久变量 ANS，可简化上一次计算结果的使用
             persistent ANS %#ok<NUSED>
 
-            try
-                output = evalc('base', command); %#ok<EVLC>
-            catch ME
-                output = ME.message;
+            if isMATLABReleaseOlderThan('R2025a', "release")
+                % 若当前版本低于 R2025a，使用 evalc + ANS
+                try
+                    output = evalc('base', command); %#ok<EVLC>
+                catch ME
+                    output = ME.message;
+                end
+            else
+                % 若当前版本高于 R2025a，使用 evaluateAndCapture
+                try
+                    output = evaluateAndCapture(this.Workspace, command);
+                catch ME
+                    output = ME.message;
+                end
             end
 
             this.Widgets.html.sendEventToHTMLSource('ResultUpdated', output);

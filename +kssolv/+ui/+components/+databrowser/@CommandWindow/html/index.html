@@ -176,6 +176,7 @@
     const terminal = document.getElementById("terminal");
     const input = document.getElementById("command-input");
     const suggestionsContainer = document.getElementById("suggestions-container");
+    let autoScrolledUp = true;
 
     // 查找数组中所有字符串的最长公共前缀
     function findLongestCommonPrefix(strings, currentInput) {
@@ -364,6 +365,9 @@
                         responseContainer = null;
                         sendUserPromptToMATLAB(actualCommand, useHistory);
                         input.value = "";
+                        if (autoScrolledUp) {
+                            terminal.scrollTop = terminal.scrollHeight;
+                        }
                         return;
                     }
                 }
@@ -371,16 +375,7 @@
                 history.push(command);
                 historyIndex = history.length;
 
-                if (/\bclear\b/i.test(command)) {
-                    input.value = "";
-                    if (terminal.innerHTML.length > 0 && !terminal.innerHTML.endsWith('\n')) {
-                        terminal.innerHTML += `\n`;
-                    }
-                    terminal.innerHTML += `>> ${command}\n`;
-                    currentResponseContent = '';
-                    responseContainer = null;
-                    return;
-                } else if (/\bclc\b/i.test(command)) {
+                if (/\bclc\b/i.test(command)) {
                     terminal.innerHTML = "";
                     input.value = "";
                     currentResponseContent = '';
@@ -398,6 +393,11 @@
                 if (command === "dev") {
                     command = "kssolv.ui.debug.WebWindow.openDevTools()";
                 }
+
+                if (autoScrolledUp) {
+                    terminal.scrollTop = terminal.scrollHeight;
+                }
+
                 sendCommandToMATLAB(command);
             }
             input.value = "";
@@ -468,7 +468,6 @@
         }
     });
 
-    let autoScrolledUp = true;
     // 监听输出区域的滚动事件
     terminal.addEventListener('wheel', (event) => {
         if (event.deltaY < 0) {
@@ -519,7 +518,6 @@
     function resultFromMATLABToHTML(event) {
         if (event.Data) {
             terminal.innerHTML += event.Data + "\n";
-
             document.querySelectorAll('#terminal a').forEach(link => {
                 link.addEventListener('click', function (e) {
                     e.preventDefault();

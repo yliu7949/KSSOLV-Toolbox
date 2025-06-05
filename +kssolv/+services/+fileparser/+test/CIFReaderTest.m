@@ -41,13 +41,14 @@ classdef CIFReaderTest < matlab.unittest.TestCase
             xyzList = cif.KSSOLVSetupObject.xyzList;
             C = cif.KSSOLVSetupObject.C;
         
-            % 检查 data 文件夹是否存在
-            if ~exist('./data', 'dir')
-                mkdir('./data');
+            % 检查 output 文件夹是否存在
+            if exist('./output', 'dir')
+                rmdir('./output', 's');
             end
+            mkdir('./output');
         
             % 打开文件
-            fid = fopen('./data/output.m', 'w');
+            fid = fopen(sprintf('./output/%s.m', name), 'w');
             if fid == -1
                 error('KSSOLV:FileParser:CIFReaderTest:OpenFileError', 'Failed to open file: ./data/output.m');
             end
