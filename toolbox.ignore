@@ -2,25 +2,27 @@
 % file path as a path relative to the toolbox folder. 
 % List only one exclude per line. 
 
-**/resources/project/**/*
-resources
-**/*.prj
-**/*.prj.bak
 **/.git/**/*
-**/.svn/**/*
-.buildtool
-**/.buildtool/**/*
+**/.git*
+.keep
+
+**/*.DS_Store
 **/*.asv
 
-*.ks
-buildfile.m
-**/+test/**/*
-**/doc/**/*
-*.mltbx
-**/*.DS_Store
-.keep
-**/.git*
-deploymentScript.m
+**/*.prj
+**/*.prj.bak
+**/resources/project/**/*
+resources
 
+**/.buildtool/**/*
+.buildtool
+buildfile.m
+
+*.mltbx
 Toolbox
 StandaloneDesktopApp
+
+**/+test/**/*
+**/doc/**/*
+
+*.ks
