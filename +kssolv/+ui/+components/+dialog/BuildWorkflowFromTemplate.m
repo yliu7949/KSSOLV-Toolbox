@@ -81,7 +81,7 @@ classdef BuildWorkflowFromTemplate < controllib.ui.internal.dialog.AbstractDialo
             this.show(app);
 
             % 打开属性探查器
-            if openInspect
+            if openInspect && ~isdeployed
                 inspect(this);
             end
         end

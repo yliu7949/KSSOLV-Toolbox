@@ -90,7 +90,7 @@ classdef Environment < handle
                 pyrun("import mp_api");
                 disp('Environment validation passed.');
             catch exception
-                warningf('Dependency verification failed: %s', exception.message);
+                error('Dependency verification failed: %s', exception.message);
             end
         end
     end

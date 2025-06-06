@@ -21,7 +21,7 @@ classdef QuickAccessBar < handle
 
             % 添加帮助按钮，链接到 KSSOLV 帮助文档
             this.HelpButton = matlab.ui.internal.toolstrip.qab.QABHelpButton();
-            this.HelpButton.ButtonPushedFcn = @(varargin) doc('kssolv');
+            % this.HelpButton.ButtonPushedFcn = @(varargin) doc('kssolv');
 
             this.RedoButton = matlab.ui.internal.toolstrip.qab.QABRedoButton();
             this.RedoButton.ButtonPushedFcn = @(varargin) disp('Redo called!');
