@@ -16,7 +16,7 @@ app = kssolv(ksFile, hostInBrowser);
 
 while true
     pause(0.5);
-    if ~isvalid(app) || ~app.AppContainer.Visible
+    if ~isvalid(app)
         if nargout == 0
             clear app
         end

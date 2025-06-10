@@ -1,21 +1,26 @@
 classdef KSSOLVToolbox < handle
     %KSSOLVTOOLBOX 排列和布局相关 UI 组件，生成 KSSOLV Toolbox 的完整用户图形界面
-    
+
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
-    
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
+
     properties (Access = public)
         Name string
         AppContainer matlab.ui.container.internal.AppContainer
         HostInBrowser (1, 1) logical = false
     end
-    
+
     methods
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
 
-            import kssolv.ui.util.Localizer.*
-            % setLocale('zh_CN');
+            import kssolv.ui.util.Localizer.*;
+
+            % 根据环境变量设置本地化
+            locale = getenv("KSSOLVLocale");
+            if ~isempty(locale) && ismember(locale, {'zh_CN', 'en_US'})
+                setLocale(locale);
+            end
 
             % 创建 App Container
             appOptions.Title = 'KSSOLV Toolbox';
@@ -66,12 +71,12 @@ classdef KSSOLVToolbox < handle
             % 添加 Project 句柄对象的监听器
             kssolv.KSSOLVToolbox.createListener();
         end
-        
+
         function delete(this)
             %DELETE 析构函数
             % 删除 App Container
             if ~isempty(this.AppContainer) && isvalid(this.AppContainer)
-                delete(this.AppContainer);                        
+                delete(this.AppContainer);
             end
         end
 
@@ -80,18 +85,24 @@ classdef KSSOLVToolbox < handle
             % 获取 App Container 实例
             appcontainer = this.AppContainer;
         end
-        
+
         function show(this)
             % 绘制并展示 App 界面
             this.AppContainer.WindowBounds = [100 100 1200 800];
             this.AppContainer.HostInBrowser = this.HostInBrowser;
-            this.AppContainer.Visible = true;
+
+            try
+                this.AppContainer.Visible = true;
+            catch exception
+                % 若 HostInBrowser 为 true，但此时无法打开默认浏览器则会报错
+                disp(this.getNewUrl());
+            end
         end
-        
+
         function close(this)
             % 关闭 App
             delete(this);
-        end       
+        end
     end
 
     methods (Static)
@@ -141,6 +152,28 @@ classdef KSSOLVToolbox < handle
             % 折叠了右侧和底部的面板
             this.AppContainer.RightCollapsed = true;
             this.AppContainer.BottomCollapsed = true;
+        end
+
+        function url = getNewUrl(this)
+            % 获取和 AppContainer 对应的浏览器访问网址
+            warning('off', 'MATLAB:structOnObject');
+            appContainer = struct(this.AppContainer);
+
+            connector.ensureServiceOn;
+            connector.newNonce;
+
+            if isdeployed
+                webPath = fullfile(matlabroot, 'mcr', 'toolbox', 'matlab', 'appcontainer', 'web');
+                path = connector.addStaticContentOnPath('AppContainerWebPath', webPath);
+                page = path + "/index.html";
+            else
+                page = "/toolbox/matlab/appcontainer/web/index.html";
+            end
+
+            % 由于 channel 可能已被打开, 使用 connector.applyNonce 重设 url
+            url = connector.getUrl(sprintf('%s?channel=%s&toolstripChannel=%s&id=%s&uuid=%s&UseMF0ForTS=true&waitForJavascriptDebugger=false', ...
+                page, appContainer.ModelChannel, appContainer.ToolstripChannel, appContainer.Tag, appContainer.uuid));
+            url = connector.applyNonce(url);
         end
 
         function status = canClose(this, ~)
