@@ -12,7 +12,13 @@ arguments
     hostInBrowser (1, 1) logical = strcmpi(getenv("HostAppInBrowser"), 'true')
 end
 
-app = kssolv(ksFile, hostInBrowser);
+try
+    app = kssolv(ksFile, hostInBrowser);
+catch exception
+    disp(exception.message);
+    writelines(exception.message, "kssolv.logs", "WriteMode", "append");
+    return
+end
 
 while true
     pause(0.5);

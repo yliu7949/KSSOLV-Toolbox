@@ -2,7 +2,7 @@ classdef Workflow < handle
     %WORKFLOW 工作流组件
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         DocumentGroupTag
@@ -77,7 +77,11 @@ classdef Workflow < handle
             appContainer.add(document);
 
             % 等待渲染完成
-            pause(0.3);
+            waitfor(document.Figure, 'FigureViewReady', true);
+            if isdeployed
+                % document 会异常地取消停靠（undocked），在渲染完成后需要重新停靠它
+                document.Docked = true;
+            end
 
             % 请求同步一次 graphJSON，目的是在此刻初始化画布中所有节点对应的 taskUI 控件
             this.HTMLComponent.sendEventToHTMLSource('workflowExportToJSON', '[]');
@@ -170,7 +174,7 @@ classdef Workflow < handle
                 eventName string {mustBeNonempty}
                 eventData = struct.empty
             end
-            
+
             document = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
             if isempty(document)
                 return

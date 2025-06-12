@@ -10,6 +10,10 @@ classdef KSSOLVToolbox < handle
         HostInBrowser (1, 1) logical = false
     end
 
+    properties (Access = private)
+        projectBrowser % 用于判断 AppContainer 是否渲染结束
+    end
+
     methods
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
@@ -26,7 +30,7 @@ classdef KSSOLVToolbox < handle
             appOptions.Title = 'KSSOLV Toolbox';
             appOptions.Tag = sprintf('kssolv(%s)', char(matlab.lang.internal.uuid));
             appOptions.ToolstripEnabled = true;
-            appOptions.EnableTheming = true;
+            appOptions.EnableTheming = false;
             this.AppContainer = matlab.ui.container.internal.AppContainer(appOptions);
             this.Name = this.AppContainer.Tag;
             % 保存 AppContainer 至 DataStorage
@@ -39,8 +43,8 @@ classdef KSSOLVToolbox < handle
             % 监听 App Container 的状态改变，例如关闭 App 时会触发 StateChanged 事件
             addlistener(this.AppContainer, 'StateChanged', @(src,data) callbackAppStateChanged(this));
             % 添加多个 Data Browser 组件
-            projectBrowser = kssolv.ui.components.databrowser.ProjectBrowser();
-            projectBrowser.addToAppContainer(this.AppContainer);
+            this.projectBrowser = kssolv.ui.components.databrowser.ProjectBrowser();
+            this.projectBrowser.addToAppContainer(this.AppContainer);
             infoBrowser = kssolv.ui.components.databrowser.InfoBrowser();
             infoBrowser.addToAppContainer(this.AppContainer);
             configBrowser = kssolv.ui.components.databrowser.ConfigBrowser();
@@ -90,13 +94,17 @@ classdef KSSOLVToolbox < handle
             % 绘制并展示 App 界面
             this.AppContainer.WindowBounds = [100 100 1200 800];
             this.AppContainer.HostInBrowser = this.HostInBrowser;
+            this.AppContainer.Busy = true;
 
             try
                 this.AppContainer.Visible = true;
+                waitfor(this.projectBrowser.Figure, 'FigureViewReady', true);
             catch exception
                 % 若 HostInBrowser 为 true，但此时无法打开默认浏览器则会报错
                 disp(this.getNewUrl());
             end
+
+            this.AppContainer.Busy = false;
         end
 
         function close(this)

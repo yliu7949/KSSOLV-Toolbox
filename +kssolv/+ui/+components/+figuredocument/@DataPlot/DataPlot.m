@@ -2,7 +2,7 @@ classdef DataPlot < handle
     %DATAPLOT 展示数据绘图结果
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         DocumentGroupTag
@@ -54,7 +54,7 @@ classdef DataPlot < handle
         function Display(this, title)
             %DISPLAY 在 Document Group 中展示图像
             arguments
-                this 
+                this
                 title (1, :) char = 'Plot'
             end
 
@@ -86,6 +86,13 @@ classdef DataPlot < handle
             % 添加到 App Container
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             appContainer.add(document);
+
+            % 等待渲染完成
+            waitfor(document.Figure, 'FigureViewReady', true);
+            if isdeployed
+                % document 会异常地取消停靠（undocked），在渲染完成后需要重新停靠它
+                document.Docked = true;
+            end
         end
     end
 

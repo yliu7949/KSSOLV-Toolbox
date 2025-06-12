@@ -2,7 +2,7 @@ classdef MoleculeDisplay < handle
     %MOLECULEDISPLAY 三维渲染分子结构和晶体结构的组件
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         DocumentGroupTag
@@ -78,6 +78,13 @@ classdef MoleculeDisplay < handle
 
             % 添加到 App Container
             appContainer.add(document);
+
+            % 等待渲染完成
+            waitfor(document.Figure, 'FigureViewReady', true);
+            if isdeployed
+                % document 会异常地取消停靠（undocked），在渲染完成后需要重新停靠它
+                document.Docked = true;
+            end
         end
     end
 
