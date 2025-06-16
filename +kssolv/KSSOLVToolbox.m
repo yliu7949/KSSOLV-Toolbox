@@ -12,6 +12,7 @@ classdef KSSOLVToolbox < handle
 
     properties (Access = private)
         projectBrowser % 用于判断 AppContainer 是否渲染结束
+        runBrowser % 运行浏览器
     end
 
     methods
@@ -49,8 +50,8 @@ classdef KSSOLVToolbox < handle
             infoBrowser.addToAppContainer(this.AppContainer);
             configBrowser = kssolv.ui.components.databrowser.ConfigBrowser();
             configBrowser.addToAppContainer(this.AppContainer);
-            runBrowser = kssolv.ui.components.databrowser.RunBrowser();
-            runBrowser.addToAppContainer(this.AppContainer);
+            this.runBrowser = kssolv.ui.components.databrowser.RunBrowser();
+            this.runBrowser.addToAppContainer(this.AppContainer);
             commandWindow = kssolv.ui.components.databrowser.CommandWindow();
             commandWindow.addToAppContainer(this.AppContainer);
             this.setPanelLayout();
@@ -80,6 +81,7 @@ classdef KSSOLVToolbox < handle
             %DELETE 析构函数
             % 删除 App Container
             if ~isempty(this.AppContainer) && isvalid(this.AppContainer)
+                delete(this.runBrowser);
                 delete(this.AppContainer);
             end
         end

@@ -25,6 +25,9 @@ classdef HomeTab < handle
             buildTab(this);
             connectTab(this);
             setTabActivated(this);
+
+            % 将 HomeTab 保存到 DataStorage
+            kssolv.ui.util.DataStorage.setData('HomeTab', this);
         end
     end
 
@@ -501,35 +504,34 @@ classdef HomeTab < handle
         end
 
         function callbackRunningRunButton(this, ~, ~)
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
+
             this.Widgets.RunningSection.RunningRunButton.Enabled = false;
             this.Widgets.RunningSection.RunningStopButton.Enabled = true;
-            
-            project = kssolv.ui.util.DataStorage.getData('Project');
+            runBrowser.Widgets.ButtonPanel.RunButton.Enable = false;
+            runBrowser.Widgets.ButtonPanel.StopButton.Enable = true;
+
+            % 增加换行以便利阅读
+            runBrowser.addNewLineToOutputTextArea();
+
             workflowRoot = project.findChildrenItem('Workflow');
             workflow = workflowRoot.children{1};
             kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
 
-            %{
-            pause(3)
-            app.Busy = false;
-
-            figFileDir = fullfile(fileparts(fileparts(fileparts(mfilename('fullpath')))), ...
-                '+components/+figuredocument/@DataPlot/test/');
-            kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'gtk.fig')).Display();
-            pause(2)
-            kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'h2o.fig')).Display();
-            pause(2)
-            kssolv.ui.components.figuredocument.DataPlot(fullfile(figFileDir, 'si.fig')).Display();
-            pause(1)
-            %}
-
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
+            runBrowser.Widgets.ButtonPanel.RunButton.Enable = true;
+            runBrowser.Widgets.ButtonPanel.StopButton.Enable = false;
         end
 
         function callbackRunningStopButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
+
+            runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
+            runBrowser.Widgets.ButtonPanel.RunButton.Enable = true;
+            runBrowser.Widgets.ButtonPanel.StopButton.Enable = false;
         end
 
         function callbackEnvironmentSettingsButton(this, ~, ~)
