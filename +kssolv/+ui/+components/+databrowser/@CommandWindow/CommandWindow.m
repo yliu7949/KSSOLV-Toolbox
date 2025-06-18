@@ -26,7 +26,7 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             this.Panel.Region = "bottom";
 
             % 构造对话机器人
-            this.ChatBot = kssolv.services.llm.ollama.ChatBot("qwen2.5:7b", '', ...
+            this.ChatBot = kssolv.services.llm.chatBot("o3-mini", '', ...
                     @(tokens) this.addChat(tokens));
 
             % 初始化命令行变量工作空间

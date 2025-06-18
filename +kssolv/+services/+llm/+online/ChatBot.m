@@ -1,4 +1,4 @@
-classdef ChatBot < kssolv.services.llm.internal.tools
+classdef ChatBot < kssolv.services.llm.internal.AbstractChatBot
     %CHATBOT 基于在线的大语言模型实现对话功能
 
     % 此类依赖 MathWorks 发布的 Large Language Models with MATLAB 工具
@@ -7,18 +7,30 @@ classdef ChatBot < kssolv.services.llm.internal.tools
     % 开发者：杨柳
     % 版权 2025 合肥瀚海量子科技有限公司
 
-    properties
-        bot (1, 1) % 对话机器人对象
-        modelName (1, 1) string % 所使用的大语言模型的名称
-        modelCapabilities (:, 1) cell % 所使用的大语言模型的能力，例如支持函数调用等
-        systemPrompt (1, 1) string % 系统提示词
-        streamFunction (1, 1) % 流式传输函数
-        messageHistory (1, 1) % 对话消息历史记录
+    methods
+        function this = ChatBot(modelName, systemPrompt, streamFunction)
+            %CHATBOT 构造函数，构造对话机器人对象
+            arguments
+                modelName (1, 1) string = "o3-mini"
+                systemPrompt (1, 1) string = ""
+                streamFunction (1, 1) function_handle = @(token) fprintf("%s\n", token)
+            end
+
+            this@kssolv.services.llm.internal.AbstractChatBot('openAIChat', modelName, systemPrompt, streamFunction);
+        end
     end
 
-    methods
-        function this = ChatBot()
-            %CHATBOT 构造函数，构造对话机器人对象
+    methods (Access = protected)
+        function buildChatBot(this)
+            if ismember('tools', this.modelCapabilities)
+                this.systemPrompt = strcat(this.systemPrompt, ...
+                    "Always respond to the user, even if the tool's return result is blank.");
+                this.bot = openAIChat(this.systemPrompt, ModelName=this.modelName, Temperature=0.6, ...
+                    StreamFun=this.streamFunction, Tools=this.toolsList);
+            else
+                this.bot = openAIChat(this.systemPrompt, ModelName=this.modelName, Temperature=0.6, ...
+                    StreamFun=this.streamFunction);
+            end
         end
     end
 end

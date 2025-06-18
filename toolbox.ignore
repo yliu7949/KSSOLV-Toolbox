@@ -26,3 +26,4 @@ StandaloneDesktopApp
 **/doc/**/*
 
 *.ks
+.env

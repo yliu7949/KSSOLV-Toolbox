@@ -9,6 +9,12 @@ arguments
     hostInBrowser (1, 1) logical = strcmpi(getenv("HostAppInBrowser"), 'true')
 end
 
+% 从 .env 文件中读取环境变量
+envFilePath = fullfile(fileparts(mfilename("fullpath")), '.env');
+if ~isdeployed && exist(envFilePath, "file")
+    loadenv(envFilePath);
+end
+
 % 创建 project 并保存至 DataStorage
 import kssolv.services.filemanager.Project
 
@@ -24,8 +30,9 @@ kssolv.ui.util.DataStorage.setData('Project', project);
 kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
 kssolv.ui.util.DataStorage.setData('LoadingKsFile', false);
 
-% 添加 +core 下面的 KSSOLV 文件夹到 MATLAB 路径中
+% 添加文件夹到 MATLAB 搜索路径
 try
+    addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+services', '+llm', 'patch'));
     addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'kssolv-3o'));
     evalc('KSSOLV.startup()');
 catch
