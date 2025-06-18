@@ -15,8 +15,9 @@ end
 try
     app = kssolv(ksFile, hostInBrowser);
 catch exception
+    app = [];
     disp(exception.message);
-    writelines(exception.message, "kssolv.logs", "WriteMode", "append");
+    writelines(exception.message, fullfile(userpath, 'KSSOLV_Toolbox', "kssolvStart.log"), "WriteMode", "append");
     return
 end
 

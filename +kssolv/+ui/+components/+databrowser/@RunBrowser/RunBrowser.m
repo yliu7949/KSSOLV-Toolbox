@@ -43,7 +43,15 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             %ADDNEWLINETOOUTPUTTEXTAREA 在输出区域增加换行以便于阅读
             currentTime = datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss', 'TimeZone', 'Asia/Shanghai');
             outputTextArea = this.Widgets.OutputTextPanel.OutputTextArea;
-            outputTextArea.Value = [outputTextArea.Value; ' '; char(currentTime)];
+            outputTextArea.HorizontalAlignment = 'left';
+            
+            if this.hasOutputToDisplay
+                outputTextArea.Value = [outputTextArea.Value; ' '; char(currentTime)];
+            else
+                outputTextArea.Value = char(currentTime);
+                outputTextArea.FontColor = 'black';
+                this.hasOutputToDisplay = true;
+            end
         end
     end
 

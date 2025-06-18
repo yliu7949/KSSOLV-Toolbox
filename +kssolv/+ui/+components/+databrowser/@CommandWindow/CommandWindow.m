@@ -103,6 +103,8 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
                     this.callbackCommandSubmitted(src, event);
                 case 'UserPromptSubmitted'
                     this.callbackUserPromptSubmitted(src, event);
+                case 'EventSent'
+                    this.callbackEventSent(src, event);
             end
         end
 
@@ -141,7 +143,50 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
         function callbackUserPromptSubmitted(this, ~, event)
             % 执行命令行窗口提交的用户提示词
             userPrompt = event.HTMLEventData;
-            this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
+            if ~isempty(this.ChatBot)
+                this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
+            else
+                this.addChat("Failed to initialize LLM service.");
+            end
+        end
+
+        function callbackEventSent(~, ~, event)
+            % 执行命令行窗口直接发送的事件
+            command = event.HTMLEventData;
+            if strcmp(command, "demo")
+                % 若命令行窗口发送了 "demo"，则直接关闭当前项目，并打开 ks.ks 文件
+                appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+                
+                % 关闭所有已打开的 document
+                documents = appContainer.getDocuments();
+                for i = 1:numel(documents)
+                    documents{i}.close();
+                end
+
+                % 更新 UI 界面
+                kssolv.ui.util.DataStorage.setData('Project', kssolv.services.filemanager.Project());
+                kssolv.ui.util.DataStorage.setData('ProjectFilename', '');
+                kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
+                kssolv.ui.util.DataStorage.getData('InfoBrowser').reBuildUI();
+                kssolv.KSSOLVToolbox.setAppContainerTitle();
+                kssolv.KSSOLVToolbox.createListener();
+                appContainer.bringToFront();
+
+                % 导入并打开 ks.ks 文件
+                kssolv.ui.util.DataStorage.setData('LoadingKsFile', true);
+                ksFile = fullfile(KSSOLV_Toolbox.RootDirectory, 'ks.ks');
+                project = kssolv.services.filemanager.Project.loadKsFile(ksFile);
+                kssolv.ui.util.DataStorage.setData('Project', project);
+                kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
+                kssolv.ui.util.DataStorage.setData('LoadingKsFile', false);
+
+                % 更新 UI 界面
+                kssolv.ui.util.DataStorage.getData('ProjectBrowser').reBuildUI();
+                kssolv.ui.util.DataStorage.getData('InfoBrowser').reBuildUI();
+                kssolv.KSSOLVToolbox.setAppContainerTitle();
+                kssolv.KSSOLVToolbox.createListener();
+                appContainer.bringToFront();
+            end
         end
     end
 

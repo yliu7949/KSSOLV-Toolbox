@@ -2,17 +2,17 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <title>Command Window UI</title>
 
     <script src="./3p/markdown-it/markdown-it.min.js"></script>
-    <script defer src="./3p/katex/katex.min.js"
+    <script crossorigin="anonymous" defer
             integrity="sha384-Rma6DA2IPUwhNxmrB/7S3Tno0YY7sFu9WSYMCuulLhIqYSGZ2gKCJWIqhBWqMQfh"
-            crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="./3p/katex/katex.min.css"
-          integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" crossorigin="anonymous">
+            src="./3p/katex/katex.min.js"></script>
+    <link crossorigin="anonymous" href="./3p/katex/katex.min.css"
+          integrity="sha384-zh0CIslj+VczCZtlzBcjt5ppRcsAmDnRem7ESsYwWwg3m/OaJ2l4x7YBZl9Kxxib" rel="stylesheet">
     <script src="./3p/highlight.js/highlight.min.js"></script>
-    <link rel="stylesheet" href="./3p/highlight.js/default.min.css">
+    <link href="./3p/highlight.js/default.min.css" rel="stylesheet">
 
     <style>
         * {
@@ -383,6 +383,15 @@
                     return;
                 }
 
+                if (command === "demo") {
+                    terminal.innerHTML += `>> ${command}\n`;
+                    input.value = "";
+                    currentResponseContent = '';
+                    responseContainer = null;
+                    sendEventToMATLAB(command);
+                    return;
+                }
+
                 if (terminal.innerHTML.length > 0 && !terminal.innerHTML.endsWith('\n')) {
                     terminal.innerHTML += `\n`;
                 }
@@ -485,6 +494,15 @@
     function sendCommandToMATLAB(command) {
         if (typeof MATLAB !== 'undefined') {
             MATLAB.sendEventToMATLAB("CommandSubmitted", command);
+        } else {
+            terminal.innerHTML += "!! MATLAB 不可用\n\n";
+        }
+    }
+
+    // 发送事件到 MATLAB
+    function sendEventToMATLAB(command) {
+        if (typeof MATLAB !== 'undefined') {
+            MATLAB.sendEventToMATLAB("EventSent", command);
         } else {
             terminal.innerHTML += "!! MATLAB 不可用\n\n";
         }

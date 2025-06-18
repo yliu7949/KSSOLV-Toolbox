@@ -28,3 +28,6 @@ Toolbox/
 
 # Environment variable configurations
 .env
+
+# Code Analyzer
+derived/

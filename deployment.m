@@ -20,7 +20,8 @@ end
 % 设定代码依赖自动推断无法正确判断的、必须要包含的文件夹
 projectRoot = fileparts(mfilename('fullpath'));
 kssolv3Home = fullfile(projectRoot, "+kssolv", "+core", "kssolv-3o");
-additionalFiles = [fullfile(projectRoot, "+kssolv", "+ui"), ...
+additionalFiles = [fullfile(projectRoot, "ks.ks"), ...
+    fullfile(projectRoot, "+kssolv", "+ui"), ...
     fullfile(projectRoot, "+kssolv", "+services"), ...
     fullfile(kssolv3Home, "+example"), ...
     fullfile(kssolv3Home, "ppdata")];
@@ -35,7 +36,7 @@ buildOpts.Verbose = true;
 buildOpts.EmbedArchive = true;
 buildOpts.ExecutableIcon = fullfile(projectRoot, "+kssolv", "+ui", "resources", "icons", "LOGO.png");
 buildOpts.ExecutableName = "KSSOLV_Toolbox";
-buildOpts.ExecutableVersion = kssolvVersion;
+buildOpts.ExecutableVersion = KSSOLV_Toolbox.Version;
 buildOpts.TreatInputsAsNumeric = false;
 buildResult = compiler.build.standaloneApplication(buildOpts);
 
@@ -51,11 +52,11 @@ packageOpts.AuthorCompany = "微光萌生初创团队";
 packageOpts.Description = "基于 MATLAB 的平面波基组第一性原理计算工具箱。" + newline + "A MATLAB-Based Plane Wave Basis Set First-Principles Calculation Toolbox.";
 packageOpts.InstallerIcon = fullfile(projectRoot, "+kssolv", "+ui", "resources", "icons", "LOGO.png");
 packageOpts.InstallerSplash = fullfile(projectRoot, "+kssolv", "+ui", "resources", "icons", "LOGO.png");
-packageOpts.InstallerName = sprintf('KSSOLV_Toolbox_V%s', kssolvVersion);
+packageOpts.InstallerName = sprintf('KSSOLV_Toolbox_V%s', KSSOLV_Toolbox.Version);
 packageOpts.OutputDir = fullfile(projectRoot, "StandaloneDesktopApp", "output", "package");
 packageOpts.RuntimeDelivery = runtimeDelivery;
 packageOpts.Summary = "平面波基组，第一性原理计算" + newline + "Plane Wave Basis, First-Principles Calculation";
 packageOpts.Verbose = true;
-packageOpts.Version = kssolvVersion;
+packageOpts.Version = KSSOLV_Toolbox.Version;
 compiler.package.installer(buildResult, "Options", packageOpts);
 end
