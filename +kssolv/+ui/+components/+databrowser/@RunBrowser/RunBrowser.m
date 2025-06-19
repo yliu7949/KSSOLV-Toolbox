@@ -73,23 +73,24 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             buttonPanelLayout.RowSpacing = 5;
             buttonPanelLayout.ColumnSpacing = 5;
 
+            import kssolv.ui.util.Localizer.*
             import kssolv.ui.components.databrowser.RunBrowser.createButton
             import matlab.ui.internal.toolstrip.Icon
 
             % 运行按钮，Row = 1，Column = 1
-            runButtonTooltip = 'Run simulation';
+            runButtonTooltip = message('KSSOLV:toolbox:RunBrowserRunButtonTooltip');
             runButtonIcon = 'playControl';
             runButton = createButton(buttonPanelLayout, 1, 1, ...
                 runButtonTooltip, runButtonIcon);
             runButton.ButtonPushedFcn = @(src, event) callbackRunButton(this, src, event);
             % 运行标签，Row = 1，Column = 2
             runLabel = uilabel(buttonPanelLayout);
-            runLabel.Text = "运行";
+            runLabel.Text = message('KSSOLV:toolbox:RunBrowserRunLabel');
             runLabel.Layout.Row = 1;
             runLabel.Layout.Column = 2;
 
             % 停止按钮，Row = 1，Column = 3
-            stopButtonTooltip = 'Stop simulation';
+            stopButtonTooltip = message('KSSOLV:toolbox:RunBrowserStopButtonTooltip');
             stopButtonIcon = 'stop';
             stopButton = createButton(buttonPanelLayout, 1, 3, ...
                 stopButtonTooltip, stopButtonIcon);
@@ -97,19 +98,19 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             stopButton.ButtonPushedFcn = @(src, event) callbackStopButton(this, src, event);
             % 停止标签，Row = 1，Column = 4
             stopLabel = uilabel(buttonPanelLayout);
-            stopLabel.Text = "停止";
+            stopLabel.Text = message('KSSOLV:toolbox:RunBrowserStopLabel');
             stopLabel.Layout.Row = 1;
             stopLabel.Layout.Column = 4;
 
             % 清空按钮，Row = 1，Column = 7
-            clearButtonTooltip = 'Clear output';
+            clearButtonTooltip = message('KSSOLV:toolbox:RunBrowserClearButtonTooltip');
             clearButtonIcon = 'clear';
             clearButton = createButton(buttonPanelLayout, 1, 7, ...
                 clearButtonTooltip, clearButtonIcon);
             clearButton.ButtonPushedFcn = @(src, event) callbackClearButton(this, src, event);
             % 清空标签，Row = 1，Column = 8
             clearLabel = uilabel(buttonPanelLayout);
-            clearLabel.Text = "清空";
+            clearLabel.Text = message('KSSOLV:toolbox:RunBrowserClearLabel');
             clearLabel.Layout.Row = 1;
             clearLabel.Layout.Column = 8;
 
@@ -125,7 +126,7 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             outputPanelLayout.Padding = [10 10 10 0];
 
             % 日志输出区域
-            outputTextArea = uitextarea(outputPanelLayout, "Value", "No contents to display.", ...
+            outputTextArea = uitextarea(outputPanelLayout, "Value", message('KSSOLV:toolbox:RunBrowserOutputTextAreaEmptyContent'), ...
                 'BackgroundColor', 'white', "FontName", 'monospace', 'FontSize', 13, 'FontColor', '#808080', ...
                 'WordWrap', 'on', 'Editable', 'off');
             outputTextArea.HorizontalAlignment = 'center';
@@ -170,7 +171,7 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
         function callbackClearButton(this, ~, ~)
             kssolv.services.logs.Diary.clearHistory();
             outputTextArea = this.Widgets.OutputTextPanel.OutputTextArea;
-            outputTextArea.Value = "No contents to display.";
+            outputTextArea.Value = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:RunBrowserOutputTextAreaEmptyContent');
             outputTextArea.FontColor = '#808080';
             outputTextArea.HorizontalAlignment = 'center';
             this.hasOutputToDisplay = false;

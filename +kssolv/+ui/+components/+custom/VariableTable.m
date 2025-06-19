@@ -67,27 +67,28 @@ classdef VariableTable < matlab.ui.componentcontainer.ComponentContainer & ...
 
             % AddButton, DeleteButton, CopyButton, ClearButton
             import kssolv.ui.components.custom.CustomButton
+            import kssolv.ui.util.Localizer.*
 
             this.AddButton = CustomButton(this.ButtonGroupLayout);
             matlab.ui.control.internal.specifyIconID(this.AddButton, 'add', 18);
-            this.AddButton.Tooltip = 'Add a new variable';
+            this.AddButton.Tooltip = message('KSSOLV:toolbox:VariableTableAddButtonTooltip');
             this.AddButton.ClickedFcn = @this.addRow;
 
             this.DeleteButton = CustomButton(this.ButtonGroupLayout);
             matlab.ui.control.internal.specifyIconID(this.DeleteButton, 'delete', 18);
-            this.DeleteButton.Tooltip = 'Remove selected variables';
+            this.DeleteButton.Tooltip = message('KSSOLV:toolbox:VariableTableDeleteButtonTooltip');
             this.DeleteButton.Enable = false;
             this.DeleteButton.ClickedFcn = @this.deleteRow;
 
             this.CopyButton = CustomButton(this.ButtonGroupLayout);
             matlab.ui.control.internal.specifyIconID(this.CopyButton, 'copy', 18);
-            this.CopyButton.Tooltip = 'Duplicate selected variables';
+            this.CopyButton.Tooltip = message('KSSOLV:toolbox:VariableTableCopyButtonTooltip');
             this.CopyButton.Enable = false;
             this.CopyButton.ClickedFcn = @this.duplicateRow;
 
             this.ClearButton = CustomButton(this.ButtonGroupLayout);
             matlab.ui.control.internal.specifyIconID(this.ClearButton, 'clear_table', 18);
-            this.ClearButton.Tooltip = 'Clear all variables';
+            this.ClearButton.Tooltip = message('KSSOLV:toolbox:VariableTableClearButtonTooltip');
             this.ClearButton.Enable = false;
             this.ClearButton.ClickedFcn = @this.clearTable;
         end

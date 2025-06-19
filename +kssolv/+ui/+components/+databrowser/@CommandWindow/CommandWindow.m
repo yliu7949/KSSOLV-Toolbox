@@ -65,12 +65,14 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
     methods (Access = private)
         function readCommandReferencesFile(this)
             % 逐行读取 commandReferences.txt 文件中的 MATLAB 命令列表
+            import kssolv.ui.util.Localizer.*
+
             currentFolder = fileparts(mfilename('fullpath'));
             commandReferencesFile = fullfile(currentFolder, 'html', 'commandReferences.txt');
 
             fileID = fopen(commandReferencesFile, 'r');
             if fileID == -1
-                warning('文件无法打开: %s', commandReferencesFile);
+                warning([message('KSSOLV:toolbox:CommandReferencesFileOpenError'), '%s'], commandReferencesFile);
             end
 
             % 初始化一个空的 cell 数组来存储每一行
@@ -142,11 +144,13 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
 
         function callbackUserPromptSubmitted(this, ~, event)
             % 执行命令行窗口提交的用户提示词
+            import kssolv.ui.util.Localizer.*
+
             userPrompt = event.HTMLEventData;
             if ~isempty(this.ChatBot)
                 this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
             else
-                this.addChat("Failed to initialize LLM service.");
+                this.addChat(message('KSSOLV:toolbox:LLMServiceInitializationFailed'));
             end
         end
 

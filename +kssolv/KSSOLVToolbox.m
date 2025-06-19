@@ -19,10 +19,10 @@ classdef KSSOLVToolbox < handle
         function this = KSSOLVToolbox()
             %KSSOLVTOOLBOX 构造此类的实例
 
-            import kssolv.ui.util.Localizer.*;
+            import kssolv.ui.util.Localizer.*
 
             % 根据环境变量设置本地化
-            locale = getenv("KSSOLVLocale");
+            locale = getenv("KSSOLV_LOCALE");
             if ~isempty(locale) && ismember(locale, {'zh_CN', 'en_US'})
                 setLocale(locale);
             end

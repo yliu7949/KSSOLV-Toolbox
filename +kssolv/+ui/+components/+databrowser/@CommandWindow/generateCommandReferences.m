@@ -38,7 +38,8 @@ for i = 1:length(commands)
 end
 fclose(fileID);
 
-fprintf("Command reference file has been generated: \n   %s\n", outputFilePath);
+import kssolv.ui.util.Localizer.*
+fprintf(message('KSSOLV:toolbox:CommandReferencesFileGenerated'), outputFilePath);
 end
 
 function command = constructCommand(filePath, toolboxMatlabPath)

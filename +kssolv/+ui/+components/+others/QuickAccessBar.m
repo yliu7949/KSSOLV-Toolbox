@@ -1,8 +1,8 @@
 classdef QuickAccessBar < handle
     %QUICKACCESSBAR 设置右上角快捷访问栏
-    
-    %   开发者：林海饶
-    %   版权 2024 合肥瀚海量子科技有限公司
+
+    %   开发者：杨柳 林海饶
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Access = private)
         HelpButton
@@ -10,12 +10,12 @@ classdef QuickAccessBar < handle
         UndoButton
     end
 
-    methods %(Access = protected)
+    methods
         function this = QuickAccessBar()
             % 构造函数
             this.createQuickAccessBar();
         end
-    
+
         function createQuickAccessBar(this)
             % 创建并配置 QuickAccessBar 相关组件
 
@@ -28,25 +28,21 @@ classdef QuickAccessBar < handle
 
             this.UndoButton = matlab.ui.internal.toolstrip.qab.QABUndoButton();
             this.UndoButton.ButtonPushedFcn = @(varargin) disp('Undo called!');
-
         end
 
         function addToAppContainer(this, appContainer)
             appContainer.add(this.HelpButton);
             appContainer.add(this.RedoButton);
             appContainer.add(this.UndoButton);
-
         end
     end
-
-
 
     methods (Static, Hidden)
         function app = qeShow()
             % 用于在单元测试中测试 QuickAccessBar，可通过下面的命令使用：
             % kssolv.ui.components.others.QuickAccessBar.qeShow();
 
-            % 创建 AppContainer          
+            % 创建 AppContainer
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
@@ -61,7 +57,6 @@ classdef QuickAccessBar < handle
             statusTestContext.Tag = 'kssolvTestContext';
             statusTestContext.StatusComponentTags = {quickAccessBar.HelpButton.Tag};
             app.Contexts = [app.Contexts {statusTestContext}];
-            
 
             % 设定 Active Context
             app.ActiveContexts = 'kssolvTestContext';
@@ -70,5 +65,4 @@ classdef QuickAccessBar < handle
             app.Visible = true;
         end
     end
-
 end

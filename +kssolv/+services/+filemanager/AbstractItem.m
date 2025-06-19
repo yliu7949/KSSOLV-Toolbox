@@ -1,14 +1,14 @@
 classdef AbstractItem < matlab.mixin.SetGet
     %ABSTRACTITEM 项目文件树中节点的抽象定义
-    
+
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     properties
         name            % 代码自动生成的唯一的节点名，不允许修改
         label           % 向用户展示的节点名，允许用户设置和修改
         description     % 节点描述
-        type            % 节点类型  
+        type            % 节点类型
         children        % 子节点
     end
 
@@ -27,7 +27,7 @@ classdef AbstractItem < matlab.mixin.SetGet
     properties (Hidden, Dependent)
         category        % 节点类别，如 Structure 或 Workflow
     end
-    
+
     methods
         function this = AbstractItem(label, type)
             %ABSTRACTITEM 构造函数，构建空的节点
@@ -59,7 +59,7 @@ classdef AbstractItem < matlab.mixin.SetGet
                 output = "";
             end
         end
-        
+
         function addChildrenItem(this, childrenItem)
             %ADDCHILDRENITEM 将 childrenItem 类追加到 data 数组中
             arguments
@@ -79,13 +79,13 @@ classdef AbstractItem < matlab.mixin.SetGet
                 this
                 nameOrLabel string
             end
-        
+
             % 检查当前节点是否匹配名称或标签
             if this.name == nameOrLabel || this.label == nameOrLabel
                 foundItem = this;
                 return;
             end
-        
+
             % 在子节点中递归查找
             for i = 1:length(this.children)
                 foundItem = this.children{i, 1}.findChildrenItem(nameOrLabel);
@@ -93,7 +93,7 @@ classdef AbstractItem < matlab.mixin.SetGet
                     return;
                 end
             end
-        
+
             % 如果没有找到则返回空数组
             foundItem = [];
         end
@@ -104,7 +104,7 @@ classdef AbstractItem < matlab.mixin.SetGet
                 this
                 name string
             end
-            
+
             childrenLength = length(this.children);
             for i = 1:length(this.children)
                 % 如果找到子节点的名称与 itemName 相同，移除并返回
@@ -135,7 +135,7 @@ classdef AbstractItem < matlab.mixin.SetGet
         function setItemProperty(this, property, value)
             %SETITEMPROPERTY 更新当前节点的某个属性的值
             arguments
-                this 
+                this
                 property string {mustBeNonempty}
                 value string {mustBeNonempty}
             end
@@ -143,13 +143,13 @@ classdef AbstractItem < matlab.mixin.SetGet
             % 检查节点是否存在该属性
             if ~ismember(property, properties(this))
                 error('KSSOLV:FileManager:AbstractItem:PropertyNotFound', ...
-                  'Unknown property in Item %s: %s', this.name, property);
+                    'Unknown property in Item %s: %s', this.name, property);
             end
 
             if isequal(this.(property), value)
                 return
             end
-        
+
             % 更新属性值和相关信息
             this.(property) = value;
             this.updatedAt = datetime;
@@ -179,7 +179,7 @@ classdef AbstractItem < matlab.mixin.SetGet
             %ENCODE 将少数字段和 data 字段编码为 JSON
             % 用于 Info Browser
             arguments
-                this 
+                this
                 prettyPrint logical = false
             end
 
@@ -190,24 +190,24 @@ classdef AbstractItem < matlab.mixin.SetGet
                 encodedJSON = jsonencode(objectStruct, "PrettyPrint", prettyPrint);
             catch ME
                 error('KSSOLV:FileManager:AbstractItem:JSONEncodeError', ...
-                  'Error encoding this item to JSON: %s', ME.message);
+                    'Error encoding this item to JSON: %s', ME.message);
             end
         end
 
         function encodedJSON = encodeToJSON(this, prettyPrint)
             %ENCODETOJSON 递归地处理 size 字段，并编码为 JSON
             % 用于 Project Browser
-            
+
             arguments
-                this 
+                this
                 prettyPrint logical = false
             end
-            
+
             try
                 encodedJSON = jsonencode(this, "PrettyPrint", prettyPrint);
             catch ME
                 error('KSSOLV:FileManager:AbstractItem:JSONEncodeError', ...
-                  'Error encoding the item to JSON: %s', ME.message);
+                    'Error encoding the item to JSON: %s', ME.message);
             end
         end
     end

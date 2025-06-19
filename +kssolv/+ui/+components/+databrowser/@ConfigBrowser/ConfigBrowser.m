@@ -85,6 +85,8 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
 
     methods (Access = protected)
         function buildUI(this)
+            import kssolv.ui.util.Localizer.*
+
             % 创建网格布局
             g = uigridlayout(this.Figure);
             g.BackgroundColor = 'white';
@@ -101,13 +103,13 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
 
             % titleLayout 中的标题和帮助按钮
             titleLabel = uilabel(titleLayout);
-            titleLabel.Text = 'Node Configuration in Workflow';
+            titleLabel.Text = message('KSSOLV:toolbox:ConfigBrowserTitleLabel');
             titleLabel.FontSize = 13;
             helpButton = kssolv.ui.components.custom.CustomButton(titleLayout);
             helpButton.HorizontalAlignment = 'center';
             helpButton.LayoutBackgroundColor = 'white';
             matlab.ui.control.internal.specifyIconID(helpButton, 'help', 18);
-            helpButton.Tooltip = 'Open related documentation';
+            helpButton.Tooltip = message('KSSOLV:toolbox:ConfigBrowserHelpButtonTooltip');
 
             % basicLayout
             basicLayout = uigridlayout(g);
@@ -118,7 +120,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
 
             nodeId = uilabel(basicLayout);
             nodeId.HorizontalAlignment = 'right';
-            nodeId.Text = "Node ID: ";
+            nodeId.Text = message('KSSOLV:toolbox:ConfigBrowserNodeIDLabel');
             this.nodeIdValue = uilabel(basicLayout);
             this.nodeIdValue.Text = this.nodeID;
             this.nodeIdValue.HorizontalAlignment = 'left';
@@ -129,26 +131,26 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             % General AccordionPanel
             accordionPanel1 = matlab.ui.container.internal.AccordionPanel('Parent', this.accordion);
             accordionPanel1.BackgroundColor = 'white';
-            accordionPanel1.Title = 'General';
+            accordionPanel1.Title = message('KSSOLV:toolbox:ConfigBrowserGeneralPanelTitle');
 
             g1 = uigridlayout(accordionPanel1);
             g1.BackgroundColor = 'white';
             g1.ColumnWidth = {80, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
 
-            nodeLabelTooltip = 'Tooltip';
+            nodeLabelTooltip = message('KSSOLV:toolbox:ConfigBrowserNodeLabelTooltip');
             nodeLabel = uilabel(g1);
             nodeLabel.HorizontalAlignment = 'right';
-            nodeLabel.Text = "Label: ";
+            nodeLabel.Text = message('KSSOLV:toolbox:ConfigBrowserNodeLabel');
             nodeLabel.Tooltip = nodeLabelTooltip;
             this.nodeLabelValue = uieditfield(g1);
             this.nodeLabelValue.Tooltip = nodeLabelTooltip;
             this.nodeLabelValue.ValueChangedFcn = @(src, event) this.nodeLabelChanged(src, event);
 
-            nodeModuleTooltip = 'Tooltip';
+            nodeModuleTooltip = message('KSSOLV:toolbox:ConfigBrowserNodeModuleTooltip');
             nodeModule = uilabel(g1);
             nodeModule.HorizontalAlignment = 'right';
-            nodeModule.Text = "Module: ";
+            nodeModule.Text = message('KSSOLV:toolbox:ConfigBrowserNodeModule');
             nodeModule.Tooltip = nodeModuleTooltip;
             this.nodeModuleValue = uidropdown(g1);
             moduleEnumMembers = enumeration('kssolv.services.workflow.module.ModuleType');
@@ -158,10 +160,10 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             this.nodeModuleValue.Tooltip = nodeModuleTooltip;
             this.nodeModuleValue.ValueChangedFcn = @(src, event) this.moduleSelectionChanged(src, event);
 
-            nodeTaskTooltip = 'Tooltip';
+            nodeTaskTooltip = message('KSSOLV:toolbox:ConfigBrowserNodeTaskTooltip');
             nodeTask = uilabel(g1);
             nodeTask.HorizontalAlignment = 'right';
-            nodeTask.Text = "Task: ";
+            nodeTask.Text = message('KSSOLV:toolbox:ConfigBrowserNodeTask');
             nodeTask.Tooltip = nodeTaskTooltip;
             this.nodeTaskValue = uidropdown(g1);
             moduleType = kssolv.services.workflow.module.ModuleType(this.nodeModuleValue.ValueIndex);
@@ -173,7 +175,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             % Input AccordionPanel
             accordionPanel2 = matlab.ui.container.internal.AccordionPanel('Parent', this.accordion);
             accordionPanel2.BackgroundColor = 'white';
-            accordionPanel2.Title = 'Input';
+            accordionPanel2.Title = message('KSSOLV:toolbox:ConfigBrowserInputPanelTitle');
 
             g2 = uigridlayout(accordionPanel2);
             g2.BackgroundColor = 'white';
@@ -181,7 +183,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             g2.RowHeight = {'fit', 120};
 
             this.inputCheckbox = uicheckbox(g2, "Value", 1);
-            this.inputCheckbox.Text = 'Use last node output as input';
+            this.inputCheckbox.Text = message('KSSOLV:toolbox:ConfigBrowserInputPanelCheckboxText');
             this.inputCheckbox.ValueChangedFcn = @(src, event) this.inputCheckBoxChanged(src, event);
             this.inputTable = kssolv.ui.components.custom.VariableTable(g2);
             this.inputTable.LayoutBackgroundColor = 'white';
@@ -189,27 +191,27 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             % Execution Resources AccordionPanel
             accordionPanel3 = matlab.ui.container.internal.AccordionPanel('Parent', this.accordion);
             accordionPanel3.BackgroundColor = 'white';
-            accordionPanel3.Title = 'Execution Resources';
+            accordionPanel3.Title = message('KSSOLV:toolbox:ConfigBrowserExecutionResourcesPanelTitle');
 
             g3 = uigridlayout(accordionPanel3);
             g3.BackgroundColor = 'white';
             g3.ColumnWidth = {80, '1x'};
             g3.RowHeight = {'fit', 'fit'};
 
-            environmentLabelTooltip = 'Parallel environment settings';
+            environmentLabelTooltip = message('KSSOLV:toolbox:ConfigBrowserExecutionResourcesPanelEnvironmentLabelTooltip');
             environmentLabel = uilabel(g3);
             environmentLabel.HorizontalAlignment = 'right';
-            environmentLabel.Text = "Parallel: ";
+            environmentLabel.Text = message('KSSOLV:toolbox:ConfigBrowserExecutionResourcesPanelEnvironmentLabel');
             environmentLabel.Tooltip = environmentLabelTooltip;
             this.environmentLabelValue = uidropdown(g3);
             this.environmentLabelValue.Items = {'None', 'GPU', 'Processes', 'Threads'};
             this.environmentLabelValue.Tooltip = environmentLabelTooltip;
             this.environmentLabelValue.ValueChangedFcn = @(src, event) this.environmentSelectionChanged(src, event);
 
-            timeLimitLabelTooltip = 'Execution time limit';
+            timeLimitLabelTooltip = message('KSSOLV:toolbox:ConfigBrowserExecutionResourcesPanelTimeLimitLabelTooltip');
             timeLimitLabel = uilabel(g3);
             timeLimitLabel.HorizontalAlignment = 'right';
-            timeLimitLabel.Text = "Time limit: ";
+            timeLimitLabel.Text = message('KSSOLV:toolbox:ConfigBrowserExecutionResourcesPanelTimeLimitLabel');
             timeLimitLabel.Tooltip = timeLimitLabelTooltip;
             this.timeLimitValue = uidropdown(g3);
             this.timeLimitValue.Items = {'No Limit', '30 minutes', '1 hour', '2 hours'};
@@ -219,7 +221,7 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             % Output AccordionPanel
             accordionPanel4 = matlab.ui.container.internal.AccordionPanel('Parent', this.accordion);
             accordionPanel4.BackgroundColor = 'white';
-            accordionPanel4.Title = 'Output';
+            accordionPanel4.Title = message('KSSOLV:toolbox:ConfigBrowserOutputPanelTitle');
             accordionPanel4.collapse();
 
             g4 = uigridlayout(accordionPanel4);
@@ -228,10 +230,10 @@ classdef ConfigBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser & ..
             g4.RowHeight = {'fit', 'fit'};
 
             this.outputSaveCheckbox = uicheckbox(g4);
-            this.outputSaveCheckbox.Text = 'Save output to Results';
+            this.outputSaveCheckbox.Text = message('KSSOLV:toolbox:ConfigBrowserOutputPanelSaveCheckboxText');
             this.outputSaveCheckbox.ValueChangedFcn = @(src, event) this.outputSaveCheckboxChanged(src, event);
             this.outputPassCheckbox = uicheckbox(g4, "Value", 1);
-            this.outputPassCheckbox.Text = 'Pass output to the next nodes';
+            this.outputPassCheckbox.Text = message('KSSOLV:toolbox:ConfigBrowserOutputPanelPassCheckboxText');
             this.outputPassCheckbox.ValueChangedFcn = @(src, event) this.outputPassCheckboxChanged(src, event);
 
             % 插入 Options Panel 和 Advanced Options Panel

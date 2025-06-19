@@ -12,7 +12,7 @@
 
         <entry key="FileSectionTitle">文件</entry>
         <entry key="FileProjectButtonLabel">项目</entry>
-        <entry key="FileProjectButtonTooltip">调整项目文件</entry>
+        <entry key="FileProjectButtonTooltip">打开项目文件</entry>
         <entry key="OpenFileListItemLabel">打开...</entry>
         <entry key="FileSaveButtonLabel">保存</entry>
         <entry key="FileSaveButtonTooltip">保存项目或结构</entry>
@@ -127,15 +127,54 @@
 
         <!-- Config Browser -->
         <entry key="ConfigBrowserTitle">配置编辑器</entry>
+        <entry key="ConfigBrowserTitleLabel">工作流节点配置</entry>
+        <entry key="ConfigBrowserHelpButtonTooltip">打开相关文档</entry>
+        <entry key="ConfigBrowserNodeIDLabel">节点 ID：</entry>
+        <entry key="ConfigBrowserGeneralPanelTitle">通用</entry>
+        <entry key="ConfigBrowserNodeLabel">标签：</entry>
+        <entry key="ConfigBrowserNodeLabelTooltip">展示在画布上的节点名称</entry>
+        <entry key="ConfigBrowserNodeModule">模块：</entry>
+        <entry key="ConfigBrowserNodeModuleTooltip">选择节点所属的模块</entry>
+        <entry key="ConfigBrowserNodeTask">任务：</entry>
+        <entry key="ConfigBrowserNodeTaskTooltip">选择节点运行的任务</entry>
+        <entry key="ConfigBrowserInputPanelTitle">输入</entry>
+        <entry key="ConfigBrowserInputPanelCheckboxText">使用上一节点的输出作为输入</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTitle">资源</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelEnvironmentLabel">并行环境：</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelEnvironmentLabelTooltip">并行环境设置</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTimeLimitLabel">时间限制：</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTimeLimitLabelTooltip">运行时间限制</entry>
+        <entry key="ConfigBrowserOutputPanelTitle">输出</entry>
+        <entry key="ConfigBrowserOutputPanelSaveCheckboxText">保存输出至 Results</entry>
+        <entry key="ConfigBrowserOutputPanelPassCheckboxText">传递输出至后续节点</entry>
+
+        <!-- Config Browser/VariableTable -->
+        <entry key="VariableTableAddButtonTooltip">添加新变量</entry>
+        <entry key="VariableTableDeleteButtonTooltip">移除所选变量</entry>
+        <entry key="VariableTableCopyButtonTooltip">复制所选变量</entry>
+        <entry key="VariableTableClearButtonTooltip">清除所有变量</entry>
 
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">模拟</entry>
+        <entry key="RunBrowserRunLabel">运行</entry>
+        <entry key="RunBrowserRunButtonTooltip">运行模拟计算</entry>
+        <entry key="RunBrowserStopLabel">停止</entry>
+        <entry key="RunBrowserStopButtonTooltip">停止模拟计算</entry>
+        <entry key="RunBrowserClearLabel">清空</entry>
+        <entry key="RunBrowserClearButtonTooltip">清空所有输出</entry>
+        <entry key="RunBrowserOutputTextAreaEmptyContent">无内容</entry>
 
         <!-- Command Window -->
         <entry key="CommandWindowTitle">命令行窗口</entry>
+        <entry key="CommandReferencesFileGenerated">命令参考文件已生成： \n   %s\n</entry>
+        <entry key="CommandReferencesFileOpenError">文件无法打开: </entry>
+        <entry key="LLMServiceInitializationFailed">初始化 LLM 服务失败。</entry>
 
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">结构</entry>
         <entry key="DocumentWorkflowTitle">工作流</entry>
+
+        <!-- FigureDocument/DataPlot -->
+        <entry key="DataPlotInputParameterError">输入参数必须是 figure 类或有效的图片文件路径</entry>
     </message>
 </rsccat>

@@ -5,14 +5,14 @@ classdef Localizer < handle
     %   使用示例：
     %   （1）导入本类：
     %       import kssolv.ui.util.Localizer.*
-    %   （2）使用本类的 message 函数获取与 Identifier 对应的本地化翻译，Identifier 
+    %   （2）使用本类的 message 函数获取与 Identifier 对应的本地化翻译，Identifier
     %       的格式为："KSSOLV:<XML 无后缀文件名>:<XML 文件 entry 条目中的 Key>"。
     %       例如：
     %       message('KSSOLV:toolbox:WelcomeMessage')
 
     %   开发者：杨柳
     %   版权 2024 合肥瀚海量子科技有限公司
-    
+
     properties (Access = private)
         % 键：Identifier，值：对应的本地化翻译
         keyValueMap containers.Map

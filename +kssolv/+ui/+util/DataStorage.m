@@ -8,7 +8,7 @@ classdef DataStorage < handle
 
     %   开发者：杨柳
     %   版权 2024-2025 合肥瀚海量子科技有限公司
-    
+
     properties (Access = private)
         DataMap
     end

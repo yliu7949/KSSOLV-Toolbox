@@ -34,7 +34,8 @@ classdef DataPlot < handle
                     this.figureFilePath = figureFilePathOrFigure;
                 end
             else
-                error('kssolv:figuredocument:DataPlot', '输入参数必须是 figure 或有效的图片文件路径');
+                error('kssolv:figuredocument:DataPlot', ...
+                    kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DataPlotInputParameterError'));
             end
 
             this.DocumentGroupTag = 'Plot';

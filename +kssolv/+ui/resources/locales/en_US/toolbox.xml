@@ -12,7 +12,7 @@
 
         <entry key="FileSectionTitle">File</entry>
         <entry key="FileProjectButtonLabel">Project</entry>
-        <entry key="FileProjectButtonTooltip">Adjust project file</entry>
+        <entry key="FileProjectButtonTooltip">Open project file</entry>
         <entry key="OpenFileListItemLabel">Open...</entry>
         <entry key="FileSaveButtonLabel">Save</entry>
         <entry key="FileSaveButtonTooltip">Save project or structure</entry>
@@ -127,15 +127,54 @@
 
         <!-- Config Browser -->
         <entry key="ConfigBrowserTitle">Config Editor</entry>
+        <entry key="ConfigBrowserTitleLabel">Node Configuration in Workflow</entry>
+        <entry key="ConfigBrowserHelpButtonTooltip">Open related documentation</entry>
+        <entry key="ConfigBrowserNodeIDLabel">Node ID: </entry>
+        <entry key="ConfigBrowserGeneralPanelTitle">General</entry>
+        <entry key="ConfigBrowserNodeLabel">Label: </entry>
+        <entry key="ConfigBrowserNodeLabelTooltip">The node name displayed on the canvas</entry>
+        <entry key="ConfigBrowserNodeModule">Module: </entry>
+        <entry key="ConfigBrowserNodeModuleTooltip">Select the module to which the node belongs</entry>
+        <entry key="ConfigBrowserNodeTask">Task: </entry>
+        <entry key="ConfigBrowserNodeTaskTooltip">Select the task that the node will run</entry>
+        <entry key="ConfigBrowserInputPanelTitle">Input</entry>
+        <entry key="ConfigBrowserInputPanelCheckboxText">Use last node output as input</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTitle">Execution Resources</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelEnvironmentLabel">Parallel: </entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelEnvironmentLabelTooltip">Parallel environment settings</entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTimeLimitLabel">Time limit: </entry>
+        <entry key="ConfigBrowserExecutionResourcesPanelTimeLimitLabelTooltip">Execution time limit</entry>
+        <entry key="ConfigBrowserOutputPanelTitle">Output</entry>
+        <entry key="ConfigBrowserOutputPanelSaveCheckboxText">Save output to Results</entry>
+        <entry key="ConfigBrowserOutputPanelPassCheckboxText">Pass output to the next nodes</entry>
+
+        <!-- Config Browser/VariableTable -->
+        <entry key="VariableTableAddButtonTooltip">Add a new variable</entry>
+        <entry key="VariableTableDeleteButtonTooltip">Remove selected variables</entry>
+        <entry key="VariableTableCopyButtonTooltip">Duplicate selected variables</entry>
+        <entry key="VariableTableClearButtonTooltip">Clear all variables</entry>
 
         <!-- Run Browser -->
         <entry key="RunBrowserTitle">Simulation</entry>
+        <entry key="RunBrowserRunLabel">Run</entry>
+        <entry key="RunBrowserRunButtonTooltip">Run simulation</entry>
+        <entry key="RunBrowserStopLabel">Stop</entry>
+        <entry key="RunBrowserStopButtonTooltip">Stop simulation</entry>
+        <entry key="RunBrowserClearLabel">Clear</entry>
+        <entry key="RunBrowserClearButtonTooltip">Clear output</entry>
+        <entry key="RunBrowserOutputTextAreaEmptyContent">No contents to display.</entry>
 
         <!-- Command Window -->
         <entry key="CommandWindowTitle">Command Window</entry>
+        <entry key="CommandReferencesFileGenerated">Command reference file has been generated: \n   %s\n</entry>
+        <entry key="CommandReferencesFileOpenError">File cannot be opened: </entry>
+        <entry key="LLMServiceInitializationFailed">Failed to initialize LLM service.</entry>
 
         <!-- Document Group -->
         <entry key="DocumentStructureTitle">Structure</entry>
         <entry key="DocumentWorkflowTitle">Workflow</entry>
+
+        <!-- FigureDocument/DataPlot -->
+        <entry key="DataPlotInputParameterError">The input parameter must be a figure class or a valid image file path</entry>
     </message>
 </rsccat>
