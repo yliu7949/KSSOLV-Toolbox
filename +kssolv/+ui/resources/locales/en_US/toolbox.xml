@@ -147,6 +147,8 @@
         <entry key="ConfigBrowserOutputPanelTitle">Output</entry>
         <entry key="ConfigBrowserOutputPanelSaveCheckboxText">Save output to Results</entry>
         <entry key="ConfigBrowserOutputPanelPassCheckboxText">Pass output to the next nodes</entry>
+        <entry key="ConfigBrowserOptionsPanelTitle">Options</entry>
+        <entry key="ConfigBrowserAdvancedOptionsPanelTitle">Advanced Options</entry>
 
         <!-- Config Browser/VariableTable -->
         <entry key="VariableTableAddButtonTooltip">Add a new variable</entry>

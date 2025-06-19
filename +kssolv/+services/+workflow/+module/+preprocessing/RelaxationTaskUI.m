@@ -24,10 +24,12 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                 options (1, 1) struct = this.defaultOptions
             end
 
+            import kssolv.ui.util.Localizer.*
+
             % Options AccordionPanel
             this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
             this.widgets.accordionPanel1.BackgroundColor = 'white';
-            this.widgets.accordionPanel1.Title = 'Options';
+            this.widgets.accordionPanel1.Title = message('KSSOLV:toolbox:ConfigBrowserOptionsPanelTitle');
 
             g1 = uigridlayout(this.widgets.accordionPanel1);
             g1.BackgroundColor = 'white';
@@ -88,18 +90,19 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                 accordion matlab.ui.container.internal.Accordion
             end
 
+            import kssolv.ui.util.Localizer.*
+
             if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserOptionsPanelTitle'))
                     % 移除旧的 Options AccordionPanel
                     accordion.Children(3).Parent = [];
                 end
 
-                if accordion.Children(3).Title == "Advanced Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserAdvancedOptionsPanelTitle'))
                     % 移除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
                     accordion.Children(3).Parent = [];
                 end
             end
-
 
             % 将 accordionPanel 添加到 accordion
             if isempty(accordion.Children)

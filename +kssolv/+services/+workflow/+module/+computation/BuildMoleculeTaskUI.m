@@ -37,10 +37,12 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                 options (1, 1) struct = this.defaultOptions
             end
 
+            import kssolv.ui.util.Localizer.*
+
             % Options AccordionPanel
             this.widgets.accordionPanel1 = matlab.ui.container.internal.AccordionPanel();
             this.widgets.accordionPanel1.BackgroundColor = 'white';
-            this.widgets.accordionPanel1.Title = 'Options';
+            this.widgets.accordionPanel1.Title = message('KSSOLV:toolbox:ConfigBrowserOptionsPanelTitle');
 
             this.widgets.g1 = uigridlayout(this.widgets.accordionPanel1);
             this.widgets.g1.BackgroundColor = 'white';
@@ -222,7 +224,7 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             % Advanced Options AccordionPanel
             this.widgets.accordionPanel2 = matlab.ui.container.internal.AccordionPanel();
             this.widgets.accordionPanel2.BackgroundColor = 'white';
-            this.widgets.accordionPanel2.Title = 'Advanced Options';
+            this.widgets.accordionPanel2.Title = message('KSSOLV:toolbox:ConfigBrowserAdvancedOptionsPanelTitle');
             this.widgets.accordionPanel2.collapse();
 
             this.widgets.g2 = uigridlayout(this.widgets.accordionPanel2);
@@ -335,13 +337,15 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                 accordion matlab.ui.container.internal.Accordion
             end
 
+            import kssolv.ui.util.Localizer.*
+
             if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserOptionsPanelTitle'))
                     % 移除旧的 Options AccordionPanel
                     accordion.Children(3).Parent = [];
                 end
 
-                if accordion.Children(3).Title == "Advanced Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserAdvancedOptionsPanelTitle'))
                     % 移除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
                     accordion.Children(3).Parent = [];
                 end

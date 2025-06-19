@@ -147,6 +147,8 @@
         <entry key="ConfigBrowserOutputPanelTitle">输出</entry>
         <entry key="ConfigBrowserOutputPanelSaveCheckboxText">保存输出至 Results</entry>
         <entry key="ConfigBrowserOutputPanelPassCheckboxText">传递输出至后续节点</entry>
+        <entry key="ConfigBrowserOptionsPanelTitle">选项</entry>
+        <entry key="ConfigBrowserAdvancedOptionsPanelTitle">高级选项</entry>
 
         <!-- Config Browser/VariableTable -->
         <entry key="VariableTableAddButtonTooltip">添加新变量</entry>

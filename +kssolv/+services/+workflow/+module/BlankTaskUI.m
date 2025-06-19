@@ -26,13 +26,15 @@ classdef BlankTaskUI < kssolv.services.workflow.module.AbstractTaskUI
                 accordion matlab.ui.container.internal.Accordion
             end
 
+            import kssolv.ui.util.Localizer.*
+
             if size(accordion.Children, 1) >= 4
-                if accordion.Children(3).Title == "Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserOptionsPanelTitle'))
                     % 移除旧的 Options AccordionPanel
                     accordion.Children(3).Parent = [];
                 end
 
-                if accordion.Children(3).Title == "Advanced Options"
+                if strcmp(accordion.Children(3).Title, message('KSSOLV:toolbox:ConfigBrowserAdvancedOptionsPanelTitle'))
                     % 移除旧的 Advanced Options AccordionPanel，注意在 Children 中的位置仍然是第三个
                     accordion.Children(3).Parent = [];
                 end
