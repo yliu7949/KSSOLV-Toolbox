@@ -34,7 +34,7 @@ classdef DataPlot < handle
                     this.figureFilePath = figureFilePathOrFigure;
                 end
             else
-                error('kssolv:figuredocument:DataPlot', ...
+                error('KSSOLV:figuredocument:DataPlot', ...
                     kssolv.ui.util.Localizer.message('KSSOLV:toolbox:DataPlotInputParameterError'));
             end
 

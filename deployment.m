@@ -27,7 +27,7 @@ additionalFiles = [fullfile(projectRoot, "ks.ks"), ...
     fullfile(kssolv3Home, "ppdata")];
 
 % 设置编译属性并进行编译
-buildOpts = compiler.build.StandaloneApplicationOptions(fullfile(projectRoot, "kssolvStart.m"));
+buildOpts = compiler.build.StandaloneApplicationOptions(fullfile(projectRoot, "kssolv.m"));
 buildOpts.AdditionalFiles = additionalFiles;
 buildOpts.AutoDetectDataFiles = true;
 buildOpts.OutputDir = fullfile(projectRoot, "StandaloneDesktopApp", "output", "build");

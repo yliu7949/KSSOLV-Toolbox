@@ -8,7 +8,7 @@ classdef KSSOLV_Toolbox
         Name string = 'KSSOLV Toolbox'
         Author string = 'Liu Yang'
         Version string = '0.2.0'
-        ReleaseDate string = '2025.06.18'
+        ReleaseDate string = '2025.06.30'
         License char = 'BSD 3-Clause "New" or "Revised" License'
         RootDirectory char = fileparts(mfilename('fullpath'))
         MinimumMATLABVersion char = 'R2024a'
