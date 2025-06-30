@@ -6,7 +6,7 @@ function app = kssolv(ksFile, hostInBrowser)
 
 arguments
     ksFile string = ""
-    hostInBrowser (1, 1) logical = strcmpi(getenv("HostAppInBrowser"), 'true')
+    hostInBrowser (1, 1) logical = strcmpi(getenv("KSSOLV_HOST_IN_BROWSER"), 'true')
 end
 
 % 从 .env 文件中读取环境变量
