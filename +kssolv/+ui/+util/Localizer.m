@@ -23,14 +23,18 @@ classdef Localizer < handle
         currentLocale
     end
 
+    properties (Constant)
+        % 本地化文件夹的位置：+kssolv/+ui/resources/locales/
+        localesFolder = fullfile(fileparts(fileparts(mfilename('fullpath'))), 'resources', 'locales');
+    end
+
     methods (Access = private)
         function this = Localizer(locale)
             % 构造函数，私有化以实现单例模式
             % 获取本地化设置，如 zh_CN
             this.currentLocale = locale;
-            % 本地化文件夹的位置：+kssolv/+ui/resources/locales/${locale}
-            resourceFolder = fullfile(fileparts(fileparts(mfilename('fullpath'))), 'resources');
-            localeFolder = fullfile(resourceFolder, 'locales', locale);
+            % 所使用的本地化文件夹的位置：+kssolv/+ui/resources/locales/${locale}
+            localeFolder = fullfile(this.localesFolder, locale);
             if exist(localeFolder, 'dir')
                 % 读取该本地化文件夹下所有 XML 文件，并全部缓存到 keyValueMap 中
                 xmlFiles = dir(fullfile(localeFolder, '*.xml'));
@@ -73,8 +77,9 @@ classdef Localizer < handle
 
             persistent uniqueInstance
             if nargin == 0
-                % 无输入参数，则尝试直接返回当前非空的 uniqueInstance 实例
+                % 在无输入参数的情况下
                 if ~isempty(uniqueInstance) && isvalid(uniqueInstance)
+                    % 若 uniqueInstance 非空，直接返回当前非空的 uniqueInstance 实例
                     instance = uniqueInstance;
                     return
                 else
@@ -86,6 +91,13 @@ classdef Localizer < handle
                 locale = userLocale;
             else
                 locale = varargin{1};
+            end
+
+            % 对尚未实现的本地化默认使用美式英语
+            localesFolder = kssolv.ui.util.Localizer.localesFolder;
+            implementedLocales = setdiff({dir(localesFolder).name}, {'.', '..'});
+            if ~ismember(locale, implementedLocales)
+                locale = 'en_US';
             end
 
             if isempty(uniqueInstance) || ~isvalid(uniqueInstance) || ~strcmp(locale, uniqueInstance.currentLocale)

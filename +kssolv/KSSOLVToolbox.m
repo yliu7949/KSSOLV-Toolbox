@@ -22,10 +22,7 @@ classdef KSSOLVToolbox < handle
             import kssolv.ui.util.Localizer.*
 
             % 根据环境变量设置本地化
-            locale = getenv("KSSOLV_LOCALE");
-            if ~isempty(locale) && ismember(locale, {'zh_CN', 'en_US'})
-                setLocale(locale);
-            end
+            setLocale(getenv("KSSOLV_LOCALE"));
 
             % 创建 App Container
             appOptions.Title = 'KSSOLV Toolbox';
@@ -128,7 +125,7 @@ classdef KSSOLVToolbox < handle
                 isDirty logical = false
             end
             import kssolv.ui.util.Localizer.message
-            import kssolv.ui.util.DataStorage.getData
+            import kssolv.ui.util.DataStorage.*
 
             projectFilename = getData('ProjectFilename');
             if projectFilename == ""
