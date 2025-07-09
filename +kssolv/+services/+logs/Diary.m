@@ -35,7 +35,7 @@ classdef Diary < handle
             this.diaryFile = fullfile(this.DIARY_DIR, [char(datetime), '.log']);
 
             % 安全关闭现有日记
-            if ~isempty(get(0, 'DiaryFile'))
+            if strcmp(get(0, 'Diary'), 'on')
                 diary off;
             end
 
@@ -123,6 +123,7 @@ classdef Diary < handle
             if this.fileID ~= -1
                 fclose(this.fileID);
             end
+            diary off;
         end
     end
 
