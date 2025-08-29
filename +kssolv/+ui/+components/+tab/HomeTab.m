@@ -532,8 +532,19 @@ classdef HomeTab < handle
             % 增加换行以便利阅读
             runBrowser.addNewLineToOutputTextArea();
 
+            % 获取当前最新打开的工作流
+            workflowDocument = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
+            if isempty(workflowDocument)
+                this.Widgets.RunningSection.RunningRunButton.Enabled = true;
+                this.Widgets.RunningSection.RunningStopButton.Enabled = false;
+                runBrowser.Widgets.ButtonPanel.RunButton.Enable = true;
+                runBrowser.Widgets.ButtonPanel.StopButton.Enable = false;
+                return
+            end
             workflowRoot = project.findChildrenItem('Workflow');
-            workflow = workflowRoot.children{1};
+            workflow = workflowRoot.findChildrenItem(workflowDocument.Tag);
+
+            % 运行工作流
             kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
 
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
