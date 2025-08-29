@@ -45,6 +45,6 @@
         <!-- SettingsDialog/GeneralTab/LLMPanel -->
         <entry key="SettingsDialogGeneralTabLLMPanelName">LLM</entry>
         <entry key="SettingsDialogGeneralTabLLMType">Type:</entry>
-        <entry key="SettingsDialogGeneralTabLLMModelName">Model used:</entry>
+        <entry key="SettingsDialogGeneralTabLLMModelName">Model Used:</entry>
     </message>
 </rsccat>

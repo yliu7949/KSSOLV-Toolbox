@@ -21,7 +21,7 @@ classdef SettingsDialog < controllib.ui.internal.dialog.AbstractDialog
         availableLanguageOptions = {'简体中文', 'English'}
         availableLanguageOptionsData = {'zh_CN', 'en_US'}
 
-        availableLLMType = {'Ollama', 'TencentCloud'}
+        availableLLMType = {'Ollama', 'OpenAICompatible'}
         availableLLMModels = {'deepseek-r1:7b', 'qwen2.5:7b'}
     end
 
@@ -104,13 +104,12 @@ classdef SettingsDialog < controllib.ui.internal.dialog.AbstractDialog
             languageDropdownLayout.RowHeight = {'fit', 'fit'};
             languageDropdownLayout.ColumnWidth = {'fit', 'fit'};
 
-            % 语言选项 label
+            % 语言选项 label & dropdown
             languageLabel = uilabel(languageDropdownLayout, "Text", ...
                 message('KSSOLV:dialogs:SettingsDialogGeneralTabLanguageLabel'));
             languageLabel.Layout.Row = 1;
             languageLabel.Layout.Column = 1;
 
-            % 语言选项 dropdown
             languageDropdown = uidropdown(languageDropdownLayout, ...
                 "Items", this.availableLanguageOptions, ...
                 'ItemsData', this.availableLanguageOptionsData, "Interruptible", "off");
@@ -132,37 +131,67 @@ classdef SettingsDialog < controllib.ui.internal.dialog.AbstractDialog
             LLMSettingPanel.Layout.Row = 2;
             LLMSettingPanel.Layout.Column = [1 2];
 
-            % 添加大语言模型类型选择控件 layout
-            LLMDropdownLayout = uigridlayout(LLMSettingPanel, ...
-                [2 2], "Scrollable", 'off');
-            LLMDropdownLayout.RowHeight = {'fit', 'fit'};
-            LLMDropdownLayout.ColumnWidth = {'fit', 'fit'};
+            % 添加大语言模型 layout
+            LLMLayout = uigridlayout(LLMSettingPanel, ...
+                [3 1], "Scrollable", 'off');
+            LLMLayout.RowHeight = {'fit', 'fit', 'fit'};
+            LLMLayout.ColumnWidth = {'fit'};
 
-            % 大语言模型类型选项 label
-            LLMLabel = uilabel(LLMDropdownLayout, "Text", ...
+            % 添加大语言模型类型选择 layout
+            LLMTypeLayout = uigridlayout(LLMLayout, ...
+                [1 2], "Scrollable", 'off');
+            LLMTypeLayout.RowHeight = {'fit'};
+            LLMTypeLayout.ColumnWidth = {'fit', 'fit'};
+
+            % 大语言模型类型选项 label & dropdown
+            LLMTypeLabel = uilabel(LLMTypeLayout, "Text", ...
                 message('KSSOLV:dialogs:SettingsDialogGeneralTabLLMType'));
-            LLMLabel.Layout.Row = 1;
-            LLMLabel.Layout.Column = 1;
+            LLMTypeLabel.Layout.Row = 1;
+            LLMTypeLabel.Layout.Column = 1;
 
-            % 大语言模型选项 dropdown
-            LLMDropdown = uidropdown(LLMDropdownLayout, ...
+            LLMTypeDropdown = uidropdown(LLMTypeLayout, ...
                 "Items", this.availableLLMType, "Interruptible", "off");
-            LLMDropdown.Value = this.availableLLMType{1};
-            LLMDropdown.Layout.Row = 1;
-            LLMDropdown.Layout.Column = 2;
+            LLMTypeDropdown.Value = this.availableLLMType{1};
+            LLMTypeDropdown.Layout.Row = 1;
+            LLMTypeDropdown.Layout.Column = 2;
 
-            % 大语言模型名称 label
-            LLMLabel = uilabel(LLMDropdownLayout, "Text", ...
+            % 添加 Ollama 大模型 layout
+            OllamaLayout = uigridlayout(LLMLayout, ...
+                [3 4], "Scrollable", 'off');
+            OllamaLayout.RowHeight = {'fit', 'fit', 'fit'};
+            OllamaLayout.ColumnWidth = {'fit', 200, 'fit'};
+
+            % Ollama 服务地址 label & uieditfield & icon
+            OllamaServerURLLabel = uilabel(OllamaLayout, "Text", "Ollama Server URL");
+            OllamaServerURLLabel.Layout.Row = 1;
+            OllamaServerURLLabel.Layout.Column = 1;
+
+            OllamaServerURLText = uieditfield(OllamaLayout, ...
+                "Placeholder", "http://127.0.0.1:11434", "Value", "http://127.0.0.1:11434");
+            OllamaServerURLText.Layout.Row = 1;
+            OllamaServerURLText.Layout.Column = 2;
+
+            OllamaServerURLConnectState = uiimage(OllamaLayout, "ImageSource", ...
+                kssolv.ui.util.GetIcon('greenCheck.svg'), "Tooltip", "Ollama Connect State");
+            OllamaServerURLConnectState.Layout.Row = 1;
+            OllamaServerURLConnectState.Layout.Column = 3;
+
+            % 大语言模型名称 label & dropdown & button
+            LLMModelListLabel = uilabel(OllamaLayout, "Text", ...
                 message('KSSOLV:dialogs:SettingsDialogGeneralTabLLMModelName'));
-            LLMLabel.Layout.Row = 2;
-            LLMLabel.Layout.Column = 1;
+            LLMModelListLabel.Layout.Row = 2;
+            LLMModelListLabel.Layout.Column = 1;
 
-            % 大语言模型名称 dropdown
-            LLMDropdown = uidropdown(LLMDropdownLayout, ...
+            LLMModelListDropdown = uidropdown(OllamaLayout,...
                 "Items", this.availableLLMModels, "Interruptible", "off");
-            LLMDropdown.Value = this.availableLLMModels{1};
-            LLMDropdown.Layout.Row = 2;
-            LLMDropdown.Layout.Column = 2;
+            LLMModelListDropdown.Value = this.availableLLMModels{1};
+            LLMModelListDropdown.Layout.Row = 2;
+            LLMModelListDropdown.Layout.Column = 2;
+
+            LLMModelListFetchButton = uibutton(OllamaLayout, "Text", "", ...
+                "Icon", kssolv.ui.util.GetIcon('refresh.svg'), "Tooltip", "Update Model List");
+            LLMModelListFetchButton.Layout.Row = 2;
+            LLMModelListFetchButton.Layout.Column = 3;
 
             % 添加到 Widgets
             this.Widgets.GeneralTab = generalTab;
@@ -214,6 +243,17 @@ classdef SettingsDialog < controllib.ui.internal.dialog.AbstractDialog
 
         function cancelButtonClicked(this)
             close(this);
+        end
+    end
+
+    methods (Hidden, Static)
+        function dialog = qeShow()
+            % 用于在单元测试中测试 SettingsDialog
+            % 示例命令：
+            % kssolv.ui.components.dialog.SettingsDialog.qeShow
+
+            dialog = kssolv.ui.components.dialog.SettingsDialog();
+            dialog.show();
         end
     end
 end

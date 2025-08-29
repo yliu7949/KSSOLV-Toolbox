@@ -243,7 +243,6 @@ classdef HomeTab < handle
             import kssolv.ui.util.Localizer.message
             import kssolv.ui.util.CreateButton
             import kssolv.ui.util.CreateListItem
-            import kssolv.ui.util.GetIcon
 
             % 创建 Environment Section
             section = Section(message("KSSOLV:toolbox:EnvironmentSectionTitle"));

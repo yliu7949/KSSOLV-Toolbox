@@ -6,18 +6,23 @@ arguments
     streamFunction (1, 1) function_handle = @(token) fprintf("%s\n", token)
 end
 
-try
-    if ~isempty(getenv("OPENAI_PROXY_URL")) && ~isempty(getenv("OPENAI_API_KEY"))
+if ~isempty(getenv("OPENAI_PROXY_URL")) && ~isempty(getenv("OPENAI_API_KEY"))
+    try
         bot = kssolv.services.llm.online.ChatBot(modelName, systemPrompt, streamFunction);
-    else
-        bot = kssolv.services.llm.ollama.ChatBot(modelName, systemPrompt, streamFunction);
+    catch exception
+        warning('KSSOLV:LLM:ServiceInitializationFailure', ...
+            ['Failed to initialize LLM service. Please ensure :\n', ...
+            'OPENAI_PROXY_URL and OPENAI_API_KEY are properly set for online service.\n'])
+        bot = [];
     end
-catch exception
-    warning('KSSOLV:LLM:ServiceInitializationFailure', ...
-        ['Failed to initialize LLM service.', ...
-        'Ensure either:\n', ...
-        '1. OPENAI_PROXY_URL and OPENAI_API_KEY are properly set for online service\n', ...
-        '2. Ollama service is correctly configured for local usage']);
-    bot = [];
+else
+    try
+        bot = kssolv.services.llm.ollama.ChatBot(modelName, systemPrompt, streamFunction);
+    catch exception
+        warning('KSSOLV:LLM:ServiceInitializationFailure', ...
+            ['Failed to initialize LLM service. Please ensure :\n', ...
+            'Ollama service is correctly configured for local usage.\n'])
+        bot = [];
+    end
 end
 end
