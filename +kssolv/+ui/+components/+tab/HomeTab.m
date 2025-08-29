@@ -74,6 +74,12 @@ classdef HomeTab < handle
             addlistener(this.Widgets.EnvironmentSection.EnvironmentSettingsButton, ...
                 'ButtonPushed', @(src, data) callbackEnvironmentSettingsButton(this));
             % Resource Section
+            addlistener(this.Widgets.ResourceSection.ResourceLibraryButton, ...
+                'ButtonPushed', @(src, data) callbackResourceLibraryButton(this));
+            addlistener(this.Widgets.ResourceSection.ResourceHelpButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackOpenDocumentButton(this));
+            addlistener(this.Widgets.ResourceSection.ResourceSupportButton, ...
+                'ButtonPushed', @(src, data) callbackResourceSupportButton(this));
         end
 
         function setTabActivated(this)
@@ -307,7 +313,7 @@ classdef HomeTab < handle
             % 创建 Button
             ResourceLibraryButton = CreateButton('push', 'ResourceLibrary', section.Tag, 'documentation');
             ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, 'community');
-            ResourceHelpButton = CreateButton('split', 'ResourceHelp', section.Tag, 'help');
+            ResourceHelpButton = CreateButton('dropdown', 'ResourceHelp', section.Tag, 'help');
             ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'requestSupport');
 
             % 创建并组装 PopupList(下拉菜单)
@@ -574,6 +580,22 @@ classdef HomeTab < handle
 
             appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
             this.settingsDialog.show(appContainer);
+        end
+
+        function callbackResourceLibraryButton(~, ~, ~)
+            url = 'https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd';
+            web(url);
+        end
+
+        function callbackOpenDocumentButton(~, ~, ~)
+            url = 'https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd';
+            web(url);
+        end
+
+        function callbackResourceSupportButton(~, ~, ~)
+            url = sprintf('mailto:%s?subject=%s V%s', KSSOLV_Toolbox.AuthorEmail, ...
+                "Request for Assistance with KSSOLV Toolbox", KSSOLV_Toolbox.Version);
+            web(url);
         end
 
         function settingsDialogClosed(this, ~, ~)

@@ -42,14 +42,14 @@ identifier = '5200919d-0e3d-4525-ad64-977f32dedd5d';
 toolboxFolder = fileparts(mfilename('fullpath'));
 
 options = matlab.addons.toolbox.ToolboxOptions(toolboxFolder, identifier);
-options.AuthorName = "Liu Yang";
-options.AuthorEmail = "and@mail.ustc.edu.cn";
-options.AuthorCompany = "University of Science and Technology of China";
-options.Description = "A MATLAB-Based Plane Wave Basis Set First-Principles Calculation Toolbox.";
-options.Summary = "Plane Wave Basis, First-Principles Calculation";
+options.AuthorName = KSSOLV_Toolbox.Author;
+options.AuthorEmail = KSSOLV_Toolbox.AuthorEmail;
+options.AuthorCompany = KSSOLV_Toolbox.AuthorCompany;
+options.Description = KSSOLV_Toolbox.Description;
+options.Summary = KSSOLV_Toolbox.Summary;
 
 options.OutputFile = fullfile(toolboxFolder, "KSSOLV_Toolbox.mltbx");
-options.ToolboxName = "KSSOLV Toolbox";
+options.ToolboxName = KSSOLV_Toolbox.Name;
 options.ToolboxVersion = KSSOLV_Toolbox.Version;
 options.AppGalleryFiles = "kssolv.m";
 options.SupportedPlatforms.Win64 = true;
@@ -57,7 +57,7 @@ options.SupportedPlatforms.Maci64 = true;
 options.SupportedPlatforms.Glnxa64 = true;
 options.SupportedPlatforms.MatlabOnline = true;
 
-options.MinimumMatlabRelease = "R2024a";
+options.MinimumMatlabRelease = KSSOLV_Toolbox.MinimumMATLABVersion;
 options.MaximumMatlabRelease = "";
 
 filteredConditions = ~contains(options.ToolboxFiles, 'buildfile.m') & ...
