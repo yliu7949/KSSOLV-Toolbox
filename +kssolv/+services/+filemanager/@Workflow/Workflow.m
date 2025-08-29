@@ -25,10 +25,20 @@ classdef Workflow < kssolv.services.filemanager.AbstractItem
             kssolv.ui.components.figuredocument.Workflow(this.graphJSON, this.name).Display();
         end
 
-        function createWorkflowItem(this)
+        function createWorkflowItem(this, isBlank)
             % 创建并添加工作流节点
+            arguments
+                this 
+                isBlank (1, 1) logical = false
+            end
+
             workflow = kssolv.services.filemanager.Workflow();
-            workflow.graphJSON = kssolv.ui.components.figuredocument.Workflow.getDagJSON();
+            if isBlank
+                workflow.graphJSON = '[]';
+            else
+                workflow.graphJSON = kssolv.ui.components.figuredocument.Workflow.getDagJSON();
+            end
+            
             this.addChildrenItem(workflow);
             displayObj = kssolv.ui.components.figuredocument.Workflow(workflow.graphJSON, workflow.name);
             displayObj.Display();

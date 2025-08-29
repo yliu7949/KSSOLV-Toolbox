@@ -59,6 +59,8 @@ classdef HomeTab < handle
                 'ItemPushed', @(src, data) callbackImportStructureFromFile(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton, ...
                 'ButtonPushed', @(src, data) callbackProjectWorkflowButton(this));
+            addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackNewBlankWorkflow(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(2), ...
                 'ItemPushed', @(src, data) callbackImportTemplateWorkflow(this));
             addlistener(this.Widgets.ProjectSection.ProjectVariableButton, ...
@@ -480,6 +482,22 @@ classdef HomeTab < handle
             end
             if ~isempty(item)
                 item.createWorkflowItem();
+                projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+                projectBrowser.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
+                projectBrowser.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+            end
+        end
+
+        function callbackNewBlankWorkflow(~, ~, ~)
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            for i = 1:length(project.children)
+                % 从当前 Project 的第二级节点中查找 Workflow 节点
+                if startsWith(project.children{i, 1}.name, 'Workflow')
+                    item = project.children{i, 1};
+                end
+            end
+            if ~isempty(item)
+                item.createWorkflowItem(true);
                 projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
                 projectBrowser.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
                 projectBrowser.updateTreetable('PATCH', item.name, item.encodeToJSON(1));

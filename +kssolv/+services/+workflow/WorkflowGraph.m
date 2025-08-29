@@ -124,7 +124,12 @@ classdef WorkflowGraph < handle
 
             % 首先处理节点
             for i = 1:length(graphJSONCells)
-                cell = graphJSONCells{i};
+                if isstruct(graphJSONCells)
+                    cell = graphJSONCells(i);
+                else
+                    cell = graphJSONCells{i};
+                end
+
                 if isfield(cell, 'shape') && strcmp(cell.shape, 'dag-node')
                     this.updateNode(cell);
                     % 初始化该节点的邻接列表
@@ -136,7 +141,12 @@ classdef WorkflowGraph < handle
 
             % 重新添加所有的边
             for i = 1:length(graphJSONCells)
-                cell = graphJSONCells{i};
+                if isstruct(graphJSONCells)
+                    cell = graphJSONCells(i);
+                else
+                    cell = graphJSONCells{i};
+                end
+
                 if isfield(cell, 'shape') && strcmp(cell.shape, 'dag-edge')
                     this.addEdge(cell);
                 end
