@@ -41,6 +41,7 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
             output.H = H;
             output.X = X;
             output.info = info;
+            output.SCFOptions = SCFOptions;
         end
     end
 end
