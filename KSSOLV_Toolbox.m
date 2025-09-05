@@ -7,11 +7,11 @@ classdef KSSOLV_Toolbox
     properties (Constant)
         Name string = 'KSSOLV Toolbox'
         Version string = '0.2.1'
-        ReleaseDate string = '2025.08.30'
+        ReleaseDate string = '2025.09.05'
         License char = 'BSD 3-Clause "New" or "Revised" License'
 
         Author string = 'Liu Yang'
-        AuthorEmail string = 'and@mail.ustc.edu.cn'
+        AuthorEmail string = 'yliu7949@gmail.com'
         AuthorCompany string = 'Hefei Hanhai Quantum Technology Co., Ltd'
         
         MinimumMATLABVersion char = 'R2024a'

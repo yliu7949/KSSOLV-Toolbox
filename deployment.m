@@ -45,17 +45,17 @@ compiler.runtime.download;
 
 % 设置打包属性并生成 KSSOLV Toolbox 的独立应用程序安装包
 packageOpts = compiler.package.InstallerOptions(buildResult);
-packageOpts.ApplicationName = "KSSOLV Toolbox";
-packageOpts.AuthorName = "微光萌生";
-packageOpts.AuthorEmail = "and@mail.ustc.edu.cn";
-packageOpts.AuthorCompany = "微光萌生初创团队";
-packageOpts.Description = "基于 MATLAB 的平面波基组第一性原理计算工具箱。" + newline + "A MATLAB-Based Plane Wave Basis Set First-Principles Calculation Toolbox.";
+packageOpts.ApplicationName = KSSOLV_Toolbox.Name;
+packageOpts.AuthorName = KSSOLV_Toolbox.Author;
+packageOpts.AuthorEmail = KSSOLV_Toolbox.AuthorEmail;
+packageOpts.AuthorCompany = KSSOLV_Toolbox.AuthorCompany;
+packageOpts.Description = "基于 MATLAB 的平面波基组第一性原理计算工具箱。" + newline + KSSOLV_Toolbox.Description;
 packageOpts.InstallerIcon = fullfile(projectRoot, "+kssolv", "+ui", "resources", "icons", "LOGO.png");
 packageOpts.InstallerSplash = fullfile(projectRoot, "+kssolv", "+ui", "resources", "icons", "LOGO.png");
 packageOpts.InstallerName = sprintf('KSSOLV_Toolbox_V%s', KSSOLV_Toolbox.Version);
 packageOpts.OutputDir = fullfile(projectRoot, "StandaloneDesktopApp", "output", "package");
 packageOpts.RuntimeDelivery = runtimeDelivery;
-packageOpts.Summary = "平面波基组，第一性原理计算" + newline + "Plane Wave Basis, First-Principles Calculation";
+packageOpts.Summary = "平面波基组，第一性原理计算" + newline + KSSOLV_Toolbox.Summary;
 packageOpts.Verbose = true;
 packageOpts.Version = KSSOLV_Toolbox.Version;
 compiler.package.installer(buildResult, "Options", packageOpts);
