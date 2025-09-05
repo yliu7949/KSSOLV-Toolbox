@@ -11,7 +11,7 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
 
     methods (Access = protected)
         function this = setup(this)
-            this.module = kssolv.services.workflow.module.ModuleType.Preprocessing;
+            this.module = kssolv.services.workflow.module.ModuleType.Computation;
             this.requiredTaskNames = [];
             this.supportGPU = false;
             this.supportParallel = false;
@@ -20,7 +20,7 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
 
     methods
         function setupOptionsUI(this)
-            this.optionsUI = kssolv.services.workflow.module.preprocessing.RelaxationTaskUI();
+            this.optionsUI = kssolv.services.workflow.module.computation.RelaxationTaskUI();
         end
 
         function output = executeTask(this, ~, input)
