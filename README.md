@@ -1,92 +1,37 @@
-# kssolv-gui
+# KSSOLV Toolbox
+KSSOLV Toolbox 是一个使用 MATLAB 语言开发的第一性原理计算工具箱。该工具箱以 **KSSOLV (Kohn-Sham Solver)** 作为计算内核，基于 MATLAB AppContainer 框架构建了直观完整的图形用户界面（GUI），旨在简化使用 KSSOLV 软件包进行 Kohn-Sham 密度泛函理论（DFT）的计算。KSSOLV Toolbox 工具箱避免了繁琐的手动脚本编写，支持自动化工作流，并集成了大语言模型（LLM）能力，能够降低使用门槛并提高研究人员的使用效率。
 
+![KSSOLV Toolbox GUI](./assets/KSSOLV Toolbox GUI.png)
 
+## 主要特性
 
-## Getting started
+KSSOLV Toolbox 采用模块化的设计： 
 
-To make it easy for you to get started with GitLab, here's a list of recommended next steps.
+* **预处理模块**: 用于导入和可视化晶体结构。 
+* **计算模块**: 执行自洽场（SCF）计算、非自洽场（Non-SCF）计算等相关任务。 
+* **后处理模块**: 用于计算多种物理性质，例如：    
+  * 电子能带结构 (Electronic Band Structures) 
+  * 费米面 (Fermi Surfaces) 
+* **绘图模块**: 提供大量内置绘图模板，方便快速生成出版质量的图表。
 
-Already a pro? Just edit this README.md and make it your own. Want to make it easy? [Use the template at the bottom](#editing-this-readme)!
+## 安装
 
-## Add your files
+1. 在 Windows、Mac 和 Linux 上的 MATLAB Desktop 中使用：
+   - 下载 `KSSOLV_Toolbox.mltbx` 文件，双击该文件即可完成安装。
+   - 安装完成后可以在 MATLAB 的 Add-Ons 插件浏览器中查看和管理 KSSOLV Toolbox。
+2. 在 Windows、Mac 和 Linux 上，作为独立应用程序安装：
+   - 下载独立应用程序版本的安装程序文件（体积约 1GB 左右）。
+   - 运行安装程序，选择安装目标位置和 MATLAB Runtime 的安装位置，点击“开始安装”按钮后等待安装完成。
 
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
+## 使用文档
 
-```
-cd existing_repo
-git remote add origin http://123.60.149.21/ustc/kssolv-gui.git
-git branch -M main
-git push -uf origin main
-```
+请参考 [KSSOLV Toolbox 简明用户手册](https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd)。
 
-## Integrate with your tools
+## 贡献指南
 
-- [ ] [Set up project integrations](http://123.60.149.21/ustc/kssolv-gui/-/settings/integrations)
+**🎯** 欢迎提交 **Issues** 和 **PR**！
 
-## Collaborate with your team
+- **新功能？** 请先在 Issue 中详细说明需求，讨论确认后再提交代码。
+- **修复 Bug？** 可以直接提交 PR，请附上问题描述和修复方案。
 
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Set auto-merge](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-# Editing this README
-
-When you're ready to make this README your own, just edit this file and use the handy template below (or feel free to structure it however you want - this is just a starting point!). Thank you to [makeareadme.com](https://www.makeareadme.com/) for this template.
-
-## Suggestions for a good README
-Every project is different, so consider which of these sections apply to yours. The sections used in the template are suggestions for most open source projects. Also keep in mind that while a README can be too long and detailed, too long is better than too short. If you think your README is too long, consider utilizing another form of documentation rather than cutting out information.
-
-## Name
-Choose a self-explaining name for your project.
-
-## Description
-Let people know what your project can do specifically. Provide context and add a link to any reference visitors might be unfamiliar with. A list of Features or a Background subsection can also be added here. If there are alternatives to your project, this is a good place to list differentiating factors.
-
-## Badges
-On some READMEs, you may see small images that convey metadata, such as whether or not all the tests are passing for the project. You can use Shields to add some to your README. Many services also have instructions for adding a badge.
-
-## Visuals
-Depending on what you are making, it can be a good idea to include screenshots or even a video (you'll frequently see GIFs rather than actual videos). Tools like ttygif can help, but check out Asciinema for a more sophisticated method.
-
-## Installation
-Within a particular ecosystem, there may be a common way of installing things, such as using Yarn, NuGet, or Homebrew. However, consider the possibility that whoever is reading your README is a novice and would like more guidance. Listing specific steps helps remove ambiguity and gets people to using your project as quickly as possible. If it only runs in a specific context like a particular programming language version or operating system or has dependencies that have to be installed manually, also add a Requirements subsection.
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
-
-## Contributing
-State if you are open to contributions and what your requirements are for accepting them.
-
-For people who want to make changes to your project, it's helpful to have some documentation on how to get started. Perhaps there is a script that they should run or some environment variables that they need to set. Make these steps explicit. These instructions could also be useful to your future self.
-
-You can also document commands to lint the code or run tests. These steps help to ensure high code quality and reduce the likelihood that the changes inadvertently break something. Having instructions for running tests is especially helpful if it requires external setup, such as starting a Selenium server for testing in a browser.
-
-## Authors and acknowledgment
-Show your appreciation to those who have contributed to the project.
-
-## License
-For open source projects, say how it is licensed.
-
-## Project status
-If you have run out of energy or time for your project, put a note at the top of the README saying that development has slowed down or stopped completely. Someone may choose to fork your project or volunteer to step in as a maintainer or owner, allowing your project to keep going. You can also make an explicit request for maintainers.
+本项目采用 **BSD 3-Clause** 许可证，你的贡献将被视为接受该协议。感谢你的支持！🌟
