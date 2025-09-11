@@ -5,14 +5,15 @@ classdef TDDFTTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'TDDFT';
-        DESCRIPTION = 'TDDFT computation';
+        TASK_NAME = 'TDDFT'
+        IDENTIFIER = 'TDDFTTask'
+        DESCRIPTION = 'TDDFT computation'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Computation;
-            this.requiredTaskNames = 'SCF';
+            this.requiredTasks = 'BuildMoleculeTask';
             this.supportGPU = true;
             this.supportParallel = false;
         end
@@ -33,6 +34,7 @@ classdef TDDFTTask < kssolv.services.workflow.module.AbstractTask
                 input.H, input.X, namedargs2cell(taskOptions));
             [Et, Z] = tddft_casida_direct(TDDFTOptions, input.molecule);
 
+            output = input;
             output.TDDFT.Et = Et;
             output.TDDFT.Z = Z;
         end

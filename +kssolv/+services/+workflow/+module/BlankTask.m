@@ -5,8 +5,9 @@ classdef BlankTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = '';
-        DESCRIPTION = '';
+        TASK_NAME = ''
+        IDENTIFIER = 'BlankTask'
+        DESCRIPTION = ''
     end
 
     methods (Access = protected)

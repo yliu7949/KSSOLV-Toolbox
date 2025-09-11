@@ -5,14 +5,15 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'SCF';
-        DESCRIPTION = 'SCF computation';
+        TASK_NAME = 'SCF'
+        IDENTIFIER = 'SCFTask'
+        DESCRIPTION = 'SCF computation'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Computation;
-            this.requiredTaskNames = 'BuildMolecule';
+            this.requiredTasks = 'BuildMoleculeTask';
             this.supportGPU = true;
             this.supportParallel = true;
         end
@@ -37,6 +38,8 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
             end
 
             [molecule, H, X, info] = scf(input.molecule, SCFOptions);
+
+            output = input;
             output.molecule = molecule;
             output.H = H;
             output.X = X;

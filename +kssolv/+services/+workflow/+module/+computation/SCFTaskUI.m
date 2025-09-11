@@ -36,7 +36,7 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             g1.ColumnWidth = {120, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
 
-            % 对角化方法
+            % eigmethod - 对角化方法
             eigMethodLabelTooltip = 'Iterative diagonalization method';
             eigMethodLabel = uilabel(g1);
             eigMethodLabel.HorizontalAlignment = 'right';
@@ -49,7 +49,7 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.eigMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.eigMethodValueDropdown.Tooltip = eigMethodLabelTooltip;
 
-            % 最大迭代步数
+            % maxscfiter - 最大迭代步数
             maxSCFIterationLabelTooltip = 'Max SCF iteration steps';
             maxSCFIterationLabel = uilabel(g1);
             maxSCFIterationLabel.HorizontalAlignment = 'right';
@@ -61,7 +61,7 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.maxSCFIterationValueSpinner.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.maxSCFIterationValueSpinner.Tooltip = maxSCFIterationLabelTooltip;
 
-            % 是否计算力
+            % force - 是否计算力
             this.widgets.forceComputeCheckbox = uicheckbox(g1);
             this.widgets.forceComputeCheckbox.Layout.Row = 3;
             this.widgets.forceComputeCheckbox.Layout.Column = 2;
@@ -80,7 +80,7 @@ classdef SCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             g2.ColumnWidth = {120, '1x'};
             g2.RowHeight = {'fit'};
 
-            % 计算杂化泛函的方法
+            % exxmethod - 计算杂化泛函的方法
             exxMethodLabelTooltip = 'Method to calculate hybrid functional';
             exxMethodLabel = uilabel(g2);
             exxMethodLabel.HorizontalAlignment = 'right';

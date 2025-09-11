@@ -36,7 +36,7 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             g1.ColumnWidth = {120, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
 
-            % 结构优化方法
+            % relaxmethod - 结构优化方法
             relaxationMethodLabelTooltip = 'Relaxation method';
             relaxationMethodLabel = uilabel(g1);
             relaxationMethodLabel.HorizontalAlignment = 'right';
@@ -49,7 +49,7 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.relaxationMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.relaxationMethodValueDropdown.Tooltip = relaxationMethodLabelTooltip;
 
-            % 结构优化收敛阈值编辑框
+            % relaxtol - 结构优化收敛阈值编辑框
             relaxationToleranceTooltip = 'Set relaxation tolerance';
             relaxationToleranceLabel = uilabel(g1);
             relaxationToleranceLabel.Layout.Row = 2;
@@ -65,7 +65,7 @@ classdef RelaxationTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.relaxationToleranceEditField.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.relaxationToleranceEditField.Tooltip = relaxationToleranceTooltip;
 
-            % 结构优化最大步数数值输入框（默认值 100）
+            % maxrelaxiter - 结构优化最大步数数值输入框（默认值 100）
             maxRelaxationIterationsTooltip = 'Set maximum relaxation iterations';
             maxRelaxationIterationsLabel = uilabel(g1);
             maxRelaxationIterationsLabel.Layout.Row = 3;

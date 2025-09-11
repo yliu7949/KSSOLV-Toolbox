@@ -5,14 +5,15 @@ classdef NSCFTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'NSCF';
-        DESCRIPTION = 'NSCF computation';
+        TASK_NAME = 'NSCF'
+        IDENTIFIER = 'NSCFTask'
+        DESCRIPTION = 'NSCF computation'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Computation;
-            this.requiredTaskNames = [];
+            this.requiredTasks = [];
             this.supportGPU = true;
             this.supportParallel = false;
         end
@@ -23,7 +24,7 @@ classdef NSCFTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.NSCFTaskUI();
         end
 
-        function output = executeTask(this, ~, ~)
+        function output = executeTask(this, ~, input)
             if isempty(this.optionsUI)
                 return
             end
@@ -36,6 +37,7 @@ classdef NSCFTask < kssolv.services.workflow.module.AbstractTask
                 NSCFOptions.(fieldName) = taskOptions.(fieldName);
             end
 
+            output = input;
             output.NSCFOptions = NSCFOptions;
         end
     end

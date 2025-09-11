@@ -49,7 +49,7 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.g1.ColumnWidth = {100, '1x'};
             this.widgets.g1.RowHeight = {20, 'fit', 'fit', 'fit', 'fit', 'fit', 'fit'};
 
-            % Molecule/Crystal 选项按钮标题
+            % type - Molecule/Crystal 选项
             buttonGroupLayout = uigridlayout(this.widgets.g1);
             buttonGroupLayout.BackgroundColor = 'white';
             buttonGroupLayout.Padding = 0;
@@ -66,7 +66,6 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             structureTypeLabel.Layout.Row = 1;
             structureTypeLabel.Layout.Column = 1;
 
-            % Molecule/Crystal 选项按钮
             this.widgets.buttonGroup = uibuttongroup(buttonGroupLayout);
             this.widgets.buttonGroup.Layout.Row = 1;
             this.widgets.buttonGroup.Layout.Column = 2;
@@ -98,11 +97,12 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.structureListbox.Layout.Row = 3;
             this.widgets.structureListbox.Layout.Column = [1 2];
             importedStructures = kssolv.services.filemanager.Structure.getAllImportedStructures();
-            this.widgets.structureListbox.Items = cellfun(@(cell) cell.name, importedStructures, 'UniformOutput', false);
-            if ~isempty(this.widgets.structureListbox.Items) && isfield(options, 'structures')
+            this.widgets.structureListbox.Items = cellfun(@(cell) cell.node.label, importedStructures, 'UniformOutput', true);
+            this.widgets.structureListbox.ItemsData = cellfun(@(cell) cell.node.name, importedStructures, 'UniformOutput', false);
+            if ~isempty(this.widgets.structureListbox.ItemsData) && isfield(options, 'structures')
                 selectedItems = cell(1, length(options.structures));
                 for i = 1:length(options.structures)
-                    selectedItems{1, i} = options.structures(i).name;
+                    selectedItems{1, i} = options.structures(i).node.name;
                 end
                 this.widgets.structureListbox.Value = selectedItems;
             end
@@ -386,7 +386,10 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             project = kssolv.ui.util.DataStorage.getData('Project');
             for i = 1:length(this.widgets.structureListbox.Value)
                 structureItem = project.findChildrenItem(this.widgets.structureListbox.Value{i});
-                this.privateOptions.structures = [this.privateOptions.structures, structureItem.data.KSSOLVSetupObject];
+                temp = structureItem.data.KSSOLVSetupObject;
+                temp.node.label = structureItem.label;
+                temp.node.name = structureItem.name;
+                this.privateOptions.structures = [this.privateOptions.structures, temp];
             end
 
             this.privateOptions.pseudopotentialPpType = this.widgets.ppTypeEditField.Value;

@@ -36,7 +36,7 @@ classdef NSCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             g1.ColumnWidth = {120, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
 
-            % 对角化方法
+            % eigmethod - 对角化方法
             eigMethodLabelTooltip = 'Iterative diagonalization method';
             eigMethodLabel = uilabel(g1);
             eigMethodLabel.HorizontalAlignment = 'right';
@@ -49,7 +49,7 @@ classdef NSCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.eigMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.eigMethodValueDropdown.Tooltip = eigMethodLabelTooltip;
 
-            % 最大 CG 迭代步数
+            % maxcgiter - 最大 CG 迭代步数
             maxCGIterationLabelTooltip = 'Maximum LOBPCG iterations';
             maxCGIterationLabel = uilabel(g1);
             maxCGIterationLabel.HorizontalAlignment = 'right';
@@ -61,7 +61,7 @@ classdef NSCFTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.maxCGIterationValueSpinner.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.maxCGIterationValueSpinner.Tooltip = maxCGIterationLabelTooltip;
 
-            % 最大 NSCF 迭代步数
+            % maxphiiter - 最大 NSCF 迭代步数
             maxPHIIterationLabelTooltip = 'Maximum NSCF iterations';
             maxPHIIterationLabel = uilabel(g1);
             maxPHIIterationLabel.HorizontalAlignment = 'right';

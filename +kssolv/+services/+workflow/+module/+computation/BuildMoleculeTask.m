@@ -5,14 +5,15 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'Build Molecule';
-        DESCRIPTION = 'Build Molecule/Crystal object of KSSOLV';
+        TASK_NAME = 'Build Molecule'
+        IDENTIFIER = 'BuildMoleculeTask'
+        DESCRIPTION = 'Build Molecule/Crystal object of KSSOLV'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Computation;
-            this.requiredTaskNames = [];
+            this.requiredTasks = [];
             this.supportGPU = false;
             this.supportParallel = false;
         end
@@ -23,7 +24,7 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.BuildMoleculeTaskUI();
         end
 
-        function output = executeTask(this, ~, ~)
+        function output = executeTask(this, ~, input)
             if isempty(this.optionsUI)
                 return
             end
@@ -58,6 +59,7 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
             end
 
             % 输出到 output
+            output = input;
             output.molecule = molecule;
         end
     end

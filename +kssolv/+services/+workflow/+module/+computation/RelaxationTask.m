@@ -5,14 +5,15 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'Geometry Optimization';
-        DESCRIPTION = 'Optimize the structure information of Molecule/Crystal object of KSSOLV';
+        TASK_NAME = 'Geometry Optimization'
+        IDENTIFIER = 'RelaxationTask'
+        DESCRIPTION = 'Optimize the structure information of Molecule/Crystal object of KSSOLV'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Computation;
-            this.requiredTaskNames = [];
+            this.requiredTasks = 'BuildMoleculeTask';
             this.supportGPU = false;
             this.supportParallel = false;
         end
@@ -38,6 +39,7 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
 
             [molecule, H, X, info] = geometryoptimization.relaxatoms(input.molecule, relaxOptions);
 
+            output = input;
             output.molecule = molecule;
             output.H = H;
             output.X = X;

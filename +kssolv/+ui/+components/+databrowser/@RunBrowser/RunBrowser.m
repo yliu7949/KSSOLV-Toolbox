@@ -44,7 +44,7 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             currentTime = datetime('now', 'Format', 'yyyy-MM-dd HH:mm:ss', 'TimeZone', 'Asia/Shanghai');
             outputTextArea = this.Widgets.OutputTextPanel.OutputTextArea;
             outputTextArea.HorizontalAlignment = 'left';
-            
+
             if this.hasOutputToDisplay
                 outputTextArea.Value = [outputTextArea.Value; ' '; char(currentTime)];
             else
@@ -52,6 +52,16 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                 outputTextArea.FontColor = 'black';
                 this.hasOutputToDisplay = true;
             end
+        end
+
+        function restoreButtons(this)
+            %RESTOREBUTTONS 恢复运行按钮和停止按钮至默认状态
+            homeTab = kssolv.ui.util.DataStorage.getData('HomeTab');
+            homeTab.Widgets.RunningSection.RunningRunButton.Enabled = true;
+            homeTab.Widgets.RunningSection.RunningStopButton.Enabled = false;
+
+            this.Widgets.ButtonPanel.RunButton.Enable = true;
+            this.Widgets.ButtonPanel.StopButton.Enable = false;
         end
     end
 
@@ -153,19 +163,11 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             workflow = workflowRoot.children{1};
             kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
 
-            homeTab.Widgets.RunningSection.RunningRunButton.Enabled = true;
-            homeTab.Widgets.RunningSection.RunningStopButton.Enabled = false;
-            this.Widgets.ButtonPanel.RunButton.Enable = true;
-            this.Widgets.ButtonPanel.StopButton.Enable = false;
+            this.restoreButtons();
         end
 
         function callbackStopButton(this, ~, ~)
-            homeTab = kssolv.ui.util.DataStorage.getData('HomeTab');
-            homeTab.Widgets.RunningSection.RunningRunButton.Enabled = true;
-            homeTab.Widgets.RunningSection.RunningStopButton.Enabled = false;
-
-            this.Widgets.ButtonPanel.RunButton.Enable = true;
-            this.Widgets.ButtonPanel.StopButton.Enable = false;
+            this.restoreButtons();
         end
 
         function callbackClearButton(this, ~, ~)

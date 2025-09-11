@@ -33,7 +33,6 @@ classPath = classNames{taskIndex};
 try
     % 动态实例化类
     taskInstance = feval(classPath);
-
 catch ME
     % 如果类不存在或实例化失败，抛出错误
     error('Unable to instantiate class "%s": %s', classPath, ME.message);

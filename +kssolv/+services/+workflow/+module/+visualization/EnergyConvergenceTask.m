@@ -5,14 +5,15 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
-        TASK_NAME = 'Energy Curve';
-        DESCRIPTION = 'Plot showing SCF energy convergence over iterations';
+        TASK_NAME = 'Energy Curve'
+        IDENTIFIER = 'EnergyConvergenceTask'
+        DESCRIPTION = 'Plot showing SCF energy convergence over iterations'
     end
 
     methods (Access = protected)
         function this = setup(this)
             this.module = kssolv.services.workflow.module.ModuleType.Visualization;
-            this.requiredTaskNames = 'SCF';
+            this.requiredTasks = 'SCFTask';
             this.supportGPU = false;
             this.supportParallel = false;
         end
@@ -25,9 +26,12 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
         end
 
         function output = executeTask(~, ~, input)
-            output = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', input.info.Etotvec, 'SCFError', input.info.SCFerrvec);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(output);
+            energyConvergencePlot = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', input.info.Etotvec, 'SCFError', input.info.SCFerrvec);
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyConvergencePlot);
             dataPlot.Display('EnergyConvergence');
+
+            output = input;
+            output.plot.EnergyConvergencePlot = energyConvergencePlot;
         end
     end
 end

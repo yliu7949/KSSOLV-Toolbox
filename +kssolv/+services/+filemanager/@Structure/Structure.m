@@ -105,7 +105,10 @@ classdef Structure < kssolv.services.filemanager.AbstractItem
             structureItem = project.findChildrenItem('Structure');
             importedStructures = cell(size(structureItem.children, 1), 1);
             for i = 1:size(structureItem.children, 1)
-                importedStructures{i, 1} = structureItem.children{i}.data.KSSOLVSetupObject;
+                temp = structureItem.children{i}.data.KSSOLVSetupObject;
+                temp.node.label = structureItem.children{i}.label;
+                temp.node.name = structureItem.children{i}.name;
+                importedStructures{i, 1} = temp;
             end
         end
     end

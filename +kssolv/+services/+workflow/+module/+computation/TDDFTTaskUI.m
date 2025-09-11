@@ -36,7 +36,7 @@ classdef TDDFTTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             g1.ColumnWidth = {120, '1x'};
             g1.RowHeight = {'fit', 'fit', 'fit'};
 
-            % TDDFT 计算方法
+            % method - TDDFT 计算方法
             TDDFTMethodLabelTooltip = 'TDDFT calculation method';
             TDDFTMethodLabel = uilabel(g1);
             TDDFTMethodLabel.HorizontalAlignment = 'right';
@@ -48,7 +48,7 @@ classdef TDDFTTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.TDDFTMethodValueDropdown.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.TDDFTMethodValueDropdown.Tooltip = TDDFTMethodLabelTooltip;
 
-            % 对角化方法
+            % diag - 对角化方法
             diagMethodLabelTooltip = 'Diagonalization method';
             diagMethodLabel = uilabel(g1);
             diagMethodLabel.HorizontalAlignment = 'right';
@@ -119,7 +119,7 @@ classdef TDDFTTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.nrootsSpinner.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.nrootsSpinner.Tooltip = nrootsTooltip;
 
-            % 是否使用 Tamm–Dancoff approximation (TDA)
+            % istda - 是否使用 Tamm–Dancoff approximation (TDA)
             this.widgets.TDACheckbox = uicheckbox(g2);
             this.widgets.TDACheckbox.Layout.Row = 4;
             this.widgets.TDACheckbox.Layout.Column = 2;
@@ -128,7 +128,7 @@ classdef TDDFTTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.TDACheckbox.Value = options.istda;
             this.widgets.TDACheckbox.ValueChangedFcn = @(src, event) this.markDirty();
 
-            % 是否使用 independent-particle approximation (IPA)
+            % isipa - 是否使用 independent-particle approximation (IPA)
             this.widgets.IPACheckbox = uicheckbox(g2);
             this.widgets.IPACheckbox.Layout.Row = 5;
             this.widgets.IPACheckbox.Layout.Column = 2;
@@ -137,7 +137,7 @@ classdef TDDFTTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.IPACheckbox.Value = options.isipa;
             this.widgets.IPACheckbox.ValueChangedFcn = @(src, event) this.markDirty();
 
-            % 是否使用 random-phase approximation (RPA)
+            % isrpa - 是否使用 random-phase approximation (RPA)
             this.widgets.RPACheckbox = uicheckbox(g2);
             this.widgets.RPACheckbox.Layout.Row = 6;
             this.widgets.RPACheckbox.Layout.Column = 2;

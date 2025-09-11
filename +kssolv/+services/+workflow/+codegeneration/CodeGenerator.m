@@ -1,5 +1,5 @@
 classdef CodeGenerator < handle
-    %CODEGENERATOR 用于执行工作流中节点任务的代码生成器类
+    %CODEGENERATOR 分析工作流并运行所有节点对应的任务
 
     %   开发者：杨柳
     %   版权 2024-2025 合肥瀚海量子科技有限公司
@@ -53,7 +53,9 @@ classdef CodeGenerator < handle
                     try
                         output = node.task.executeTask(context, input);
                     catch ME
-                        changeNodeStatus(nodeID, 'error');
+                        changeNodeStatus(nodeID, 'failed');
+                        runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
+                        runBrowser.restoreButtons();
                         throw(ME);
                     end
                     changeNodeStatus(nodeID, 'success');

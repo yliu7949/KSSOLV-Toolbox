@@ -383,7 +383,7 @@ classdef HomeTab < handle
             if ksFile == ""
                 % ksFile 为空说明当前未打开某个 .ks 文件，需要选择保存为 .ks 文件的路径
                 [file,location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
-                    message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled.ks');
+                    message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled');
                 if isequal(file, 0) || isequal(location, 0)
                     % 用户点击了"取消"按钮
                     return
