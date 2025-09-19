@@ -56,7 +56,7 @@ classdef CodeGenerator < handle
                         changeNodeStatus(nodeID, 'failed');
                         runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
                         runBrowser.restoreButtons();
-                        throw(ME);
+                        throwAsCaller(ME);
                     end
                     changeNodeStatus(nodeID, 'success');
 
