@@ -25,10 +25,6 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 将该 Browser 放在界面右侧
             this.Panel.Region = "bottom";
 
-            % 构造对话机器人
-            this.ChatBot = kssolv.services.llm.chatBot("o3-mini", '', ...
-                    @(tokens) this.addChat(tokens));
-
             % 初始化命令行变量工作空间
             if ~isMATLABReleaseOlderThan('R2025a', "release")
                 this.Workspace = matlab.lang.Workspace;
@@ -147,11 +143,18 @@ classdef CommandWindow < matlab.ui.internal.databrowser.AbstractDataBrowser
             import kssolv.ui.util.Localizer.*
 
             userPrompt = event.HTMLEventData;
-            if ~isempty(this.ChatBot)
-                this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
-            else
+
+            try
+                if isempty(this.ChatBot)
+                    % 若未初始化对话机器人，则创建对话机器人
+                    this.ChatBot = kssolv.services.llm.chatBot('', '', ...
+                        @(tokens) this.addChat(tokens));
+                end
+            catch ME
                 this.addChat(message('KSSOLV:toolbox:LLMServiceInitializationFailed'));
             end
+
+            this.ChatBot.chat(userPrompt.prompt, userPrompt.useHistory);
         end
 
         function callbackEventSent(~, ~, event)

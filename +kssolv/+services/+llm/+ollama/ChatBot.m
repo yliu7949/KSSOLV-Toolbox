@@ -22,11 +22,6 @@ classdef ChatBot < kssolv.services.llm.internal.AbstractChatBot
 
     methods (Access = protected)
         function buildChatBot(this)
-            if isempty(this.modelCapabilities)
-                modelInfo = webwrite("http://localhost:11434/api/show", struct("name", this.modelName));
-                this.modelCapabilities = modelInfo.capabilities;
-            end
-
             if ismember('tools', this.modelCapabilities)
                 this.systemPrompt = strcat(this.systemPrompt, ...
                     "Always respond to the user, even if the tool's return result is blank.");

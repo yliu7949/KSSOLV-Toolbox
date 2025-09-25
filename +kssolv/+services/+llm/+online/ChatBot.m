@@ -11,7 +11,7 @@ classdef ChatBot < kssolv.services.llm.internal.AbstractChatBot
         function this = ChatBot(modelName, systemPrompt, streamFunction)
             %CHATBOT 构造函数，构造对话机器人对象
             arguments
-                modelName (1, 1) string = "o3-mini"
+                modelName (1, 1) string = "gpt-5-mini"
                 systemPrompt (1, 1) string = ""
                 streamFunction (1, 1) function_handle = @(token) fprintf("%s\n", token)
             end
@@ -23,8 +23,6 @@ classdef ChatBot < kssolv.services.llm.internal.AbstractChatBot
     methods (Access = protected)
         function buildChatBot(this)
             if ismember('tools', this.modelCapabilities)
-                this.systemPrompt = strcat(this.systemPrompt, ...
-                    "Always respond to the user, even if the tool's return result is blank.");
                 this.bot = openAIChat(this.systemPrompt, ModelName=this.modelName, Temperature=0.6, ...
                     StreamFun=this.streamFunction, Tools=this.toolsList);
             else

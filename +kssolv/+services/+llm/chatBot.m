@@ -1,12 +1,17 @@
 function bot = chatBot(modelName, systemPrompt, streamFunction)
 %CHATBOT 构造对话机器人对象
 arguments
-    modelName (1, 1) string = "o3-mini"
+    modelName (1, 1) string
     systemPrompt (1, 1) string = ""
     streamFunction (1, 1) function_handle = @(token) fprintf("%s\n", token)
 end
 
 if ~isempty(getenv("OPENAI_PROXY_URL")) && ~isempty(getenv("OPENAI_API_KEY"))
+    if strlength(modelName) == 0 && ~isempty(getenv("OPENAI_MODEL_LIST"))
+        availableModels = llms.openai.models;
+        modelName = availableModels{1, 1};
+    end
+
     try
         bot = kssolv.services.llm.online.ChatBot(modelName, systemPrompt, streamFunction);
     catch exception
