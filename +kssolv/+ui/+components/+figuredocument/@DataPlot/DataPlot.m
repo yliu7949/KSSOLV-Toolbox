@@ -73,7 +73,7 @@ classdef DataPlot < handle
             if ~isempty(this.figure)
                 if isa(this.figure, 'matlab.ui.Figure')
                     ax = findobj(this.figure, 'Type', 'Axes');
-                    ax.Parent = g;
+                    set(ax, 'Parent', g);
                 else
                     ax = this.figure.getAxesObject();
                     ax.Parent = g;
