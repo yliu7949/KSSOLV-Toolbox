@@ -61,8 +61,11 @@ classdef HomeTab < handle
                 'ButtonPushed', @(src, data) callbackProjectWorkflowButton(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(1), ...
                 'ItemPushed', @(src, data) callbackNewBlankWorkflow(this));
-            addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(2), ...
-                'ItemPushed', @(src, data) callbackImportTemplateWorkflow(this));
+            addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(3), ...
+                'ItemPushed', @(src, data) callbackImportWorkflowFromFile(this));
+            addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(4), ...
+                'ItemPushed', @(src, data) callbackExportWorkflow(this));
+
             addlistener(this.Widgets.ProjectSection.ProjectVariableButton, ...
                 'ButtonPushed', @(src, data) callbackProjectVariableButton(this));
             % Running Section
@@ -169,8 +172,9 @@ classdef HomeTab < handle
 
             ProjectWorkflowButtonPopup = PopupList();
             NewWorkflowListItem = CreateListItem('default', 'NewWorkflow', section.Tag, 0, 'add_class');
-            ImportTemplateWorkflowListItem = CreateListItem('default', 'ImportTemplateWorkflow', section.Tag, 0, 'add_artifactGraph');
-            ExportTemplateWorkflowListItem = CreateListItem('default', 'ExportTemplateWorkflow', section.Tag, 0, 'save_sourceControlChanges');
+            ImportTemplateWorkflowListItem = this.createTemplateWorkflowMenu(section.Tag);
+            ImportWorkflowFromFileListItem = CreateListItem('default', 'ImportWorkflowFromFile', section.Tag, 0, 'new_artifactGraph');
+            ExportWorkflowListItem = CreateListItem('default', 'ExportWorkflow', section.Tag, 0, 'documentArtifactGraph');
 
             ProjectVariableButtonPopup = PopupList();
             NewVariableListItem = CreateListItem('default', 'NewVariable', section.Tag, 0, 'new_sectionHighlighted');
@@ -183,7 +187,8 @@ classdef HomeTab < handle
             ProjectStructureButtonPopup.add(ImportStructureFromMatlabListItem);
             ProjectWorkflowButtonPopup.add(NewWorkflowListItem);
             ProjectWorkflowButtonPopup.add(ImportTemplateWorkflowListItem);
-            ProjectWorkflowButtonPopup.add(ExportTemplateWorkflowListItem);
+            ProjectWorkflowButtonPopup.add(ImportWorkflowFromFileListItem);
+            ProjectWorkflowButtonPopup.add(ExportWorkflowListItem);
             ProjectVariableButtonPopup.add(NewVariableListItem);
             ProjectVariableButtonPopup.add(ImportVariableFromFileListItem);
             ProjectVariableButtonPopup.add(ImportVariableFromMATLABListItem);
@@ -350,6 +355,34 @@ classdef HomeTab < handle
                 'ResourceSupportButton', ResourceSupportButton);
         end
 
+        %% 私有函数
+        function importTemplateWorkflowListItem = createTemplateWorkflowMenu(~, sectionTag)
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.CreateListItem
+
+            popup = PopupList();
+            importTemplateWorkflowListItem = CreateListItem('popup', 'ImportTemplateWorkflow', sectionTag, 0, 'add_artifactGraph');
+
+            workflowTemplateDirectory = fullfile(KSSOLV_Toolbox.UIResourcesDirectory, 'workflows');
+            workflowFiles = dir(fullfile(workflowTemplateDirectory, '*.wf'));
+            for i = 1:length(workflowFiles)
+                currentFilename = workflowFiles(i).name;
+                currentFilePath = fullfile(workflowFiles(i).folder, currentFilename);
+                [~, name, ~] = fileparts(currentFilename);
+
+                % 动态创建 ListItem，并添加到 popup 中
+                templateItem = ListItem(name, 'artifactGraph');
+                templateItem.Tag = [sectionTag '_' erase(name, ' ')];
+                popup.add(templateItem);
+
+                % 添加回调函数
+                addlistener(templateItem, ...
+                'ItemPushed', @(src, data) kssolv.ui.components.figuredocument.Workflow.loadWfFile(currentFilePath));
+            end
+
+            importTemplateWorkflowListItem.Popup = popup;
+        end
+
         %% 回调函数
         function callbackFileProjectButton(~, ~, ~)
             import kssolv.ui.util.Localizer.*
@@ -510,10 +543,47 @@ classdef HomeTab < handle
             end
         end
 
-        function callbackImportTemplateWorkflow(~, ~, ~)
-            import kssolv.ui.components.dialog.BuildWorkflowFromTemplate
-            import kssolv.ui.util.DataStorage
-            BuildWorkflowFromTemplate().show(DataStorage.getData('AppContainer'));
+        function callbackImportWorkflowFromFile(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+
+            % 打开文件选取对话框
+            [file, path] = uigetfile({'*.wf', 'KSSOLV Workflow Files (*.wf)'}, ...
+                message('KSSOLV:dialogs:OpenWFFileTitle'), 'MultiSelect', 'off');
+            if isequal(file, 0)
+                % 用户点击了"取消"按钮
+                return
+            end
+            kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
+
+            % 加载到当前 Project 中
+            wfFile = fullfile(path, file);
+            kssolv.ui.components.figuredocument.Workflow.loadWfFile(wfFile);
+        end
+
+        function callbackExportWorkflow(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+            
+            currentWorkflowDocument = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
+            if isempty(currentWorkflowDocument)
+                return
+            end
+
+            % 根据 tag 查找对应的 Workflow item
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            workflow = project.findChildrenItem(currentWorkflowDocument.Tag);
+
+            % 选择保存为 .wf 文件的路径
+            [file,location] = uiputfile({'*.wf', 'KSSOLV Workflow Files (*.wf)'}, ...
+                message('KSSOLV:dialogs:SaveWFFileTitle'), 'untitled');
+            if isequal(file, 0) || isequal(location, 0)
+                % 用户点击了"取消"按钮
+                return
+            else
+                % 用户选择了具体的文件路径
+                wfFile = fullfile(location, file);
+                workflow.saveToWfFile(wfFile);
+            end
+            kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
         end
 
         function callbackProjectVariableButton(~, ~, ~)

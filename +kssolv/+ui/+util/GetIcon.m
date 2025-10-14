@@ -14,6 +14,4 @@ arguments
     iconName {mustBeNonempty}
 end
 
-iconPath = fullfile(fileparts(fileparts(mfilename('fullpath'))), ...
-    ['resources/icons/', iconName]);
-
+iconPath = fullfile(KSSOLV_Toolbox.UIResourcesDirectory, 'icons', iconName);

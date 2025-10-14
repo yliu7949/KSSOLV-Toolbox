@@ -22,4 +22,8 @@ classdef KSSOLV_Toolbox
         Description string = "A MATLAB-Based Plane Wave Basis Set First-Principles Calculation Toolbox."
         Summary string = "Plane Wave Basis, First-Principles Calculation"
     end
+
+    properties (Constant, Hidden)
+        UIResourcesDirectory char = fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+ui', 'resources')
+    end
 end

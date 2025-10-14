@@ -32,8 +32,9 @@
         <entry key="ProjectWorkflowButtonLabel">工作流</entry>
         <entry key="ProjectWorkflowButtonTooltip">编辑工作流</entry>
         <entry key="NewWorkflowListItemLabel">新建空白工作流</entry>
-        <entry key="ImportTemplateWorkflowListItemLabel">从模板建立工作流...</entry>
-        <entry key="ExportTemplateWorkflowListItemLabel">将工作流保存为模板...</entry>
+        <entry key="ImportTemplateWorkflowListItemLabel">从模板建立工作流</entry>
+        <entry key="ImportWorkflowFromFileListItemLabel">从文件导入工作流...</entry>
+        <entry key="ExportWorkflowListItemLabel">保存工作流...</entry>
         <entry key="ProjectVariableButtonLabel">变量</entry>
         <entry key="ProjectVariableButtonTooltip">编辑变量</entry>
         <entry key="NewVariableListItemLabel">新建变量...</entry>

@@ -19,7 +19,7 @@
         <entry key="AppCanCloseCancel">Cancel</entry>
 
         <!-- HomeTab: callbackFileProjectButton -->
-        <entry key="OpenKSFileTitle">Open KSSOLV file</entry>
+        <entry key="OpenKSFileTitle">Open KSSOLV Project file</entry>
 
         <!-- HomeTab: callbackFileSaveButton, callbackFileCloseButton -->
         <entry key="SaveKSFileTitle">Select File for Save As</entry>
@@ -30,6 +30,12 @@
         <entry key="ProjectCanCloseSave">Save</entry>
         <entry key="ProjectCanCloseDoNotSave">Don't Save</entry>
         <entry key="ProjectCanCloseCancel">Cancel</entry>
+
+        <!-- HomeTab: callbackImportWorkflowFromFile -->
+        <entry key="OpenWFFileTitle">Open KSSOLV Workflow file</entry>
+
+        <!-- HomeTab: callbackExportWorkflow -->
+        <entry key="SaveWFFileTitle">Select File for Save As</entry>
 
         <!-- SettingsDialog -->
         <entry key="SettingsDialogName">Settings</entry>

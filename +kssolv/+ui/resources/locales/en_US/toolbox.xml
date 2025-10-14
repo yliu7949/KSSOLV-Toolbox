@@ -32,8 +32,9 @@
         <entry key="ProjectWorkflowButtonLabel">Workflow</entry>
         <entry key="ProjectWorkflowButtonTooltip">Edit workflow</entry>
         <entry key="NewWorkflowListItemLabel">New blank workflow</entry>
-        <entry key="ImportTemplateWorkflowListItemLabel">Import workflow from template...</entry>
-        <entry key="ExportTemplateWorkflowListItemLabel">Save workflow as template...</entry>
+        <entry key="ImportTemplateWorkflowListItemLabel">Import workflow from template</entry>
+        <entry key="ImportWorkflowFromFileListItemLabel">Import workflow from file...</entry>
+        <entry key="ExportWorkflowListItemLabel">Save workflow...</entry>
         <entry key="ProjectVariableButtonLabel">Variable</entry>
         <entry key="ProjectVariableButtonTooltip">Edit variable</entry>
         <entry key="NewVariableListItemLabel">Create new variable...</entry>

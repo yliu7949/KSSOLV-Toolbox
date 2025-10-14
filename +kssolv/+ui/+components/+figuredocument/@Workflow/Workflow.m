@@ -184,6 +184,17 @@ classdef Workflow < handle
             h.sendEventToHTMLSource(eventName, ...
                 jsonencode(eventData, "PrettyPrint", true));
         end
+
+        function loadWfFile(wfFilePath)
+            workflowItem = kssolv.services.filemanager.Workflow.loadWfFile(wfFilePath);
+            project = kssolv.ui.util.DataStorage.getData('Project');
+            workflowRoot = project.findChildrenItem('Workflow');
+            workflowRoot.addWorkflowItem(workflowItem);
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.updateTreetable('ADD', workflowRoot.name, workflowRoot.children{end}.encodeToJSON(1));
+            projectBrowser.updateTreetable('PATCH', workflowRoot.name, workflowRoot.encodeToJSON(1));
+        end
     end
 
     methods (Hidden)

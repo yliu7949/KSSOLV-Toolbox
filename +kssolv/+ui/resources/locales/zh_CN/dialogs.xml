@@ -33,6 +33,12 @@
         <entry key="ProjectCanCloseDoNotSave">不保存</entry>
         <entry key="ProjectCanCloseCancel">取消</entry>
 
+        <!-- HomeTab: callbackImportWorkflowFromFile -->
+        <entry key="OpenWFFileTitle">打开 KSSOLV 工作流文件</entry>
+
+        <!-- HomeTab: callbackExportWorkflow -->
+        <entry key="SaveWFFileTitle">保存文件</entry>
+
         <!-- SettingsDialog -->
         <entry key="SettingsDialogName">设置</entry>
         <entry key="SettingsDialogHelpButtonText">帮助</entry>

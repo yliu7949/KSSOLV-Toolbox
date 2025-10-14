@@ -95,7 +95,9 @@ classdef InfoBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             project = kssolv.ui.util.DataStorage.getData('Project');
             name = event.AffectedObject.currentSelectedItem;
             item = project.findChildrenItem(name);
-            this.Widgets.html.Data = item.encode();
+            if ~isempty(item)
+                this.Widgets.html.Data = item.encode();
+            end
         end
     end
 

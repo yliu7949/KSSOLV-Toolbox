@@ -97,14 +97,20 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             this.widgets.structureListbox.Layout.Row = 3;
             this.widgets.structureListbox.Layout.Column = [1 2];
             importedStructures = kssolv.services.filemanager.Structure.getAllImportedStructures();
-            this.widgets.structureListbox.Items = cellfun(@(cell) cell.node.label, importedStructures, 'UniformOutput', true);
-            this.widgets.structureListbox.ItemsData = cellfun(@(cell) cell.node.name, importedStructures, 'UniformOutput', false);
-            if ~isempty(this.widgets.structureListbox.ItemsData) && isfield(options, 'structures')
-                selectedItems = cell(1, length(options.structures));
-                for i = 1:length(options.structures)
-                    selectedItems{1, i} = options.structures(i).node.name;
+            if ~isempty(importedStructures)
+                this.widgets.structureListbox.Items = cellfun(@(cell) cell.node.label, importedStructures, 'UniformOutput', true);
+                this.widgets.structureListbox.ItemsData = cellfun(@(cell) cell.node.name, importedStructures, 'UniformOutput', false);
+                if ~isempty(this.widgets.structureListbox.ItemsData) && isfield(options, 'structures')
+                    selectedItems = cell(1, length(options.structures));
+                    for i = 1:length(options.structures)
+                        selectedItems{1, i} = options.structures(i).node.name;
+                    end
+                    this.widgets.structureListbox.Value = selectedItems;
                 end
-                this.widgets.structureListbox.Value = selectedItems;
+            else
+                this.widgets.structureListbox.Items = "Empty";
+                this.widgets.structureListbox.ItemsData = empty;
+                this.widgets.structureListbox.Value = "Empty";
             end
             this.widgets.structureListbox.ValueChangedFcn = @(src, event) this.markDirty();
             this.widgets.structureListbox.Tooltip = structureTooltip;
@@ -386,10 +392,12 @@ classdef BuildMoleculeTaskUI < kssolv.services.workflow.module.AbstractTaskUI
             project = kssolv.ui.util.DataStorage.getData('Project');
             for i = 1:length(this.widgets.structureListbox.Value)
                 structureItem = project.findChildrenItem(this.widgets.structureListbox.Value{i});
-                temp = structureItem.data.KSSOLVSetupObject;
-                temp.node.label = structureItem.label;
-                temp.node.name = structureItem.name;
-                this.privateOptions.structures = [this.privateOptions.structures, temp];
+                if ~isempty(structureItem)
+                    temp = structureItem.data.KSSOLVSetupObject;
+                    temp.node.label = structureItem.label;
+                    temp.node.name = structureItem.name;
+                    this.privateOptions.structures = [this.privateOptions.structures, temp];
+                end
             end
 
             this.privateOptions.pseudopotentialPpType = this.widgets.ppTypeEditField.Value;

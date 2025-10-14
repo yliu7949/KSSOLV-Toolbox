@@ -25,7 +25,7 @@ classdef Localizer < handle
 
     properties (Constant)
         % 本地化文件夹的位置：+kssolv/+ui/resources/locales/
-        localesFolder = fullfile(fileparts(fileparts(mfilename('fullpath'))), 'resources', 'locales');
+        localesFolder = fullfile(KSSOLV_Toolbox.UIResourcesDirectory, 'locales');
     end
 
     methods (Access = private)

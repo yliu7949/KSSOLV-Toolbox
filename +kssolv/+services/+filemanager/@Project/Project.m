@@ -11,7 +11,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
     properties (Hidden)
         version string    % .ks 文件版本号，默认为 ks-1.0
     end
-    
+
     methods
         function this = Project()
             %PROJECT 构造函数
@@ -32,15 +32,15 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                 this
                 filename (1,1) string = this.label + '.ks'
             end
-        
-            % 检查filename是否为绝对路径，并检查目录是否存在，不存在则创建
+
+            % 检查 filename 是否为绝对路径，并检查目录是否存在，不存在则创建
             folderPath = fileparts(filename);
             if ~isempty(folderPath) && ~exist(folderPath, 'dir')
                 warning('off');
                 mkdir(folderPath);
                 warning('on');
             end
-        
+
             data = this;
             try
                 % 在执行 save 命令前设定 isDirty 属性，
@@ -49,7 +49,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                 save(filename, 'data', "-mat", "-v7.3");
             catch ME
                 error('KSSOLV:FileManager:Project:FileSaveError', ...
-                      'Error saving the Project file: %s', ME.message);
+                    'Error saving the Project file: %s', ME.message);
             end
         end
 
@@ -73,7 +73,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
                 load(fileName, "-mat", 'data');
             catch ME
                 error('KSSOLV:FileManager:Project:FileLoadError', ...
-                      'Error loading the Project file: %s', ME.message);
+                    'Error loading the Project file: %s', ME.message);
             end
         end
     end
