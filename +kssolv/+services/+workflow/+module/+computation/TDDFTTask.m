@@ -24,19 +24,24 @@ classdef TDDFTTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.TDDFTTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this
+                context containers.Map
+                ~
+            end
+
             if isempty(this.optionsUI)
                 return
             end
             taskOptions = this.optionsUI.options;
 
-            TDDFTOptions = tddft_setup(input.molecule, input.SCFOptions, ...
-                input.H, input.X, namedargs2cell(taskOptions));
-            [Et, Z] = tddft_casida_direct(TDDFTOptions, input.molecule);
+            TDDFTOptions = tddft_setup(context("molecule"), context("SCFOptions"), ...
+                context("H"), context("X"), namedargs2cell(taskOptions));
+            [Et, Z] = tddft_casida_direct(TDDFTOptions, context("molecule"));
 
-            output = input;
-            output.TDDFT.Et = Et;
-            output.TDDFT.Z = Z;
+            % 输出 context
+            context("TDDFT") = struct('Et', Et, 'Z', Z);
         end
     end
 end

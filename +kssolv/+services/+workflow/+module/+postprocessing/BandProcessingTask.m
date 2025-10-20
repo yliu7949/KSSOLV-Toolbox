@@ -24,13 +24,19 @@ classdef BandProcessingTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.postprocessing.BandProcessingTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this
+                context containers.Map
+                ~
+            end
+
             if isempty(this.optionsUI)
                 return
             end
             taskOptions = this.optionsUI.options;
 
-            symmetryResult = input.symmetry;
+            symmetryResult = context("symmetry");
             %{
             for i = 1:size(symmetryResult.path, 1)
                 p1 = symmetryResult.path{i, 1};
@@ -40,12 +46,13 @@ classdef BandProcessingTask < kssolv.services.workflow.module.AbstractTask
             end
             %}
 
-            kPoints = generateKPoints(symmetryResult, taskOptions.numInterpolationPoints);
+            NSCFOptions = context("NSCFOptions");
+            NSCFOptions.rho0 = context("H").rho;
+            context("NSCFOptions") = NSCFOptions;
 
-            output = input;
-            output.NSCFOptions.rho0 = input.H.rho;
-            output.bandProcessing.kPoints = kPoints;
-            output.bandProcessing.energyBands = eband(input.molecule, output.NSCFOptions, kPoints);
+            kPoints = generateKPoints(symmetryResult, taskOptions.numInterpolationPoints);
+            energyBands = eband(context("molecule"), NSCFOptions, kPoints);
+            context("bandProcessing") = struct('kPoints', {kPoints}, 'energyBands', energyBands);
         end
     end
 end

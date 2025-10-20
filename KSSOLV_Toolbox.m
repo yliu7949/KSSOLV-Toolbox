@@ -6,8 +6,8 @@ classdef KSSOLV_Toolbox
 
     properties (Constant)
         Name string = 'KSSOLV Toolbox'
-        Version string = '0.2.1'
-        ReleaseDate string = '2025.09.05'
+        Version string = '0.2.2'
+        ReleaseDate string = '2025.10.19'
         License char = 'BSD 3-Clause "New" or "Revised" License'
 
         Author string = 'Liu Yang'

@@ -24,7 +24,13 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.BuildMoleculeTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this 
+                context containers.Map
+                ~ 
+            end
+            
             if isempty(this.optionsUI)
                 return
             end
@@ -58,9 +64,8 @@ classdef BuildMoleculeTask < kssolv.services.workflow.module.AbstractTask
                 molecule.autokpts = taskOptions.autokpts;
             end
 
-            % 输出到 output
-            output = input;
-            output.molecule = molecule;
+            % 输出 context
+            context("molecule") = molecule;
         end
     end
 end

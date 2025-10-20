@@ -24,7 +24,13 @@ classdef NSCFTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.NSCFTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this
+                context containers.Map
+                ~
+            end
+
             if isempty(this.optionsUI)
                 return
             end
@@ -37,8 +43,8 @@ classdef NSCFTask < kssolv.services.workflow.module.AbstractTask
                 NSCFOptions.(fieldName) = taskOptions.(fieldName);
             end
 
-            output = input;
-            output.NSCFOptions = NSCFOptions;
+            % 输出 context
+            context("NSCFOptions") = NSCFOptions;
         end
     end
 end

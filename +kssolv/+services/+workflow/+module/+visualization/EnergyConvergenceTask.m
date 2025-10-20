@@ -25,13 +25,19 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.BlankTaskUI();
         end
 
-        function output = executeTask(~, ~, input)
-            energyConvergencePlot = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', input.info.Etotvec, 'SCFError', input.info.SCFerrvec);
+        function context = executeTask(~, context, ~)
+            arguments
+                ~
+                context containers.Map
+                ~
+            end
+
+            energyConvergencePlot = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', context("info").Etotvec, 'SCFError', context("info").SCFerrvec);
             dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyConvergencePlot);
             dataPlot.Display('EnergyConvergence');
 
-            output = input;
-            output.plot.EnergyConvergencePlot = energyConvergencePlot;
+            % 输出 context
+            context("EnergyConvergencePlot") = energyConvergencePlot;
         end
     end
 end

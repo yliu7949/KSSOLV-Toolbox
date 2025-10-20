@@ -24,7 +24,13 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.SCFTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this
+                context containers.Map
+                ~
+            end
+
             if isempty(this.optionsUI)
                 return
             end
@@ -37,14 +43,13 @@ classdef SCFTask < kssolv.services.workflow.module.AbstractTask
                 SCFOptions.(fieldName) = taskOptions.(fieldName);
             end
 
-            [molecule, H, X, info] = scf(input.molecule, SCFOptions);
+            [molecule, H, X, info] = scf(context("molecule"), SCFOptions);
 
-            output = input;
-            output.molecule = molecule;
-            output.H = H;
-            output.X = X;
-            output.info = info;
-            output.SCFOptions = SCFOptions;
+            context("molecule") = molecule;
+            context("H") = H;
+            context("X") = X;
+            context("info") = info;
+            context("SCFOptions") = SCFOptions;
         end
     end
 end

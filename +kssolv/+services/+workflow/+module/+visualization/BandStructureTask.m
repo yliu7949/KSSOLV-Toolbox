@@ -25,13 +25,20 @@ classdef BandStructureTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.BlankTaskUI();
         end
 
-        function output = executeTask(~, ~, input)
-            energyBandStructurePlot = kssolv.services.workflow.module.visualization.chart.BandStructurePlot('kPoints', input.bandProcessing.kPoints, 'energyBands', input.bandProcessing.energyBands);
+        function context = executeTask(~, context, ~)
+            arguments
+                ~
+                context containers.Map
+                ~
+            end
+
+            energyBandStructurePlot = kssolv.services.workflow.module.visualization.chart.BandStructurePlot('kPoints', context("bandProcessing").kPoints, ...
+                'energyBands', context("bandProcessing").energyBands);
             dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyBandStructurePlot);
             dataPlot.Display('EnergyBandStructure');
 
-            output = input;
-            output.plot.EnergyBandStructurePlot = energyBandStructurePlot;
+            % 输出 context
+            context("EnergyBandStructurePlot") = energyBandStructurePlot;
         end
     end
 end

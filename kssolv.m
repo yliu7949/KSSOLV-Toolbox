@@ -34,7 +34,7 @@ kssolv.ui.util.DataStorage.setData('LoadingKsFile', false);
 try
     addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+services', '+llm', 'patch'));
     addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'kssolv-3o'));
-    addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'processsuite'));
+    addpath(fullfile(fileparts(mfilename('fullpath')), '+kssolv', '+core', 'processsuite', 'seekpath'));
     evalc('KSSOLV.startup()');
 catch
 end

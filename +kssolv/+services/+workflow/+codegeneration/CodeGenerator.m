@@ -1,100 +1,121 @@
 classdef CodeGenerator < handle
-    %CODEGENERATOR 分析工作流并运行所有节点对应的任务
+    % CODEGENERATOR 分析工作流，通过拓扑排序确定节点的正确执行顺序，并依次执行所有任务
 
     %   开发者：杨柳
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     methods (Static)
+
         function executeTasks(workflow)
+            % executeTasks 按照拓扑顺序执行工作流中的所有任务
+            %
+            %   执行流程:
+            %       1. 重置工作流 UI 中所有节点的状态。
+            %       2. 对工作流进行拓扑排序，以确保父节点在子节点之前执行。
+            %       3. 按排序顺序迭代执行每个节点的任务。
+            %       4. 管理一个上下文(context)，将已完成节点更新的上下文传递给其后续节点。
+            %       5. 在执行过程中更新 UI 节点状态（running, success, failed）。
             arguments
                 workflow kssolv.services.workflow.WorkflowGraph
             end
 
+            % 嵌套函数，用于向 UI 发送节点状态更新事件
             function changeNodeStatus(nodeID, status)
-                kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowUpdateNodeStatus', ...
+                kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI ('workflowUpdateNodeStatus', ...
                     struct('nodeID', nodeID, 'newStatus', status));
-                pause(0.1);
+                pause(0.1); % 给予 UI 足够的时间来响应和刷新
             end
 
-            % 获取所有节点 ID
             allNodeIDs = keys(workflow.Nodes);
 
-            % 遍历所有节点，找到连通的子图
-            visited = containers.Map();  % 用于记录访问过的节点
-            connectedComponents = {};    % 用于存储连通的节点子图
-
-            % 查找连通的子图，忽略孤立节点
+            % 步骤 1: 将所有节点状态重置为默认值
             for i = 1:length(allNodeIDs)
-                nodeID = allNodeIDs{i};
-                changeNodeStatus(nodeID, 'default');
-                if ~isKey(visited, nodeID)
-                    subgraph = kssolv.services.workflow.codegeneration.CodeGenerator.findConnectedNodes(workflow, nodeID, visited);
-                    if ~isempty(subgraph)
-                        connectedComponents{end+1} = subgraph; %#ok<*AGROW>
-                    end
-                end
+                changeNodeStatus(allNodeIDs{i}, 'default');
             end
 
-            % 初始化上下文和输入
-            context = struct();
-
-            % 遍历连通子图中的每个节点，执行任务
-            for i = 1:length(connectedComponents)
-                % 当前连通子图的节点列表
-                nodeList = connectedComponents{i};
-                input = struct();
-
-                for j = 1:length(nodeList)
-                    nodeID = nodeList{j};
-                    node = workflow.Nodes(nodeID);  % 获取当前节点
-
-                    % 执行任务，得到输出
-                    changeNodeStatus(nodeID, 'running');
-                    try
-                        output = node.task.executeTask(context, input);
-                    catch ME
-                        changeNodeStatus(nodeID, 'failed');
-                        runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
-                        runBrowser.restoreButtons();
-                        throwAsCaller(ME);
-                    end
-                    changeNodeStatus(nodeID, 'success');
-
-                    % 传递 output 作为下一个节点的 input
-                    input = output;
+            % 步骤 2: 对工作流图进行拓扑排序，获取正确的执行顺序
+            try
+                sortedNodeIDs = kssolv.services.workflow.codegeneration.CodeGenerator.topologicalSort(workflow);
+            catch ME
+                % 如果排序失败（如存在循环依赖），恢复 UI 并向上抛出异常
+                runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
+                if ~isempty(runBrowser)
+                    runBrowser.restoreButtons();
                 end
+                throwAsCaller(ME);
+            end
+
+            % 步骤 3: 初始化上下文 context
+            context = containers.Map('KeyType', 'char', 'ValueType', 'any');
+
+            % 步骤 4: 按照拓扑排序的顺序遍历并执行任务
+            for i = 1:length(sortedNodeIDs)
+                nodeID = sortedNodeIDs{i};
+                node = workflow.Nodes(nodeID);
+
+                % 准备当前节点的输入
+                input = containers.Map('KeyType', 'char', 'ValueType', 'any');
+
+                % 执行当前节点的任务
+                changeNodeStatus(nodeID, 'running');
+                try
+                    % executeTask 将当前节点的输出存储到上下文中，供其子节点后续使用
+                    context = node.task.executeTask(context, input);
+                catch ME
+                    changeNodeStatus(nodeID, 'failed');
+                    % 任务执行失败时，恢复 UI 状态并抛出异常
+                    runBrowser = kssolv.ui.util.DataStorage.getData('RunBrowser');
+                    if ~isempty(runBrowser)
+                        runBrowser.restoreButtons()
+                    end
+                    % disp(ME.message);
+                    throwAsCaller(ME);
+                end
+
+                changeNodeStatus(nodeID, 'success');
             end
         end
 
-        function connectedNodes = findConnectedNodes(workflow, startNodeID, visited)
-            % 递归查找从 startNodeID 连通的所有节点
-            connectedNodes = {};
-            if isKey(visited, startNodeID)
+        function sortedNodes = topologicalSort(workflow)
+            % topologicalSort 使用内置函数对工作流的节点进行拓扑排序，自动处理不连通的子图并检测循环依赖
+
+            arguments
+                workflow kssolv.services.workflow.WorkflowGraph
+            end
+
+            allNodeIDs = keys(workflow.Nodes);
+            if isempty(allNodeIDs)
+                sortedNodes = {};
                 return;
             end
 
-            % 标记节点为已访问
-            visited(startNodeID) = true;
-            connectedNodes{end+1} = startNodeID;
-
-            % 获取当前节点的子节点
-            children = workflow.getChildren(startNodeID);
-            for i = 1:length(children)
-                childNodeID = children{i};
-                if ~isKey(visited, childNodeID)
-                    subNodes = kssolv.services.workflow.codegeneration.CodeGenerator.findConnectedNodes(workflow, childNodeID, visited);
-                    connectedNodes = [connectedNodes, subNodes];
+            sourceEdges = {};
+            targetEdges = {};
+            for i = 1:length(allNodeIDs)
+                parentNodeID = allNodeIDs{i};
+                children = workflow.getChildren(parentNodeID);
+                for j = 1:length(children)
+                    childNodeID = children{j};
+                    sourceEdges{end+1} = parentNodeID; %#ok<AGROW>
+                    targetEdges{end+1} = childNodeID; %#ok<AGROW>
                 end
             end
 
-            % 获取当前节点的父节点（如果图中存在向上的依赖）
-            parents = workflow.getParents(startNodeID);
-            for i = 1:length(parents)
-                parentNodeID = parents{i};
-                if ~isKey(visited, parentNodeID)
-                    subNodes = kssolv.services.workflow.codegeneration.CodeGenerator.findConnectedNodes(workflow, parentNodeID, visited);
-                    connectedNodes = [connectedNodes, subNodes];
-                end
+            try
+                G = digraph(sourceEdges, targetEdges, [], allNodeIDs);
+            catch ME
+                error('KSSOLV:Workflow:CodeGenerator:DigraphError', 'Error creating directed graph: %s', ME.message);
+            end
+
+            if hascycles(G)
+                error('KSSOLV:Workflow:CodeGenerator:CycleDetected', 'Circular dependency detected in workflow, unable to execute tasks.');
+            end
+
+            try
+                nodeIndices = toposort(G);
+                sortedNodes = G.Nodes.Name(nodeIndices)'; % 转置为 1xN cell 数组
+            catch ME
+                error('KSSOLV:Workflow:CodeGenerator:TopologicalSort', ME.message);
             end
         end
     end

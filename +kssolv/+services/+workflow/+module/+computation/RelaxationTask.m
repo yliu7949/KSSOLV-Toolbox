@@ -24,7 +24,13 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
             this.optionsUI = kssolv.services.workflow.module.computation.RelaxationTaskUI();
         end
 
-        function output = executeTask(this, ~, input)
+        function context = executeTask(this, context, ~)
+            arguments
+                this
+                context containers.Map
+                ~
+            end
+
             if isempty(this.optionsUI)
                 return
             end
@@ -37,14 +43,13 @@ classdef RelaxationTask < kssolv.services.workflow.module.AbstractTask
                 relaxOptions.(fieldName) = taskOptions.(fieldName);
             end
 
-            [molecule, H, X, info] = geometryoptimization.relaxatoms(input.molecule, relaxOptions);
+            [molecule, H, X, info] = geometryoptimization.relaxatoms(context("molecule"), relaxOptions);
 
-            output = input;
-            output.molecule = molecule;
-            output.H = H;
-            output.X = X;
-            output.relaxInfo = info;
-            output.info = info.lastIonicStepInfo;
+            context("molecule") = molecule;
+            context("H") = H;
+            context("X") = X;
+            context("relaxInfo") = info;
+            context("info") = info.lastIonicStepInfo;
         end
     end
 end
