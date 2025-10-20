@@ -54,6 +54,9 @@ classdef Workflow < handle
             figOptions.DocumentGroupTag = this.DocumentGroupTag;
             if this.tag ~= ""
                 figOptions.Tag = this.tag;
+
+                project = kssolv.ui.util.DataStorage.getData('Project');
+                figOptions.Title = project.findChildrenItem(this.tag).label;
             end
             document = matlab.ui.internal.FigureDocument(figOptions);
 
