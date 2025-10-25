@@ -64,7 +64,7 @@ classdef KSSOLVToolbox < handle
             footerBar = kssolv.ui.components.others.FooterBar();
             footerBar.addToAppContainer(this.AppContainer);
             % 添加位于右上角的 QuickAccessBar 组件
-            quickAccessBar = kssolv.ui.components.others.QuickAccessBar();
+            quickAccessBar = kssolv.ui.components.qab.QuickAccessBar();
             quickAccessBar.addToAppContainer(this.AppContainer)
 
             % 注册关闭时的提示对话框

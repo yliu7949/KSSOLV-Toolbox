@@ -11,14 +11,16 @@
         <entry key="HomeTabTitle">Home</entry>
 
         <entry key="FileSectionTitle">File</entry>
-        <entry key="FileProjectButtonLabel">Project</entry>
-        <entry key="FileProjectButtonTooltip">Open project file</entry>
-        <entry key="OpenFileListItemLabel">Open...</entry>
+        <entry key="FileOpenButtonLabel">Open</entry>
+        <entry key="FileOpenButtonTooltip">Open file</entry>
+        <entry key="OpenProjectFileListItemLabel">Open project...</entry>
+        <entry key="OpenProjectFileListItemTooltip">Open a .ks project file</entry>
         <entry key="FileSaveButtonLabel">Save</entry>
         <entry key="FileSaveButtonTooltip">Save project or structure</entry>
-        <entry key="SaveProjectListItemLabel">Save current project</entry>
-        <entry key="SaveProjectAsListItemLabel">Save project as...</entry>
-        <entry key="SaveStructureAsListItemLabel">Save structure as...</entry>
+        <entry key="SaveProjectListItemLabel">Save</entry>
+        <entry key="SaveProjectListItemTooltip">Save current project to .ks file</entry>
+        <entry key="SaveProjectAsListItemLabel">Save As...</entry>
+        <entry key="SaveProjectAsListItemTooltip">Save current project to a new file</entry>
         <entry key="FileCloseButtonLabel">Close</entry>
         <entry key="FileCloseButtonTooltip">Close current project</entry>
 
@@ -30,7 +32,7 @@
         <entry key="ImportStructureFromLibraryListItemLabel">Import structure from material library...</entry>
         <entry key="ImportStructureFromMatlabListItemLabel">Import structure from MATLAB workspace...</entry>
         <entry key="ProjectWorkflowButtonLabel">Workflow</entry>
-        <entry key="ProjectWorkflowButtonTooltip">Edit workflow</entry>
+        <entry key="ProjectWorkflowButtonTooltip">New default workflow</entry>
         <entry key="NewWorkflowListItemLabel">New blank workflow</entry>
         <entry key="ImportTemplateWorkflowListItemLabel">Import workflow from template</entry>
         <entry key="ImportWorkflowFromFileListItemLabel">Import workflow from file...</entry>
@@ -38,8 +40,7 @@
         <entry key="ProjectVariableButtonLabel">Variable</entry>
         <entry key="ProjectVariableButtonTooltip">Edit variable</entry>
         <entry key="NewVariableListItemLabel">Create new variable...</entry>
-        <entry key="ImportVariableFromFileListItemLabel">Import variable from file...</entry>
-        <entry key="ImportVariableFromMATLABListItemLabel">Import variable from MATLAB workspace...</entry>
+        <entry key="ExportVariabletoMATLABListItemLabel">Export variable to MATLAB workspace</entry>
         
         <entry key="RunningSectionTitle">Running</entry>
         <entry key="RunningRunButtonLabel">Run</entry>
@@ -64,15 +65,15 @@
         <entry key="GetExtraFeatureListItemLabel">Get additional features...</entry>
 
         <entry key="ResourceSectionTitle">Resources</entry>
-        <entry key="ResourceLibraryButtonLabel">Library</entry>
-        <entry key="ResourceLibraryButtonTooltip">Summary of relevant theoretical data</entry>
+        <entry key="ResourceDocumentationButtonLabel">Documentation</entry>
+        <entry key="ResourceDocumentationButtonTooltip">Open Documentation</entry>
         <entry key="ResourceCommunityButtonLabel">Community</entry>
         <entry key="ResourceCommunityButtonTooltip">Visit the KSSOLV online community</entry>
         <entry key="ResourceHelpButtonLabel">Help</entry>
         <entry key="ResourceHelpButtonTooltip">Get help</entry>
         <entry key="ResourceSupportButtonLabel">Request Support</entry>
         <entry key="ResourceSupportButtonTooltip">Request technical support</entry>
-        <entry key="OpenDocumentListItemLabel">Documents</entry>
+        <entry key="ExamplesListItemLabel">Examples</entry>
         <entry key="OfficialSiteListItemLabel">Official Website</entry>
         <entry key="CheckUpdateListItemLabel">Check for updates</entry>
         <entry key="CheckLicenseListItemLabel">License</entry>
@@ -87,9 +88,15 @@
         
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">Workflow</entry>
-        <entry key="SaveSectionTitle">Save</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">Save as</entry>
-        <entry key="SaveWorkflowAsTemplateButtonTooltip">Save as Workflow Template</entry>
+        <entry key="WorkflowFileSectionTitle">Workflow File</entry>
+        <entry key="WorkflowFileNewBlankWorkflowButtonLabel">New</entry>
+        <entry key="WorkflowFileNewBlankWorkflowButtonTooltip">New blank workflow</entry>
+        <entry key="WorkflowFileImportWorkflowButtonLabel">Import</entry>
+        <entry key="WorkflowFileImportWorkflowButtonTooltip">Import workflow</entry>
+        <entry key="WorkflowFileSaveWorkflowAsTemplateButtonLabel">Save</entry>
+        <entry key="WorkflowFileSaveWorkflowAsTemplateButtonTooltip">Save the workflow to a .wf file</entry>
+        <entry key="WorkflowFileDeleteWorkflowButtonLabel">Delete</entry>
+        <entry key="WorkflowFileDeleteWorkflowButtonTooltip">Delete current workflow</entry>
 
         <entry key="NodeSectionTitle">Nodes</entry>
         <entry key="AddNodeButtonLabel">Add Node</entry>
@@ -100,9 +107,6 @@
         <entry key="node01ListItemLabel">Node 0-1</entry>
         <entry key="node10ListItemLabel">Node 1-0</entry>
         <entry key="node11ListItemLabel">Node 1-1</entry>
-        <entry key="node12ListItemLabel">Node 1-2</entry>
-        <entry key="node21ListItemLabel">Node 2-1</entry>
-        <entry key="nodexyListItemLabel">Node x-y</entry>
         <entry key="AddTopPortListItemLabel">Add top port</entry>
         <entry key="RemoveTopPortListItemLabel">Remove top port</entry>
         <entry key="AddBottomPortListItemLabel">Add bottom port</entry>
@@ -116,10 +120,14 @@
         <entry key="ZoomResetButtonLabel">Reset Zoom</entry>
         <entry key="ZoomResetButtonTooltip">Reset to default view</entry>
         
-        <entry key="SettingsSectionTitle">Settings</entry>
-        <entry key="SetNodeButtonLabel">Set Node</entry>
-        <entry key="SetNodeButtonTooltip">Set Node</entry>
+        <entry key="ConfigSectionTitle">Config</entry>
+        <entry key="ConfigureNodeButtonLabel">Configure Node</entry>
+        <entry key="ConfigureNodeButtonTooltip">Modify task parameters in the config editor</entry>
         
+        <!-- ToolStrip QAB -->
+        <entry key="QABSaveButtonLabel">Save</entry>
+        <entry key="QABSaveButtonTooltip">Save current project</entry>
+
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">Project Browser</entry>
 

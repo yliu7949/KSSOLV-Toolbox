@@ -39,6 +39,10 @@
         <!-- HomeTab: callbackExportWorkflow -->
         <entry key="SaveWFFileTitle">保存文件</entry>
 
+        <!-- HomeTab: callbackRunAndTime -->
+        <entry key="RunTimeUsed">用时：</entry>
+        <entry key="RunTimeUsedUnit">秒</entry>
+
         <!-- SettingsDialog -->
         <entry key="SettingsDialogName">设置</entry>
         <entry key="SettingsDialogHelpButtonText">帮助</entry>

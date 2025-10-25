@@ -456,6 +456,7 @@
       htmlComponent.addEventListener("enableDebugLog", () => { debug = true; });
       htmlComponent.addEventListener("addItem", addItem);
       htmlComponent.addEventListener("patchItem", patchItem);
+      htmlComponent.addEventListener("deleteItem", deleteItem);
       handleBackspaceKey();
 
       function dataFromMATLABToHTML(event) {
@@ -544,6 +545,26 @@
         }
       }
 
+      function deleteItem(event) {
+        const eventData = JSON.parse(event.Data);
+        const itemName = eventData.itemName;
+        const table = document.getElementById('tree-table');
+        const tbody = table.querySelector('tbody');
+
+        const rowToDelete = tbody.querySelector(`tr[data-name="${itemName}"]`);
+
+        if (rowToDelete) {
+          const itemType = rowToDelete.querySelector('td:nth-child(3)').textContent;
+          if (itemType !== 'Project' && itemType !== 'Folder') {
+            rowToDelete.remove();
+            if (typeof MATLAB !== 'undefined') {
+              MATLAB.sendEventToMATLAB("RowRemoved", itemName);
+            }
+          }
+        } else {
+          console.error('Item to delete not found: ', itemName);
+        }
+      }
     }
   </script>
 </head>

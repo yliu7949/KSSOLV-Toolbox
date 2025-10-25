@@ -7,7 +7,7 @@ classdef CustomButton < matlab.ui.componentcontainer.ComponentContainer & ...
         matlab.ui.control.internal.model.mixin.TooltipComponent & ...
         matlab.ui.control.internal.model.mixin.HorizontallyAlignableComponent
 
-    % CUSTOMBUTTON 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
+    %CUSTOMBUTTON 自定义样式的无边框按钮组件，支持文字按钮和图标按钮。
 
     %   开发者：杨柳
     %   版权 2024-2025 合肥瀚海量子科技有限公司

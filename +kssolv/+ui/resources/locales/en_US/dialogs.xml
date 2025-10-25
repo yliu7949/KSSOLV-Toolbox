@@ -37,6 +37,10 @@
         <!-- HomeTab: callbackExportWorkflow -->
         <entry key="SaveWFFileTitle">Select File for Save As</entry>
 
+        <!-- HomeTab: callbackRunAndTime -->
+        <entry key="RunTimeUsed">Time Used: </entry>
+        <entry key="RunTimeUsedUnit">seconds</entry>
+
         <!-- SettingsDialog -->
         <entry key="SettingsDialogName">Settings</entry>
         <entry key="SettingsDialogHelpButtonText">Help</entry>

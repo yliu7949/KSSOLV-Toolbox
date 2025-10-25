@@ -11,14 +11,16 @@
         <entry key="HomeTabTitle">主页</entry>
 
         <entry key="FileSectionTitle">文件</entry>
-        <entry key="FileProjectButtonLabel">项目</entry>
-        <entry key="FileProjectButtonTooltip">打开项目文件</entry>
-        <entry key="OpenFileListItemLabel">打开...</entry>
+        <entry key="FileOpenButtonLabel">打开</entry>
+        <entry key="FileOpenButtonTooltip">打开文件</entry>
+        <entry key="OpenProjectFileListItemLabel">打开项目...</entry>
+        <entry key="OpenProjectFileListItemTooltip">打开一个 .ks 项目文件</entry>
         <entry key="FileSaveButtonLabel">保存</entry>
         <entry key="FileSaveButtonTooltip">保存项目或结构</entry>
-        <entry key="SaveProjectListItemLabel">保存当前项目</entry>
-        <entry key="SaveProjectAsListItemLabel">项目另存为...</entry>
-        <entry key="SaveStructureAsListItemLabel">结构另存为...</entry>
+        <entry key="SaveProjectListItemLabel">保存</entry>
+        <entry key="SaveProjectListItemTooltip">保存当前项目到 .ks 文件</entry>
+        <entry key="SaveProjectAsListItemLabel">另存为...</entry>
+        <entry key="SaveProjectAsListItemTooltip">保存当前项目到新的文件</entry>
         <entry key="FileCloseButtonLabel">关闭</entry>
         <entry key="FileCloseButtonTooltip">关闭当前项目</entry>
 
@@ -30,7 +32,7 @@
         <entry key="ImportStructureFromLibraryListItemLabel">从材料库导入结构...</entry>
         <entry key="ImportStructureFromMatlabListItemLabel">从 MATLAB 工作区导入结构...</entry>
         <entry key="ProjectWorkflowButtonLabel">工作流</entry>
-        <entry key="ProjectWorkflowButtonTooltip">编辑工作流</entry>
+        <entry key="ProjectWorkflowButtonTooltip">新建默认工作流</entry>
         <entry key="NewWorkflowListItemLabel">新建空白工作流</entry>
         <entry key="ImportTemplateWorkflowListItemLabel">从模板建立工作流</entry>
         <entry key="ImportWorkflowFromFileListItemLabel">从文件导入工作流...</entry>
@@ -38,8 +40,7 @@
         <entry key="ProjectVariableButtonLabel">变量</entry>
         <entry key="ProjectVariableButtonTooltip">编辑变量</entry>
         <entry key="NewVariableListItemLabel">新建变量...</entry>
-        <entry key="ImportVariableFromFileListItemLabel">从文件导入变量...</entry>
-        <entry key="ImportVariableFromMATLABListItemLabel">从 MATLAB 工作区导入变量...</entry>
+        <entry key="ExportVariabletoMATLABListItemLabel">导出变量到 MATLAB 工作区</entry>
         
         <entry key="RunningSectionTitle">运行</entry>
         <entry key="RunningRunButtonLabel">运行</entry>
@@ -64,15 +65,15 @@
         <entry key="GetExtraFeatureListItemLabel">获取附加功能...</entry>
 
         <entry key="ResourceSectionTitle">资源</entry>
-        <entry key="ResourceLibraryButtonLabel">图书馆</entry>
-        <entry key="ResourceLibraryButtonTooltip">相关理论资料的汇总</entry>
+        <entry key="ResourceDocumentationButtonLabel">文档</entry>
+        <entry key="ResourceDocumentationButtonTooltip">阅读文档</entry>
         <entry key="ResourceCommunityButtonLabel">社区</entry>
         <entry key="ResourceCommunityButtonTooltip">访问 KSSOLV 在线社区</entry>
         <entry key="ResourceHelpButtonLabel">帮助</entry>
         <entry key="ResourceHelpButtonTooltip">获取帮助</entry>
         <entry key="ResourceSupportButtonLabel">请求支持</entry>
         <entry key="ResourceSupportButtonTooltip">请求技术支持</entry>
-        <entry key="OpenDocumentListItemLabel">文档</entry>
+        <entry key="ExamplesListItemLabel">探索示例</entry>
         <entry key="OfficialSiteListItemLabel">官方网站</entry>
         <entry key="CheckUpdateListItemLabel">检查更新</entry>
         <entry key="CheckLicenseListItemLabel">许可</entry>
@@ -87,9 +88,15 @@
         
         <!-- ToolStrip Workflow tab -->
         <entry key="WorkflowTabTitle">工作流</entry>
-        <entry key="SaveSectionTitle">保存</entry>
-        <entry key="SaveWorkflowAsTemplateButtonLabel">另存为</entry>
-        <entry key="SaveWorkflowAsTemplateButtonTooltip">另存为工作流模板</entry>
+        <entry key="WorkflowFileSectionTitle">工作流文件</entry>
+        <entry key="WorkflowFileNewBlankWorkflowButtonLabel">新建</entry>
+        <entry key="WorkflowFileNewBlankWorkflowButtonTooltip">新建空白工作流</entry>
+        <entry key="WorkflowFileImportWorkflowButtonLabel">导入</entry>
+        <entry key="WorkflowFileImportWorkflowButtonTooltip">导入工作流</entry>
+        <entry key="WorkflowFileSaveWorkflowAsTemplateButtonLabel">保存</entry>
+        <entry key="WorkflowFileSaveWorkflowAsTemplateButtonTooltip">保存工作流到 .wf 文件</entry>
+        <entry key="WorkflowFileDeleteWorkflowButtonLabel">删除</entry>
+        <entry key="WorkflowFileDeleteWorkflowButtonTooltip">删除当前的工作流</entry>
 
         <entry key="NodeSectionTitle">节点</entry>
         <entry key="AddNodeButtonLabel">新增节点</entry>
@@ -100,9 +107,6 @@
         <entry key="node01ListItemLabel">0-1 节点</entry>
         <entry key="node10ListItemLabel">1-0 节点</entry>
         <entry key="node11ListItemLabel">1-1 节点</entry>
-        <entry key="node12ListItemLabel">1-2 节点</entry>
-        <entry key="node21ListItemLabel">2-1 节点</entry>
-        <entry key="nodexyListItemLabel">x-y 节点</entry>
         <entry key="AddTopPortListItemLabel">增加上连接桩</entry>
         <entry key="RemoveTopPortListItemLabel">减少上连接桩</entry>
         <entry key="AddBottomPortListItemLabel">增加下连接桩</entry>
@@ -116,9 +120,13 @@
         <entry key="ZoomResetButtonLabel">重置缩放</entry>
         <entry key="ZoomResetButtonTooltip">重置为默认视角</entry>
         
-        <entry key="SettingsSectionTitle">设置</entry>
-        <entry key="SetNodeButtonLabel">设置节点</entry>
-        <entry key="SetNodeButtonTooltip">设置节点</entry>
+        <entry key="ConfigSectionTitle">配置</entry>
+        <entry key="ConfigureNodeButtonLabel">配置节点</entry>
+        <entry key="ConfigureNodeButtonTooltip">在配置编辑器中修改节点的任务参数</entry>
+
+        <!-- ToolStrip QAB -->
+        <entry key="QABSaveButtonLabel">保存</entry>
+        <entry key="QABSaveButtonTooltip">保存当前项目</entry>
 
         <!-- Project Browser -->
         <entry key="ProjectBrowserTitle">项目浏览器</entry>

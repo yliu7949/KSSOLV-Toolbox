@@ -48,10 +48,16 @@ classdef HomeTab < handle
         function connectTab(this)
             %CONNECTTAB 为按钮等组件添加监听器和回调函数
             % File Section
-            addlistener(this.Widgets.FileSection.FileProjectButton, ...
-                'ButtonPushed', @(src, data) callbackFileProjectButton(this));
+            addlistener(this.Widgets.FileSection.FileOpenButton, ...
+                'ButtonPushed', @(src, data) callbackFileOpenButton(this));
+            addlistener(this.Widgets.FileSection.FileOpenButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackFileOpenButton(this));
             addlistener(this.Widgets.FileSection.FileSaveButton, ...
                 'ButtonPushed', @(src, data) callbackFileSaveButton(this));
+            addlistener(this.Widgets.FileSection.FileSaveButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackFileSaveButton(this));
+            addlistener(this.Widgets.FileSection.FileSaveButton.Popup.getChildByIndex(2), ...
+                'ItemPushed', @(src, data) callbackSaveProjectAs(this));
             addlistener(this.Widgets.FileSection.FileCloseButton, ...
                 'ButtonPushed', @(src, data) callbackFileCloseButton(this));
             % Project Section
@@ -65,22 +71,25 @@ classdef HomeTab < handle
                 'ItemPushed', @(src, data) callbackImportWorkflowFromFile(this));
             addlistener(this.Widgets.ProjectSection.ProjectWorkflowButton.Popup.getChildByIndex(4), ...
                 'ItemPushed', @(src, data) callbackExportWorkflow(this));
-
-            addlistener(this.Widgets.ProjectSection.ProjectVariableButton, ...
-                'ButtonPushed', @(src, data) callbackProjectVariableButton(this));
+            addlistener(this.Widgets.ProjectSection.ProjectVariableButton.Popup.getChildByIndex(2), ...
+                'ItemPushed', @(src, data) callbackExportVariabletoMATLAB(this));
             % Running Section
             addlistener(this.Widgets.RunningSection.RunningRunButton, ...
                 'ButtonPushed', @(src, data) callbackRunningRunButton(this));
+            addlistener(this.Widgets.RunningSection.RunningRunButton.Popup.getChildByIndex(1), ...
+                'ItemPushed', @(src, data) callbackRunAndTime(this));
             addlistener(this.Widgets.RunningSection.RunningStopButton, ...
                 'ButtonPushed', @(src, data) callbackRunningStopButton(this));
             % Environment Section
             addlistener(this.Widgets.EnvironmentSection.EnvironmentSettingsButton, ...
                 'ButtonPushed', @(src, data) callbackEnvironmentSettingsButton(this));
             % Resource Section
-            addlistener(this.Widgets.ResourceSection.ResourceLibraryButton, ...
-                'ButtonPushed', @(src, data) callbackResourceLibraryButton(this));
+            addlistener(this.Widgets.ResourceSection.ResourceDocumentationButton, ...
+                'ButtonPushed', @(src, data) callbackResourceDocumentationButton(this));
             addlistener(this.Widgets.ResourceSection.ResourceHelpButton.Popup.getChildByIndex(1), ...
-                'ItemPushed', @(src, data) callbackOpenDocumentButton(this));
+                'ItemPushed', @(src, data) callbackExamplesButton(this));
+            addlistener(this.Widgets.ResourceSection.ResourceHelpButton.Popup.getChildByIndex(2), ...
+                'ItemPushed', @(src, data) callbackOpenOfficialSiteButton(this));
             addlistener(this.Widgets.ResourceSection.ResourceSupportButton, ...
                 'ButtonPushed', @(src, data) callbackResourceSupportButton(this));
         end
@@ -89,6 +98,14 @@ classdef HomeTab < handle
             %SETTABACTIVATED 初始化时设置一些按钮是否被启用
             this.Widgets.RunningSection.RunningStepButton.Enabled = false;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
+
+            % 禁用尚未实现功能的按钮
+            this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(2).Enabled = false;
+            this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(3).Enabled = false;
+            this.Widgets.ProjectSection.ProjectStructureButton.Popup.getChildByIndex(4).Enabled = false;
+            this.Widgets.ProjectSection.ProjectVariableButton.Popup.getChildByIndex(1).Enabled = false;
+            this.Widgets.EnvironmentSection.EnvironmentRemoteButton.Popup.getChildByIndex(1).Enabled = false;
+            this.Widgets.EnvironmentSection.EnvironmentExtraButton.Popup.getChildByIndex(1).Enabled = false;
         end
     end
 
@@ -110,27 +127,25 @@ classdef HomeTab < handle
             column3 = Column();
 
             % 创建 Button
-            FileProjectButton = CreateButton('split', 'FileProject', section.Tag, 'openFolder');
+            FileOpenButton = CreateButton('split', 'FileOpen', section.Tag, 'openFolder');
             FileSaveButton = CreateButton('split', 'FileSave', section.Tag, 'unsaved');
             FileCloseButton = CreateButton('push', 'FileClose', section.Tag, 'close');
 
             % 创建并组装 PopupList(下拉菜单)
-            FileProjectButtonPopup = PopupList();
-            OpenFileListItem = CreateListItem('default', 'OpenFile', section.Tag, 0, 'new');
-            FileProjectButtonPopup.add(OpenFileListItem);
-            FileProjectButton.Popup = FileProjectButtonPopup;
+            FileOpenButtonPopup = PopupList();
+            OpenProjectFileListItem = CreateListItem('default', 'OpenProjectFile', section.Tag, 1, 'project');
+            FileOpenButtonPopup.add(OpenProjectFileListItem);
+            FileOpenButton.Popup = FileOpenButtonPopup;
 
             FileSaveButtonPopup = PopupList();
-            SaveProjectListItem = CreateListItem('default', 'SaveProject', section.Tag, 0, 'saved');
-            SaveProjectAsListItem = CreateListItem('default', 'SaveProjectAs', section.Tag, 0, 'saveAs');
-            SaveStructureAsListItem = CreateListItem('default', 'SaveStructureAs', section.Tag, 0, 'save_renderedVolume');
+            SaveProjectListItem = CreateListItem('default', 'SaveProject', section.Tag, 1, 'saved');
+            SaveProjectAsListItem = CreateListItem('default', 'SaveProjectAs', section.Tag, 1, 'saveAs');
             FileSaveButtonPopup.add(SaveProjectListItem);
             FileSaveButtonPopup.add(SaveProjectAsListItem);
-            FileSaveButtonPopup.add(SaveStructureAsListItem);
             FileSaveButton.Popup = FileSaveButtonPopup;
 
             % 组装 Column 和 Button
-            column1.add(FileProjectButton);
+            column1.add(FileOpenButton);
             column2.add(FileSaveButton);
             column3.add(FileCloseButton);
             section.add(column1);
@@ -139,7 +154,7 @@ classdef HomeTab < handle
             this.Tab.add(section);
 
             % 添加到 Widgets
-            this.Widgets.FileSection = struct('FileProjectButton', FileProjectButton, ...
+            this.Widgets.FileSection = struct('FileOpenButton', FileOpenButton, ...
                 'FileSaveButton', FileSaveButton, 'FileCloseButton', FileCloseButton);
         end
 
@@ -153,6 +168,7 @@ classdef HomeTab < handle
             % 创建 Project Section
             section = Section(message("KSSOLV:toolbox:ProjectSectionTitle"));
             section.Tag = 'ProjectSection';
+
             % 创建 Column
             column1 = Column();
             column2 = Column();
@@ -161,7 +177,7 @@ classdef HomeTab < handle
             % 创建 Button
             ProjectStructureButton = CreateButton('dropdown', 'ProjectStructure', section.Tag, 'import_data');
             ProjectWorkflowButton = CreateButton('split', 'ProjectWorkflow', section.Tag, 'artifactGraph');
-            ProjectVariableButton = CreateButton('split', 'ProjectVariable', section.Tag, 'legend');
+            ProjectVariableButton = CreateButton('dropdown', 'ProjectVariable', section.Tag, 'legend');
 
             % 创建并组装 PopupList(下拉菜单)
             ProjectStructureButtonPopup = PopupList();
@@ -172,14 +188,13 @@ classdef HomeTab < handle
 
             ProjectWorkflowButtonPopup = PopupList();
             NewWorkflowListItem = CreateListItem('default', 'NewWorkflow', section.Tag, 0, 'add_class');
-            ImportTemplateWorkflowListItem = this.createTemplateWorkflowMenu(section.Tag);
+            ImportTemplateWorkflowListItem = kssolv.ui.components.tab.HomeTab.createTemplateWorkflowMenu(section.Tag);
             ImportWorkflowFromFileListItem = CreateListItem('default', 'ImportWorkflowFromFile', section.Tag, 0, 'new_artifactGraph');
             ExportWorkflowListItem = CreateListItem('default', 'ExportWorkflow', section.Tag, 0, 'documentArtifactGraph');
 
             ProjectVariableButtonPopup = PopupList();
             NewVariableListItem = CreateListItem('default', 'NewVariable', section.Tag, 0, 'new_sectionHighlighted');
-            ImportVariableFromFileListItem = CreateListItem('default', 'ImportVariableFromFile', section.Tag, 0, 'importDiagram');
-            ImportVariableFromMATLABListItem = CreateListItem('default', 'ImportVariableFromMATLAB', section.Tag, 0, 'matlabWorkspaceFile');
+            ExportVariabletoMATLABListItem = CreateListItem('default', 'ExportVariabletoMATLAB', section.Tag, 0, 'matlabWorkspaceFile');
 
             ProjectStructureButtonPopup.add(ImportStructureFromFileListItem)
             ProjectStructureButtonPopup.add(ImportStructureFromLinkListItem);
@@ -190,8 +205,7 @@ classdef HomeTab < handle
             ProjectWorkflowButtonPopup.add(ImportWorkflowFromFileListItem);
             ProjectWorkflowButtonPopup.add(ExportWorkflowListItem);
             ProjectVariableButtonPopup.add(NewVariableListItem);
-            ProjectVariableButtonPopup.add(ImportVariableFromFileListItem);
-            ProjectVariableButtonPopup.add(ImportVariableFromMATLABListItem);
+            ProjectVariableButtonPopup.add(ExportVariabletoMATLABListItem);
             ProjectStructureButton.Popup = ProjectStructureButtonPopup;
             ProjectWorkflowButton.Popup = ProjectWorkflowButtonPopup;
             ProjectVariableButton.Popup = ProjectVariableButtonPopup;
@@ -268,15 +282,15 @@ classdef HomeTab < handle
 
             % 创建 Button
             EnvironmentSettingsButton = CreateButton('push', 'EnvironmentSettings', section.Tag, 'settings');
-            EnvironmentRemoteButton = CreateButton('split', 'EnvironmentRemote', section.Tag, 'matlabCloud');
+            EnvironmentRemoteButton = CreateButton('dropdown', 'EnvironmentRemote', section.Tag, 'matlabCloud');
             EnvironmentParallelButton = CreateButton('push', 'EnvironmentParallel', section.Tag, 'parallel');
-            EnvironmentExtraButton = CreateButton('split', 'EnvironmentExtra', section.Tag, 'addOns');
+            EnvironmentExtraButton = CreateButton('dropdown', 'EnvironmentExtra', section.Tag, 'addOns');
 
             % 创建并组装 PopupList(下拉菜单)
             RemotePopup = PopupList();
             ExtraPopup = PopupList();
             ConnectToClusterListItem = CreateListItem('default', 'ConnectToCluster', section.Tag, 0, 'new_cloud');
-            GetExtraFeatureListItem = CreateListItem('default', 'GetExtraFeature', section.Tag, 0, 'addOnsSB');
+            GetExtraFeatureListItem = CreateListItem('default', 'GetExtraFeature', section.Tag, 0, 'addOns');
             RemotePopup.add(ConnectToClusterListItem);
             ExtraPopup.add(GetExtraFeatureListItem);
             EnvironmentRemoteButton.Popup = RemotePopup;
@@ -316,22 +330,22 @@ classdef HomeTab < handle
             column4 = Column();
 
             % 创建 Button
-            ResourceLibraryButton = CreateButton('push', 'ResourceLibrary', section.Tag, 'documentation');
+            ResourceDocumentationButton = CreateButton('push', 'ResourceDocumentation', section.Tag, 'documentation');
             ResourceCommunityButton = CreateButton('push', 'ResourceCommunity', section.Tag, 'community');
             ResourceHelpButton = CreateButton('dropdown', 'ResourceHelp', section.Tag, 'help');
             ResourceSupportButton = CreateButton('push', 'ResourceSupport', section.Tag, 'requestSupport');
 
             % 创建并组装 PopupList(下拉菜单)
             HelpPopup = PopupList();
-            OpenDocumentListItem = CreateListItem('default', 'OpenDocument', section.Tag, 0, 'documentList');
-            OfficialSiteListItem = CreateListItem('default', 'OfficialSite', section.Tag, 0, 'link');
+            ExamplesListItem = CreateListItem('default', 'Examples', section.Tag, 0, 'examples');
+            OpenOfficialSiteListItem = CreateListItem('default', 'OfficialSite', section.Tag, 0, 'link_globe');
             CheckUpdateListItem = CreateListItem('default', 'CheckUpdate', section.Tag);
             CheckLicenseListItem = CreateListItem('default', 'CheckLicense', section.Tag);
             TermsOfUseListItem = CreateListItem('default', 'TermsOfUse', section.Tag);
             AboutUsListItem = CreateListItem('default', 'AboutUs', section.Tag);
-            HelpPopup.add(OpenDocumentListItem);
-            HelpPopup.add(OfficialSiteListItem);
-            HelpPopup.add(PopupListHeader(''));
+            HelpPopup.add(ExamplesListItem);
+            HelpPopup.add(OpenOfficialSiteListItem);
+            HelpPopup.addSeparator;
             HelpPopup.add(CheckUpdateListItem);
             HelpPopup.add(CheckLicenseListItem);
             HelpPopup.add(TermsOfUseListItem);
@@ -339,7 +353,7 @@ classdef HomeTab < handle
             ResourceHelpButton.Popup = HelpPopup;
 
             % 组装 Column 和 Button
-            column1.add(ResourceLibraryButton);
+            column1.add(ResourceDocumentationButton);
             column2.add(ResourceCommunityButton);
             column3.add(ResourceHelpButton);
             column4.add(ResourceSupportButton);
@@ -350,46 +364,19 @@ classdef HomeTab < handle
             this.Tab.add(section);
 
             % 添加到 Widgets
-            this.Widgets.ResourceSection = struct('ResourceLibraryButton', ResourceLibraryButton, ...
+            this.Widgets.ResourceSection = struct('ResourceDocumentationButton', ResourceDocumentationButton, ...
                 'ResourceCommunityButton', ResourceCommunityButton, 'ResourceHelpButton', ResourceHelpButton, ...
                 'ResourceSupportButton', ResourceSupportButton);
         end
 
-        %% 私有函数
-        function importTemplateWorkflowListItem = createTemplateWorkflowMenu(~, sectionTag)
-            import matlab.ui.internal.toolstrip.*
-            import kssolv.ui.util.CreateListItem
-
-            popup = PopupList();
-            importTemplateWorkflowListItem = CreateListItem('popup', 'ImportTemplateWorkflow', sectionTag, 0, 'add_artifactGraph');
-
-            workflowTemplateDirectory = fullfile(KSSOLV_Toolbox.UIResourcesDirectory, 'workflows');
-            workflowFiles = dir(fullfile(workflowTemplateDirectory, '*.wf'));
-            for i = 1:length(workflowFiles)
-                currentFilename = workflowFiles(i).name;
-                currentFilePath = fullfile(workflowFiles(i).folder, currentFilename);
-                [~, name, ~] = fileparts(currentFilename);
-
-                % 动态创建 ListItem，并添加到 popup 中
-                templateItem = ListItem(name, 'artifactGraph');
-                templateItem.Tag = [sectionTag '_' erase(name, ' ')];
-                popup.add(templateItem);
-
-                % 添加回调函数
-                addlistener(templateItem, ...
-                'ItemPushed', @(src, data) kssolv.ui.components.figuredocument.Workflow.loadWfFile(currentFilePath));
-            end
-
-            importTemplateWorkflowListItem.Popup = popup;
-        end
-
         %% 回调函数
-        function callbackFileProjectButton(~, ~, ~)
+        function callbackFileOpenButton(~, ~, ~)
             import kssolv.ui.util.Localizer.*
             [file, path] = uigetfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
                 message('KSSOLV:dialogs:OpenKSFileTitle'), 'MultiSelect', 'off');
             if isequal(file, 0)
                 % 用户点击了"取消"按钮
+                kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
                 return
             end
 
@@ -415,10 +402,11 @@ classdef HomeTab < handle
             ksFile = kssolv.ui.util.DataStorage.getData('ProjectFilename');
             if ksFile == ""
                 % ksFile 为空说明当前未打开某个 .ks 文件，需要选择保存为 .ks 文件的路径
-                [file,location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                [file, location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
                     message('KSSOLV:dialogs:SaveKSFileTitle'), 'untitled');
                 if isequal(file, 0) || isequal(location, 0)
                     % 用户点击了"取消"按钮
+                    kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
                     return
                 else
                     % 用户选择了具体的文件路径
@@ -430,6 +418,37 @@ classdef HomeTab < handle
             else
                 % ksFile 不为空说明当前已打开某个 .ks 文件，直接保存文件
                 project.saveToKsFile(ksFile);
+            end
+        end
+
+        function callbackSaveProjectAs(~, ~, ~)
+            import kssolv.ui.util.Localizer.*
+
+            ksFile = kssolv.ui.util.DataStorage.getData('ProjectFilename');
+            if ksFile == ""
+                filename = 'untitled';
+            else
+                [~, filename, ~] = fileparts(ksFile);
+            end
+
+            % 打开对话框，需要选择另存为 .ks 文件的路径
+            [file, location] = uiputfile({'*.ks', 'KSSOLV Files (*.ks)'}, ...
+                message('KSSOLV:dialogs:SaveKSFileTitle'), filename);
+            if isequal(file, 0) || isequal(location, 0)
+                % 用户点击了"取消"按钮
+                kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
+                return
+            else
+                % 用户选择了具体的文件路径
+                ksFile = fullfile(location, file);
+                project = kssolv.ui.util.DataStorage.getData('Project');
+                project.isDirty = false;
+                project.saveToKsFile(ksFile);
+
+                % 更新标题栏
+                kssolv.ui.util.DataStorage.setData('ProjectFilename', ksFile);
+                kssolv.KSSOLVToolbox.setAppContainerTitle();
+                kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
             end
         end
 
@@ -562,7 +581,7 @@ classdef HomeTab < handle
 
         function callbackExportWorkflow(~, ~, ~)
             import kssolv.ui.util.Localizer.*
-            
+
             currentWorkflowDocument = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
             if isempty(currentWorkflowDocument)
                 return
@@ -586,7 +605,7 @@ classdef HomeTab < handle
             kssolv.ui.util.DataStorage.getData('AppContainer').bringToFront();
         end
 
-        function callbackProjectVariableButton(~, ~, ~)
+        function callbackExportVariabletoMATLAB(~, ~, ~)
             projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
             project = kssolv.ui.util.DataStorage.getData('Project');
             if ~isempty(projectBrowser.currentSelectedItem)
@@ -629,6 +648,23 @@ classdef HomeTab < handle
             runBrowser.Widgets.ButtonPanel.StopButton.Enable = false;
         end
 
+        function callbackRunAndTime(this, ~, ~)
+            import kssolv.ui.util.Localizer.*
+
+            footerBar = kssolv.ui.util.DataStorage.getData('FooterBar');
+            footerBar.setLabelText('');
+
+            % 计时并运行
+            tStart = tic;
+            this.callbackRunningRunButton();
+            tEnd = toc(tStart);
+
+            % 在底部状态栏中更新本次计算用时
+            timeUsedText = sprintf('%s%.2f %s', message('KSSOLV:dialogs:RunTimeUsed'), ...
+                tEnd, message('KSSOLV:dialogs:RunTimeUsedUnit'));
+            footerBar.setLabelText(timeUsedText);
+        end
+
         function callbackRunningStopButton(this, ~, ~)
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;
@@ -652,13 +688,18 @@ classdef HomeTab < handle
             this.settingsDialog.show(appContainer);
         end
 
-        function callbackResourceLibraryButton(~, ~, ~)
+        function callbackResourceDocumentationButton(~, ~, ~)
             url = 'https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd';
             web(url);
         end
 
-        function callbackOpenDocumentButton(~, ~, ~)
+        function callbackExamplesButton(~, ~, ~)
             url = 'https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd';
+            web(url);
+        end
+
+        function callbackOpenOfficialSiteButton(~, ~, ~)
+            url = 'https://pwdft.com/prod/43.html';
             web(url);
         end
 
@@ -670,6 +711,35 @@ classdef HomeTab < handle
 
         function settingsDialogClosed(this, ~, ~)
             this.Widgets.EnvironmentSection.EnvironmentSettingsButton.Enabled = true;
+        end
+    end
+
+    methods (Static, Access = {?kssolv.ui.components.tab.HomeTab, ?kssolv.ui.components.tab.WorkflowTab})
+        function importTemplateWorkflowListItem = createTemplateWorkflowMenu(sectionTag)
+            import matlab.ui.internal.toolstrip.*
+            import kssolv.ui.util.CreateListItem
+
+            popup = PopupList();
+            importTemplateWorkflowListItem = CreateListItem('popup', 'ImportTemplateWorkflow', sectionTag, 0, 'add_artifactGraph');
+
+            workflowTemplateDirectory = fullfile(KSSOLV_Toolbox.UIResourcesDirectory, 'workflows');
+            workflowFiles = dir(fullfile(workflowTemplateDirectory, '*.wf'));
+            for i = 1:length(workflowFiles)
+                currentFilename = workflowFiles(i).name;
+                currentFilePath = fullfile(workflowFiles(i).folder, currentFilename);
+                [~, name, ~] = fileparts(currentFilename);
+
+                % 动态创建 ListItem，并添加到 popup 中
+                templateItem = ListItem(name, 'artifactGraph');
+                templateItem.Tag = [sectionTag '_' erase(name, ' ')];
+                popup.add(templateItem);
+
+                % 添加回调函数
+                addlistener(templateItem, ...
+                    'ItemPushed', @(src, data) kssolv.ui.components.figuredocument.Workflow.loadWfFile(currentFilePath));
+            end
+
+            importTemplateWorkflowListItem.Popup = popup;
         end
     end
 
