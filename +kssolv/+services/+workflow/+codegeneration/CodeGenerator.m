@@ -105,7 +105,7 @@ classdef CodeGenerator < handle
             end
 
             try
-                nodeIndices = toposort(G);
+                nodeIndices = toposort(G, "Order", "stable");
                 sortedNodes = G.Nodes.Name(nodeIndices)'; % 转置为 1xN cell 数组
             catch ME
                 error('KSSOLV:Workflow:CodeGenerator:TopologicalSort', ME.message);
