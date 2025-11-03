@@ -41,6 +41,7 @@ classdef SymmetryAnalysisTask < kssolv.services.workflow.module.AbstractTask
             structure = convertMoleculeToCell(context("molecule"));
             result = seekpath.hpkot.getPath(structure, taskOptions.withTimeReversal, ...
                 taskOptions.symmetryThreshold, taskOptions.symmetryPrecision, taskOptions.angleTolerance);
+            result.reciprocal_primitive_lattice = seekpath.utils.getReciprocalCellRows(context("molecule").supercell * 0.5291772083);
 
             % 输出 context
             context("symmetry") = result;
@@ -49,7 +50,7 @@ classdef SymmetryAnalysisTask < kssolv.services.workflow.module.AbstractTask
 end
 
 function structureCell = convertMoleculeToCell(MoleculeObject)
-cell = MoleculeObject.supercell .* 0.5291772083;
+cell = MoleculeObject.supercell * 0.5291772083;
 positions = MoleculeObject.xyzlist / MoleculeObject.supercell;
 atomicNumbers = [MoleculeObject.atomlist.anum]';
 

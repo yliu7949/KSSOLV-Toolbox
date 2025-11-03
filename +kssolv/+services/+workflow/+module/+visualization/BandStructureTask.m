@@ -1,12 +1,12 @@
 classdef BandStructureTask < kssolv.services.workflow.module.AbstractTask
-    %ENERGYCONVERGENCETASK 能带结构可视化任务
+    %BANDSTRUCTURETASK 能带结构可视化任务
 
     %   开发者：杨柳
     %   版权 2025 合肥瀚海量子科技有限公司
 
     properties (Constant)
         TASK_NAME = 'Band Structure'
-        IDENTIFIER = 'EnergyConvergenceTask'
+        IDENTIFIER = 'BandStructureTask'
         DESCRIPTION = 'Plot electronic band structure'
     end
 

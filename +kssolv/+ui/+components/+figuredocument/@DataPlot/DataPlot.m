@@ -18,9 +18,14 @@ classdef DataPlot < handle
             end
 
             if isa(figureFilePathOrFigure, 'matlab.ui.Figure') || isa(figureFilePathOrFigure, 'matlab.graphics.chartcontainer.ChartContainer')
-                % 如果输入是 figure 类型
-                this.figure = figureFilePathOrFigure;
-                this.figureFilePath = "";
+                % 如果输入是 figure 类型或 ChartContainer 类型
+                if isvalid(figureFilePathOrFigure) && ~isempty(figureFilePathOrFigure)
+                    this.figure = figureFilePathOrFigure;
+                    this.figureFilePath = "";
+                else
+                    this.figure = [];
+                    this.figureFilePath = "";
+                end
             elseif isstring(figureFilePathOrFigure) || ischar(figureFilePathOrFigure)
                 % 如果输入是字符串路径，检查文件扩展名
                 [~, ~, ext] = fileparts(figureFilePathOrFigure);

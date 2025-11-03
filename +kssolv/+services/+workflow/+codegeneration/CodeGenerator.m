@@ -5,7 +5,6 @@ classdef CodeGenerator < handle
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     methods (Static)
-
         function executeTasks(workflow)
             % executeTasks 按照拓扑顺序执行工作流中的所有任务
             %
@@ -19,18 +18,12 @@ classdef CodeGenerator < handle
                 workflow kssolv.services.workflow.WorkflowGraph
             end
 
-            % 嵌套函数，用于向 UI 发送节点状态更新事件
-            function changeNodeStatus(nodeID, status)
-                kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI ('workflowUpdateNodeStatus', ...
-                    struct('nodeID', nodeID, 'newStatus', status));
-                pause(0.1); % 给予 UI 足够的时间来响应和刷新
-            end
-
             allNodeIDs = keys(workflow.Nodes);
 
             % 步骤 1: 将所有节点状态重置为默认值
             for i = 1:length(allNodeIDs)
-                changeNodeStatus(allNodeIDs{i}, 'default');
+                changeNodeStatus(allNodeIDs{i}, 'default', true);
+                pause(0.1);
             end
 
             % 步骤 2: 对工作流图进行拓扑排序，获取正确的执行顺序
@@ -119,4 +112,19 @@ classdef CodeGenerator < handle
             end
         end
     end
+end
+
+function changeNodeStatus(nodeID, status, noRefresh)
+% 用于向 UI 发送节点状态更新事件
+arguments
+    nodeID char
+    status char {mustBeMember(status, {'default', 'running', 'failed', 'success'})}
+    noRefresh logical = false
+end
+
+kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI ('workflowUpdateNodeStatus', ...
+    struct('nodeID', nodeID, 'newStatus', status));
+if ~noRefresh
+    pause(0.1); % 给予 UI 足够的时间来响应和刷新
+end
 end

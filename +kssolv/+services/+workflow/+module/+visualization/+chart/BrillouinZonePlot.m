@@ -159,8 +159,8 @@ classdef BrillouinZonePlot < matlab.graphics.chartcontainer.ChartContainer
                 % Get point names and their coordinates.
                 p1 = this.result.path{i, 1};
                 p2 = this.result.path{i, 2};
-                coord1 = this.result.point_coords(p1);
-                coord2 = this.result.point_coords(p2);
+                coord1 = this.result.point_coords(p1) * this.result.reciprocal_primitive_lattice;
+                coord2 = this.result.point_coords(p2) * this.result.reciprocal_primitive_lattice;
 
                 % Plot a line segment between the two points.
                 line(ax, [coord1(1), coord2(1)], [coord1(2), coord2(2)], 'Color', 'r', 'LineWidth', 2);
@@ -318,8 +318,9 @@ classdef BrillouinZonePlot < matlab.graphics.chartcontainer.ChartContainer
                 % Get point names and their 3D coordinates.
                 p1 = this.result.path{i, 1};
                 p2 = this.result.path{i, 2};
-                coord1 = this.result.point_coords(p1);
-                coord2 = this.result.point_coords(p2);
+
+                coord1 = this.result.point_coords(p1) * this.result.reciprocal_primitive_lattice;
+                coord2 = this.result.point_coords(p2) * this.result.reciprocal_primitive_lattice;
 
                 % Plot a 3D line segment between the two points.
                 line(ax, [coord1(1), coord2(1)], [coord1(2), coord2(2)], [coord1(3), coord2(3)], ...

@@ -32,7 +32,7 @@ classdef BrillouinZone3DTask < kssolv.services.workflow.module.AbstractTask
                 ~
             end
 
-            reciprocalLattice = seekpath.utils.getReciprocalCellRows(context("symmetry").primitive_lattice);
+            reciprocalLattice = context("symmetry").reciprocal_primitive_lattice;
             b1 = reciprocalLattice(1, :);
             b2 = reciprocalLattice(2, :);
             b3 = reciprocalLattice(3, :);
