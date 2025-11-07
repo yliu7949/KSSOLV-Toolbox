@@ -56,8 +56,8 @@ classdef BandProcessing3DTask < kssolv.services.workflow.module.AbstractTask
             end
 
             % 进行能带计算（不使用 HT 方法）
-            NSCFOptions = context("NSCFOptions");
             crystal = copy(context("molecule"));
+            NSCFOptions = context("NSCFOptions");
             NSCFOptions.rho0 = context("H").rho;
             context("NSCFOptions") = NSCFOptions;
 

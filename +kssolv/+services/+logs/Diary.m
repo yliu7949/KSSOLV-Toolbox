@@ -32,7 +32,7 @@ classdef Diary < handle
             if ~isfolder(this.DIARY_DIR)
                 mkdir(this.DIARY_DIR);
             end
-            this.diaryFile = fullfile(this.DIARY_DIR, [char(datetime), '.log']);
+            this.diaryFile = fullfile(this.DIARY_DIR, [char(datetime('now', 'Format', 'uuuu-MM-dd HH-mm-ss')), '.log']);
 
             % 安全关闭现有日记
             if strcmp(get(0, 'Diary'), 'on')
