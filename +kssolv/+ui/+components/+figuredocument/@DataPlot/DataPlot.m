@@ -1,4 +1,4 @@
-classdef DataPlot < handle
+classdef DataPlot
     %DATAPLOT 展示数据绘图结果
 
     %   开发者：杨柳
@@ -6,17 +6,20 @@ classdef DataPlot < handle
 
     properties
         DocumentGroupTag
+        tag string
         figureFilePath string
         figure
     end
 
     methods
-        function this = DataPlot(figureFilePathOrFigure)
+        function this = DataPlot(figureFilePathOrFigure, tag)
             %DATAPLOT 构造函数
             arguments
                 figureFilePathOrFigure
+                tag string = ""
             end
 
+            this.tag = tag;
             if isa(figureFilePathOrFigure, 'matlab.ui.Figure') || isa(figureFilePathOrFigure, 'matlab.graphics.chartcontainer.ChartContainer')
                 % 如果输入是 figure 类型或 ChartContainer 类型
                 if isvalid(figureFilePathOrFigure) && ~isempty(figureFilePathOrFigure)
@@ -64,8 +67,22 @@ classdef DataPlot < handle
                 title (1, :) char = 'Plot'
             end
 
+            appContainer = kssolv.ui.util.DataStorage.getData('AppContainer');
+            document = appContainer.getDocument(this.DocumentGroupTag, this.tag);
+            if ~isempty(document)
+                % 如果具有相同 tag 的 document 存在，则选中它
+                document.Selected = true;
+                return
+            end
+
             figOptions.Title = title;
             figOptions.DocumentGroupTag = this.DocumentGroupTag;
+            if this.tag ~= ""
+                figOptions.Tag = this.tag;
+
+                project = kssolv.ui.util.DataStorage.getData('Project');
+                figOptions.Title = project.findChildrenItem(this.tag).label;
+            end
             document = matlab.ui.internal.FigureDocument(figOptions);
 
             % 创建 uigrid

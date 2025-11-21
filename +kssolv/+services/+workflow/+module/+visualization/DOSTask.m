@@ -59,12 +59,20 @@ classdef DOSTask < kssolv.services.workflow.module.AbstractTask
 
             % 绘图
             DOSPlot = kssolv.services.workflow.module.visualization.chart.DOSPlot('dos', dos, 'energyRange', energyRange);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(DOSPlot);
+
+            % 将 plot 保存到 Project/Results
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            plotTag = resultsItem.addPlot(copy(DOSPlot), 'Density of States (DOS)');
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.plotsItem);
+
+            % 展示绘图结果
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(DOSPlot, plotTag);
             dataPlot.Display('Density of States (DOS)');
 
             % 输出 context
             context("NSCFOptions") = NSCFOptions;
-            context("DOSPlot") = DOSPlot;
         end
     end
 end

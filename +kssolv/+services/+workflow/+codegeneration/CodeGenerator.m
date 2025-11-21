@@ -5,7 +5,7 @@ classdef CodeGenerator < handle
     %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     methods (Static)
-        function executeTasks(workflow)
+        function executeTasks(workflow, workflowName)
             % executeTasks 按照拓扑顺序执行工作流中的所有任务
             %
             %   执行流程:
@@ -16,6 +16,7 @@ classdef CodeGenerator < handle
             %       5. 在执行过程中更新 UI 节点状态（running, success, failed）。
             arguments
                 workflow kssolv.services.workflow.WorkflowGraph
+                workflowName = 'Default'
             end
 
             allNodeIDs = keys(workflow.Nodes);
@@ -67,6 +68,14 @@ classdef CodeGenerator < handle
 
                 changeNodeStatus(nodeID, 'success');
             end
+
+            % 步骤 5: 将运行结果存入 Results
+            remove(context, "molecule");
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            resultsItem.addDataset(context, workflowName);
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.datasetsItem);
         end
 
         function sortedNodes = topologicalSort(workflow)
@@ -122,7 +131,7 @@ arguments
     noRefresh logical = false
 end
 
-kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI ('workflowUpdateNodeStatus', ...
+kssolv.ui.components.figuredocument.Workflow.sendEventToWorkflowUI('workflowUpdateNodeStatus', ...
     struct('nodeID', nodeID, 'newStatus', status));
 if ~noRefresh
     pause(0.1); % 给予 UI 足够的时间来响应和刷新

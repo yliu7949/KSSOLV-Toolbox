@@ -1,4 +1,4 @@
-classdef BandStructure3DPlot < matlab.graphics.chartcontainer.ChartContainer
+classdef BandStructure3DPlot < kssolv.services.workflow.module.visualization.chart.AbstractChartContainer
     %BANDSTRUCTURE3DPLOT 用于绘制能量收敛曲线图和误差曲线的自定义图表类
 
     %   开发者：杨柳
@@ -15,22 +15,7 @@ classdef BandStructure3DPlot < matlab.graphics.chartcontainer.ChartContainer
         segmentedKPoints
     end
 
-    properties (Access = private)
-        axes
-    end
-
-    methods
-        function axes = getAxesObject(this)
-            axes = this.axes;
-        end
-    end
-
     methods (Access = protected)
-        function setup(this)
-            % 用于初始化设置
-            this.Parent.Visible = 'off';
-        end
-
         function update(this)
             % 当数据或属性发生变化时，用于更新图表的更新方法
 

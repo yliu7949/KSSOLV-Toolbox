@@ -1,4 +1,4 @@
-classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
+classdef EnergyConvergencePlot < kssolv.services.workflow.module.visualization.chart.AbstractChartContainer
     %ENERGYCONVERGENCEPLOT 用于绘制能量收敛曲线图和误差曲线的自定义图表类
 
     %   开发者：杨柳
@@ -9,22 +9,7 @@ classdef EnergyConvergencePlot < matlab.graphics.chartcontainer.ChartContainer
         SCFError % 误差数据
     end
 
-    properties (Access = private)
-        axes
-    end
-
-    methods
-        function axes = getAxesObject(this)
-            axes = this.axes;
-        end
-    end
-
     methods (Access = protected)
-        function setup(this)
-            % 用于初始化设置
-            this.Parent.Visible = 'off';
-        end
-
         function update(this)
             ax = getAxes(this);
             cla(ax);

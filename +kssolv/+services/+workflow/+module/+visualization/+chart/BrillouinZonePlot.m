@@ -1,4 +1,4 @@
-classdef BrillouinZonePlot < matlab.graphics.chartcontainer.ChartContainer
+classdef BrillouinZonePlot < kssolv.services.workflow.module.visualization.chart.AbstractChartContainer
     %BRILLOUINZONE2DPLOT 用于绘制二维布里渊区的自定义图表类
 
     %   开发者：杨柳
@@ -18,22 +18,7 @@ classdef BrillouinZonePlot < matlab.graphics.chartcontainer.ChartContainer
         facesData
     end
 
-    properties (Access = private)
-        axes
-    end
-
-    methods
-        function axes = getAxesObject(this)
-            axes = this.axes;
-        end
-    end
-
     methods (Access = protected)
-        function setup(this)
-            % 用于初始化设置
-            this.Parent.Visible = 'off';
-        end
-
         function update(this)
             % Update method for updating the chart when data or properties change.
             % Determine if we are effectively in 2D (if b3 is negligible)
@@ -365,7 +350,9 @@ classdef BrillouinZonePlot < matlab.graphics.chartcontainer.ChartContainer
 
             % Set the view angle
             view(ax, 115, 10);
-            rotate3d(ax, 'on');
+            if ~isempty(ancestor(ax, 'figure'))
+                rotate3d(ax, 'on');
+            end
 
             % 保存 Axes
             this.axes = ax;

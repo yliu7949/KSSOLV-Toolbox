@@ -36,13 +36,20 @@ classdef BrillouinZone2DTask < kssolv.services.workflow.module.AbstractTask
             b1 = reciprocalLattice(1, :);
             b2 = reciprocalLattice(2, :);
 
+            % 绘图
             BrillouinZone2DPlot = kssolv.services.workflow.module.visualization.chart.BrillouinZonePlot('result', context("symmetry"), ...
                 'withPath', true, 'b1', b1, 'b2', b2);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(BrillouinZone2DPlot);
-            dataPlot.Display('BrillouinZone2D');
 
-            % 输出 context
-            context("BrillouinZone2DPlot") = BrillouinZone2DPlot;
+            % 将 plot 保存到 Project/Results
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            plotTag = resultsItem.addPlot(copy(BrillouinZone2DPlot), 'BrillouinZone2D');
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.plotsItem);
+
+            % 展示绘图结果
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(BrillouinZone2DPlot, plotTag);
+            dataPlot.Display('BrillouinZone2D');
         end
     end
 end

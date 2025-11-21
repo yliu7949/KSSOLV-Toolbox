@@ -1,4 +1,4 @@
-classdef DOSPlot < matlab.graphics.chartcontainer.ChartContainer
+classdef DOSPlot < kssolv.services.workflow.module.visualization.chart.AbstractChartContainer
     %DOSPLOT 用于绘制态密度的自定义图表类
 
     %   开发者：杨柳
@@ -17,22 +17,7 @@ classdef DOSPlot < matlab.graphics.chartcontainer.ChartContainer
         YLimitsMode {mustBeMember(YLimitsMode, {'auto', 'manual'})}
     end
 
-    properties (Access = private)
-        axes
-    end
-
-    methods
-        function axes = getAxesObject(this)
-            axes = this.axes;
-        end
-    end
-
     methods (Access = protected)
-        function setup(this)
-            % 用于初始化设置
-            this.Parent.Visible = 'off';
-        end
-
         function update(this)
             % 用于在数据或属性变化时更新图表的方法
 

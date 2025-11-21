@@ -1,4 +1,4 @@
-classdef BandStructurePlot < matlab.graphics.chartcontainer.ChartContainer
+classdef BandStructurePlot < kssolv.services.workflow.module.visualization.chart.AbstractChartContainer
     %BANDSTRUCTUREPLOT 用于绘制能量收敛曲线图和误差曲线的自定义图表类
 
     %   开发者：杨柳
@@ -42,22 +42,7 @@ classdef BandStructurePlot < matlab.graphics.chartcontainer.ChartContainer
         kPointTicks (:, 1)
     end
 
-    properties (Access = private)
-        axes
-    end
-
-    methods
-        function axes = getAxesObject(this)
-            axes = this.axes;
-        end
-    end
-
     methods (Access = protected)
-        function setup(this)
-            % 用于初始化设置
-            this.Parent.Visible = 'off';
-        end
-
         function update(this)
             % Update method for updating the chart when data or properties change.
 

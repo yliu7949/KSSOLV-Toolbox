@@ -32,13 +32,20 @@ classdef BandStructureTask < kssolv.services.workflow.module.AbstractTask
                 ~
             end
 
+            % 绘图
             energyBandStructurePlot = kssolv.services.workflow.module.visualization.chart.BandStructurePlot('kPoints', context("bandProcessing").kPoints, ...
                 'energyBands', context("bandProcessing").energyBands);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyBandStructurePlot);
-            dataPlot.Display('EnergyBandStructure');
 
-            % 输出 context
-            context("EnergyBandStructurePlot") = energyBandStructurePlot;
+            % 将 plot 保存到 Project/Results
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            plotTag = resultsItem.addPlot(copy(energyBandStructurePlot), 'EnergyBandStructure');
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.plotsItem);
+
+            % 展示绘图结果
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyBandStructurePlot, plotTag);
+            dataPlot.Display('EnergyBandStructure');
         end
     end
 end

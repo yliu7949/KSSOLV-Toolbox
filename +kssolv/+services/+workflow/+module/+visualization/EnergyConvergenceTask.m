@@ -32,12 +32,19 @@ classdef EnergyConvergenceTask < kssolv.services.workflow.module.AbstractTask
                 ~
             end
 
+            % 绘图
             energyConvergencePlot = kssolv.services.workflow.module.visualization.chart.EnergyConvergencePlot('TotalEnergy', context("info").Etotvec, 'SCFError', context("info").SCFerrvec);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyConvergencePlot);
-            dataPlot.Display('EnergyConvergence');
 
-            % 输出 context
-            context("EnergyConvergencePlot") = energyConvergencePlot;
+            % 将 plot 保存到 Project/Results
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            plotTag = resultsItem.addPlot(copy(energyConvergencePlot), 'EnergyConvergence');
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.plotsItem);
+
+            % 展示绘图结果
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyConvergencePlot, plotTag);
+            dataPlot.Display('EnergyConvergence');
         end
     end
 end

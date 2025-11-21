@@ -40,13 +40,20 @@ classdef BandStructure3DTask < kssolv.services.workflow.module.AbstractTask
             LUMOIndex = crystal.nel / 2 + 1;
             HOMOIndex = crystal.nel / 2;
 
+            % 绘图
             energyBandStructure3DPlot = kssolv.services.workflow.module.visualization.chart.BandStructure3DPlot('kPoints', kPoints, ...
                 'energyBands', energyBands, 'slicePlane', slicePlane, 'bandIndex', [LUMOIndex, HOMOIndex]);
-            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyBandStructure3DPlot);
-            dataPlot.Display('EnergyBandStructure3D');
 
-            % 输出 context
-            context("EnergyBandStructure3DPlot") = energyBandStructure3DPlot;
+            % 将 plot 保存到 Project/Results
+            resultsItem = kssolv.services.filemanager.Results.getResultsItem();
+            plotTag = resultsItem.addPlot(copy(energyBandStructure3DPlot), 'EnergyBandStructure3D');
+
+            projectBrowser = kssolv.ui.util.DataStorage.getData('ProjectBrowser');
+            projectBrowser.refreshUIAfterItemCreation(resultsItem.plotsItem);
+
+            % 展示绘图结果
+            dataPlot = kssolv.ui.components.figuredocument.DataPlot(energyBandStructure3DPlot, plotTag);
+            dataPlot.Display('EnergyBandStructure3D');
         end
     end
 end

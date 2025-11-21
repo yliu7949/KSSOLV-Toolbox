@@ -21,6 +21,8 @@ classdef Project < kssolv.services.filemanager.AbstractItem
             this.addChildrenItem(workflowParent);
             structureParent = kssolv.services.filemanager.Structure('Structure', 'Folder');
             this.addChildrenItem(structureParent);
+            resultsParent = kssolv.services.filemanager.Results('Results', 'Folder');
+            this.addChildrenItem(resultsParent);
 
             this.isDirty = false;
             this.version = 'ks-1.0';

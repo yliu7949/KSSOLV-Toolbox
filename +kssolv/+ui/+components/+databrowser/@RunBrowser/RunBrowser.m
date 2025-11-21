@@ -148,9 +148,14 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
     methods (Access = private)
         function callbackRunButton(this, ~, ~)
+            workflowDocument = kssolv.ui.components.figuredocument.Workflow.getCurrentWorkflowDocument();
+            if isempty(workflowDocument)
+                this.restoreButtons();
+                return
+            end
+
             project = kssolv.ui.util.DataStorage.getData('Project');
             homeTab = kssolv.ui.util.DataStorage.getData('HomeTab');
-
             homeTab.Widgets.RunningSection.RunningRunButton.Enabled = false;
             homeTab.Widgets.RunningSection.RunningStopButton.Enabled = true;
             this.Widgets.ButtonPanel.RunButton.Enable = false;
@@ -160,8 +165,8 @@ classdef RunBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             this.addNewLineToOutputTextArea();
 
             workflowRoot = project.findChildrenItem('Workflow');
-            workflow = workflowRoot.children{1};
-            kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
+            workflow = workflowRoot.findChildrenItem(workflowDocument.Tag);
+            kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph, workflow.label);
 
             this.restoreButtons();
         end

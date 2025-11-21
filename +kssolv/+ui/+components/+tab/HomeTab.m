@@ -640,7 +640,7 @@ classdef HomeTab < handle
             workflow = workflowRoot.findChildrenItem(workflowDocument.Tag);
 
             % 运行工作流
-            kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph);
+            kssolv.services.workflow.codegeneration.CodeGenerator.executeTasks(workflow.graph, workflow.label);
 
             this.Widgets.RunningSection.RunningRunButton.Enabled = true;
             this.Widgets.RunningSection.RunningStopButton.Enabled = false;

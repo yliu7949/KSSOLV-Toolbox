@@ -36,7 +36,7 @@ classdef AbstractItem < matlab.mixin.SetGet
                 type  string = "Data"
             end
 
-            this.name = sprintf('%s(%s)', label, char(matlab.lang.internal.uuid));
+            this.name = sprintf('%s(%s)', type, char(matlab.lang.internal.uuid));
             this.label = label;
             this.description = "None";
             this.type = type;
@@ -185,7 +185,15 @@ classdef AbstractItem < matlab.mixin.SetGet
 
             objectStruct = struct('name', this.name, 'label', this.label, ...
                 'createdAt', this.createdAt, 'updatedAt', this.updatedAt, ...
-                'description', this.description, 'data', this.data);
+                'description', this.description);
+
+            if strcmp(this.type, "Structure")
+                % 当前仅对 Structure 类型的 Item 编码 data 字段
+                objectStruct.data = this.data;
+            else
+                objectStruct.data = [];
+            end
+
             try
                 encodedJSON = jsonencode(objectStruct, "PrettyPrint", prettyPrint);
             catch ME

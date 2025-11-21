@@ -1,8 +1,8 @@
 classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     %PROJECTBROWSER 自定义的 Data Browser 组件，存放 ks 项目文件的 TreeTable 视图
-    
+
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         Widgets
@@ -11,13 +11,13 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
     properties (SetObservable)
         currentSelectedItem   % 当前选中的节点
     end
-    
+
     methods
         function this = ProjectBrowser()
             %PROJECTBROWSER 构造此类的实例
             title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:ProjectBrowserTitle');
             % 调用超类构造函数
-            this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ProjectBrowser', title);          
+            this = this@matlab.ui.internal.databrowser.AbstractDataBrowser('ProjectBrowser', title);
             % 自定义 widget 和 layout
             buildUI(this);
             % 设定 FigurePanel 的 Tag
@@ -25,10 +25,10 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             % 保存至 DataStorage
             kssolv.ui.util.DataStorage.setData('ProjectBrowser', this);
         end
-        
+
         function updateTreetable(this, action, itemName, itemJSON)
             arguments
-                this 
+                this
                 action {mustBeMember(action, {'ADD', 'PATCH', 'DELETE'})}
                 itemName {mustBeNonempty}
                 itemJSON string = ''
@@ -44,6 +44,12 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                 this.Widgets.html.sendEventToHTMLSource('updateTreeTableData', ...
                     project.encodeToJSON());
             end
+        end
+
+        function refreshUIAfterItemCreation(this, item)
+            % 在新增 item 时更新部分 UI
+            this.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
+            this.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
         end
 
         function reBuildUI(this)
@@ -66,7 +72,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             g.Padding = [0 0 0 0];
             g.RowHeight = {'1x'};
             g.ColumnWidth = {'1x'};
-            
+
             htmlFile = fullfile(fileparts(mfilename('fullpath')), 'TreeTable', 'TreeTable.html');
             h = uihtml(g, "HTMLSource", htmlFile);
             this.Widgets.html = h;
@@ -98,7 +104,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
 
         function callbackRowDoubleClicked(this, ~, event)
             this.currentSelectedItem = event.HTMLEventData;
-            
+
             project = kssolv.ui.util.DataStorage.getData('Project');
             item = project.findChildrenItem(this.currentSelectedItem);
             switch class(item)
@@ -123,15 +129,21 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
                         % 新增 workflow 项，并打开相应的 document
                         item.createWorkflowItem();
                         % 更新 TreeTable
-                        this.updateTreetable('ADD', item.name, item.children{end}.encodeToJSON(1));
-                        this.updateTreetable('PATCH', item.name, item.encodeToJSON(1));
+                        this.refreshUIAfterItemCreation(item);
                     else
                         % 直接显示工作流画布
                         item.showWorkflowDisplay();
                     end
+                otherwise
+                    if strcmp(item.type, "Plot")
+                        plotHandler = item.data;
+                        plotHandler.replot();
+                        dataPlot = kssolv.ui.components.figuredocument.DataPlot(plotHandler, item.name);
+                        dataPlot.Display(item.label);
+                    end
             end
         end
-    
+
         function callbackRowRemoved(this, ~, event)
             removedItemName = event.HTMLEventData;
             project = kssolv.ui.util.DataStorage.getData('Project');
@@ -157,7 +169,7 @@ classdef ProjectBrowser < matlab.ui.internal.databrowser.AbstractDataBrowser
             % b = kssolv.ui.components.databrowser.ProjectBrowser();
             % b.qeShow()
 
-            % 创建 AppContainer          
+            % 创建 AppContainer
             appOptions.Tag = sprintf('kssolv(%s)',char(matlab.lang.internal.uuid));
             appOptions.Title = kssolv.ui.util.Localizer.message('KSSOLV:toolbox:UnitTestTitle');
             appOptions.ToolstripEnabled = true;
