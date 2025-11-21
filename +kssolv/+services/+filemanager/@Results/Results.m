@@ -1,5 +1,5 @@
 classdef Results < kssolv.services.filemanager.AbstractItem
-    %RESULTS 定义了KSSOLV Toolbox 的计算结果类和相关操作函数
+    %RESULTS 定义了 KSSOLV Toolbox 的计算结果类和相关操作函数
 
     %   开发者：杨柳
     %   版权 2025 合肥瀚海量子科技有限公司

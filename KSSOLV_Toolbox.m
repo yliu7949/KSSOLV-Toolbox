@@ -6,8 +6,8 @@ classdef KSSOLV_Toolbox
 
     properties (Constant)
         Name string = 'KSSOLV Toolbox'
-        Version string = '0.2.2'
-        ReleaseDate string = '2025.10.19'
+        Version string = '0.2.3'
+        ReleaseDate string = '2025.11.22'
         License char = 'BSD 3-Clause "New" or "Revised" License'
 
         Author string = 'Liu Yang'
@@ -15,7 +15,7 @@ classdef KSSOLV_Toolbox
         AuthorCompany string = 'Hefei Hanhai Quantum Technology Co., Ltd'
         
         MinimumMATLABVersion char = 'R2024a'
-        RecommendedMinimumMATLABVersion char = 'R2025a'
+        RecommendedMinimumMATLABVersion char = 'R2025b'
 
         RootDirectory char = fileparts(mfilename('fullpath'))
         
