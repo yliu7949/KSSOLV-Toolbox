@@ -15,7 +15,7 @@ classdef BandProcessing3DTask < kssolv.services.workflow.module.AbstractTask
             this.module = kssolv.services.workflow.module.ModuleType.Postprocessing;
             this.requiredTasks = ['SCFTask', 'NSCFTask'];
             this.supportGPU = false;
-            this.supportParallel = false;
+            this.supportParallel = true;
         end
     end
 
@@ -59,6 +59,7 @@ classdef BandProcessing3DTask < kssolv.services.workflow.module.AbstractTask
             crystal = copy(context("molecule"));
             NSCFOptions = context("NSCFOptions");
             NSCFOptions.rho0 = context("H").rho;
+            NSCFOptions.enableParallelPool = true;
             context("NSCFOptions") = NSCFOptions;
 
             crystal.set('scfkpts', crystal.kpts, 'kpts', kPoints);

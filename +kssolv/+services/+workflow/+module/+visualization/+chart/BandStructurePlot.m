@@ -78,7 +78,7 @@ classdef BandStructurePlot < kssolv.services.workflow.module.visualization.chart
                 energyBands = this.segmentedEnergyBands{index, 1}; %#ok<*PROP>
                 for i = 1:size(energyBands, 1)
                     plot(ax, this.kPointDistance{index, 1}, energyBands(i,:), ...
-                        'color', '#f38a12', 'LineWidth', 2);
+                        'b', 'LineWidth', 2);
                 end
 
                 if length(this.kPointTicks{index, 1}) > 1

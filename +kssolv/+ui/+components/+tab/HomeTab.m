@@ -611,7 +611,7 @@ classdef HomeTab < handle
             if ~isempty(projectBrowser.currentSelectedItem)
                 % 添加到 base 工作空间
                 item = project.findChildrenItem(projectBrowser.currentSelectedItem);
-                assignin('base', item.label, item);
+                assignin('base', strrep(item.label, ' ', ''), item);
             end
         end
 

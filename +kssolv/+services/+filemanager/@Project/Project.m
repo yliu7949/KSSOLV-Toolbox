@@ -2,7 +2,7 @@ classdef Project < kssolv.services.filemanager.AbstractItem
     %PROJECT 定义了以".ks"为扩展名的 KSSOLV Toolbox 项目文件类和相关操作函数
 
     %   开发者：杨柳
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties (Hidden, SetObservable)
         isDirty logical   % 用于判断是否需要保存当前项目中的变更

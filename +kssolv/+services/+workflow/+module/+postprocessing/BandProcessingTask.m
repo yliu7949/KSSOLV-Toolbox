@@ -15,7 +15,7 @@ classdef BandProcessingTask < kssolv.services.workflow.module.AbstractTask
             this.module = kssolv.services.workflow.module.ModuleType.Postprocessing;
             this.requiredTasks = ['SymmetryAnalysisTask', 'SCFTask', 'NSCFTask'];
             this.supportGPU = false;
-            this.supportParallel = false;
+            this.supportParallel = true;
         end
     end
 
@@ -48,6 +48,7 @@ classdef BandProcessingTask < kssolv.services.workflow.module.AbstractTask
 
             NSCFOptions = context("NSCFOptions");
             NSCFOptions.rho0 = context("H").rho;
+            NSCFOptions.enableParallelPool = true;
             context("NSCFOptions") = NSCFOptions;
 
             kPoints = generateKPoints(symmetryResult, taskOptions.numInterpolationPoints);
