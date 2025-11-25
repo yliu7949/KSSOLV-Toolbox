@@ -1,31 +1,26 @@
 # KSSOLV Toolbox
-KSSOLV Toolbox 是一个使用 MATLAB 语言开发的第一性原理计算工具箱。该工具箱以 **KSSOLV (Kohn-Sham Solver)** 作为计算内核，基于 MATLAB AppContainer 框架构建了直观完整的图形用户界面（GUI），旨在简化使用 KSSOLV 软件包进行 Kohn-Sham 密度泛函理论（DFT）的计算。KSSOLV Toolbox 工具箱避免了繁琐的手动脚本编写，支持自动化工作流，并集成了大语言模型（LLM）能力，能够降低使用门槛并提高研究人员的使用效率。
 
-![KSSOLV Toolbox GUI](./assets/KSSOLV Toolbox GUI.png)
+[![Github Release Version](https://img.shields.io/github/v/release/yliu7949/KSSOLV-Toolbox?color=blue&include_prereleases)](https://github.com/yliu7949/KSSOLV-Toolbox/releases/latest)[![GitHub License](https://img.shields.io/github/license/yliu7949/KSSOLV-Toolbox)](https://github.com/yliu7949/KSSOLV-Toolbox/blob/main/LICENSE)[![GitHub top language](https://img.shields.io/github/languages/top/yliu7949/KSSOLV-Toolbox)](https://matlab.mathworks.com/)![MATLAB Versions Tested](https://img.shields.io/badge/tested%20with-R2025b%20%7C%20R2025a-blue) 
+
+**KSSOLV Toolbox** 是一个基于 MATLAB 的图形化工具箱，用来更轻松地运行 **Kohn-Sham Solver (KSSOLV)** 包提供的密度泛函理论 (DFT) 计算。它的目标是让研究人员摆脱繁琐的脚本编写，让研究人员能够以更直观的方式完成从结构导入、计算参数设置到结果分析的完整流程。
+
+![KSSOLV Toolbox GUI](https://github.com/yliu7949/KSSOLV-Toolbox/blob/main/assets/KSSOLV%20Toolbox%20GUI.png)
 
 ## 主要特性
 
-KSSOLV Toolbox 采用模块化的设计： 
+**KSSOLV Toolbox** 采用模块化的设计： 
 
-* **预处理模块**: 用于导入和可视化晶体结构。 
-* **计算模块**: 执行自洽场（SCF）计算、非自洽场（Non-SCF）计算等相关任务。 
-* **后处理模块**: 用于计算多种物理性质，例如：    
-  * 电子能带结构 (Electronic Band Structures) 
-  * 费米面 (Fermi Surfaces) 
-* **绘图模块**: 提供大量内置绘图模板，方便快速生成出版质量的图表。
+* **预处理模块**：导入晶体结构及分析对称性。
+* **计算模块**：支持 SCF 和 Non-SCF 等常用计算任务。
+* **后处理模块**：负责能带结构等结果的计算与处理。
+* **可视化模块**：内置多种绘图模板，用于快速绘制计算结果。
 
 ## 安装
 
-1. 在 Windows、Mac 和 Linux 上的 MATLAB Desktop 中使用：
-   - 下载 `KSSOLV_Toolbox.mltbx` 文件，双击该文件即可完成安装。
-   - 安装完成后可以在 MATLAB 的 Add-Ons 插件浏览器中查看和管理 KSSOLV Toolbox。
-2. 在 Windows、Mac 和 Linux 上，作为独立应用程序安装：
-   - 下载独立应用程序版本的安装程序文件（体积约 1GB 左右）。
-   - 运行安装程序，选择安装目标位置和 MATLAB Runtime 的安装位置，点击“开始安装”按钮后等待安装完成。
+在 Windows、MacOS 和 Linux 的 MATLAB® 桌面版软件中可以直接使用：
 
-## 使用文档
-
-请参考 [KSSOLV Toolbox 简明用户手册](https://gleamore.feishu.cn/docx/O64DdiY7LoPykxxLWAJcr0oxnfd)。
+- 从 [Releases](https://github.com/yliu7949/KSSOLV-Toolbox/releases/latest) 页面下载 `KSSOLV_Toolbox.mltbx`，双击即可完成安装。
+- 安装后，你可以在 MATLAB 的 **Add-Ons** 管理器中查看、启用或卸载 **KSSOLV Toolbox**。
 
 ## 贡献指南
 
@@ -35,3 +30,7 @@ KSSOLV Toolbox 采用模块化的设计：
 - **修复 Bug？** 可以直接提交 PR，请附上问题描述和修复方案。
 
 本项目采用 **BSD 3-Clause** 许可证，你的贡献将被视为接受该协议。感谢你的支持！🌟
+
+## 引用
+
+如果你在研究工作或论文中使用了 **KSSOLV Toolbox**，请引用下面的论文。
