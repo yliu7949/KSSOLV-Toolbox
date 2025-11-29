@@ -36,7 +36,11 @@ classdef AbstractItem < matlab.mixin.SetGet
                 type  string = "Data"
             end
 
-            this.name = sprintf('%s(%s)', type, char(matlab.lang.internal.uuid));
+            if strcmp(type, 'Folder')
+                this.name = sprintf('%s(%s)', label, char(matlab.lang.internal.uuid));
+            else
+                this.name = sprintf('%s(%s)', type, char(matlab.lang.internal.uuid));
+            end
             this.label = label;
             this.description = "None";
             this.type = type;

@@ -2,7 +2,7 @@ classdef HomeTab < handle
     %HOMETAB Toolstrip 菜单栏中的 Home 标签页
 
     %   开发者：杨柳、高俊、林海饶
-    %   版权 2024 合肥瀚海量子科技有限公司
+    %   版权 2024-2025 合肥瀚海量子科技有限公司
 
     properties
         Tab       % Home 标签页
